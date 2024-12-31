@@ -2,7 +2,8 @@
 import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
-      
+import APIClient from '../api_service/api_client';
+
 const value = ref('');
 const editorRef = ref<any>(null); 
   
@@ -37,6 +38,13 @@ const outputValue = () => {
   console.log('Editor Value:', value.value);
 };
 
+
+const callApi = async () => {
+  const apiClient = new APIClient();
+  await apiClient.apiGet('/skill/getList', {}, true);
+};
+
+
 </script>
 
 <template>
@@ -47,6 +55,7 @@ const outputValue = () => {
 
     <button @click="outputValue">輸出內容</button>
     <button @click="insertCustomText">插入自定義文字</button>
+    <button @click="callApi">呼叫API</button> 
   </div>
 </template>
 
