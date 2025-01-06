@@ -1,0 +1,39 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import Welcome from '../components/Welcome.vue'
+import RegisterEmail from '../components/RegisterEmail.vue'
+import Register from '../components/Register.vue'
+import Login from '../components/Login.vue'
+import ForgotPassword from '../components/ForgotPassword.vue'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      name: 'welcome',
+      component: Welcome
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/forgot-password',
+      name: 'forgotPassword',
+      component: ForgotPassword
+    },
+    {
+      path: '/register/email',
+      name: 'registerEmail',
+      component: RegisterEmail
+    },
+    {
+      path: '/register/info',
+      name: 'register',
+      component: Register
+    }
+  ]
+})
+
+export default router

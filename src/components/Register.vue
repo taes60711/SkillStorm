@@ -1,0 +1,257 @@
+<template>
+  <div class="register-container">
+    <div class="header">
+      <button class="back-button" @click="goBack">
+        <span class="back-icon">&#8592;</span>
+      </button>
+      <h1 class="title">註冊(1/2)</h1>
+    </div>
+
+    <form @submit.prevent="handleSubmit" class="register-form">
+      <div class="form-group">
+        <label for="name">名稱</label>
+        <input 
+          type="text" 
+          id="name" 
+          v-model="form.name"
+          :class="{ 'error': errors.name }"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">密碼</label>
+        <input 
+          type="password" 
+          id="password" 
+          v-model="form.password"
+          :class="{ 'error': errors.password }"
+        />
+        <div class="password-requirements">
+          <div class="requirement" :class="{ 'met': passwordLength }">
+            <span class="x-mark">&#10005;</span>六碼以上
+          </div>
+          <div class="requirement" :class="{ 'met': hasEnglish }">
+            <span class="x-mark">&#10005;</span>含有英文
+          </div>
+          <div class="requirement" :class="{ 'met': hasNumber }">
+            <span class="x-mark">&#10005;</span>含有數字
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">確認密碼</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          v-model="form.confirmPassword"
+          :class="{ 'error': errors.confirmPassword }"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="verificationCode">驗證碼</label>
+        <input 
+          type="text" 
+          id="verificationCode" 
+          v-model="form.verificationCode"
+          :class="{ 'error': errors.verificationCode }"
+        />
+      </div>
+
+      <button type="submit" class="next-button" :disabled="!isFormValid">
+        下一步
+      </button>
+    </form>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const form = ref({
+  name: '',
+  password: '',
+  confirmPassword: '',
+  verificationCode: ''
+})
+
+const errors = ref({
+  name: false,
+  password: false,
+  confirmPassword: false,
+  verificationCode: false
+})
+
+// 密碼驗證計算屬性
+const passwordLength = computed(() => form.value.password.length >= 6)
+const hasEnglish = computed(() => /[a-zA-Z]/.test(form.value.password))
+const hasNumber = computed(() => /[0-9]/.test(form.value.password))
+
+const isFormValid = computed(() => {
+  return passwordLength.value && 
+         hasEnglish.value && 
+         hasNumber.value && 
+         form.value.password === form.value.confirmPassword &&
+         form.value.name &&
+         form.value.verificationCode
+})
+
+const handleSubmit = () => {
+  // 這裡處理表單提交邏輯
+  console.log('Form submitted:', form.value)
+}
+
+const goBack = () => {
+  router.push('/')
+}
+</script>
+
+<style scoped>
+.register-container {
+  min-height: 100vh;
+  background-color: #000000;
+  padding: 20px;
+  color: #FFFFFF;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  left: 0;
+}
+
+.back-icon {
+  display: inline-block;
+  transform: translateY(-2px);
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.register-form {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  color: #FFFFFF;
+  font-size: 14px;
+}
+
+input {
+  background-color: transparent;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  padding: 12px;
+  color: #FFFFFF;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: #E8A87C;
+}
+
+input.error {
+  border-color: #FF4444;
+}
+
+.password-requirements {
+  margin-top: 8px;
+  display: flex;
+  gap: 16px;
+}
+
+.requirement {
+  color: #FF4444;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.requirement.met {
+  color: #00FF00;
+}
+
+.x-mark {
+  font-size: 10px;
+}
+
+.next-button {
+  background-color: #333333;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.next-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 480px) {
+  .register-container {
+    padding: 16px;
+  }
+
+  .header {
+    margin-bottom: 30px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  input {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .next-button {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .password-requirements {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+</style>
