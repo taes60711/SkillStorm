@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import APIClient from '../api_service/api_client';
+import UserService from '@/api_service/user_service';
 
 const value = ref('');
 const editorRef = ref<any>(null); 
@@ -40,8 +41,9 @@ const outputValue = () => {
 
 
 const callApi = async () => {
-  const apiClient = new APIClient();
-  await apiClient.apiGet('/skill/getList', {}, true);
+  /// 暫時
+  new UserService().getUserDataByUID("uid");
+  
 };
 
 
