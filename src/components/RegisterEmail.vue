@@ -14,6 +14,7 @@
           required
           :class="{ 'error': emailError }"
         />
+        <span v-if="emailError" class="error-message">{{ errorMessage }}</span>
       </div>
 
       <button type="submit" class="register-button" :disabled="isLoading">
@@ -29,7 +30,7 @@
     <!-- 加載提示 -->
     <div class="loading-overlay" v-if="isLoading">
       <div class="loading-content">
-        <div class="loading-text">驗證碼寄送至信箱中...</div>
+        <div class="loading-text">{{ loadingMessage }}</div>
       </div>
     </div>
   </div>
@@ -38,31 +39,48 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { mockAuthApi } from '../mocks/authMock'
 
 const router = useRouter()
 const email = ref('')
 const emailError = ref(false)
+const errorMessage = ref('')
 const isLoading = ref(false)
+const loadingMessage = ref('')
 
 const handleSubmit = async () => {
   if (!email.value) {
     emailError.value = true
+    errorMessage.value = '請輸入 Email'
     return
   }
 
   isLoading.value = true
+  loadingMessage.value = '檢查 Email...'
   
   try {
-    // 模擬 API 請求
+    // 檢查 email 是否已存在
+    const emailExists = await mockAuthApi.checkEmailExists(email.value)
+    
+    if (emailExists) {
+      emailError.value = true
+      errorMessage.value = '此 Email 已被註冊'
+      return
+    }
+
+    // Email 可用，開始寄送驗證碼
+    loadingMessage.value = '驗證碼寄送至信箱中...'
     await new Promise(resolve => setTimeout(resolve, 1500))
     
-    // 儲存 email 到 localStorage 或 vuex/pinia
+    // 儲存 email 到 localStorage
     localStorage.setItem('registerEmail', email.value)
     
     // 導航到下一步
     router.push('/register/info')
   } catch (error) {
     console.error('Error:', error)
+    emailError.value = true
+    errorMessage.value = '發生錯誤，請稍後再試'
   } finally {
     isLoading.value = false
   }
@@ -99,15 +117,14 @@ const handleGoogleSignIn = () => {
 }
 
 .brand-name {
-  color: #FFFFFF;
+  color: white;
   font-size: 24px;
   font-weight: bold;
-  margin: 0;
 }
 
 .register-form {
   width: 100%;
-  max-width: 300px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -119,52 +136,53 @@ const handleGoogleSignIn = () => {
   gap: 8px;
 }
 
-label {
-  color: #FFFFFF;
+.form-group label {
+  color: white;
   font-size: 14px;
 }
 
-input {
-  background-color: transparent;
-  border: 1px solid #333333;
-  border-radius: 8px;
+.form-group input {
   padding: 12px;
-  color: #FFFFFF;
-  font-size: 16px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  color: white;
 }
 
-input:focus {
-  outline: none;
-  border-color: #E8A87C;
+.form-group input.error {
+  border-color: #ff4444;
 }
 
-input.error {
-  border-color: #FF4444;
-}
-
-button {
-  width: 100%;
-  padding: 15px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
+.error-message {
+  color: #ff4444;
+  font-size: 12px;
 }
 
 .register-button {
+  padding: 12px;
   background-color: #333333;
   color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  width: 100%;
 }
 
 .register-button:disabled {
-  opacity: 0.5;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
 .google-button {
-  background-color: #FFFFFF;
-  color: #000000;
+  padding: 12px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,35 +208,12 @@ button {
 }
 
 .loading-content {
-  background-color: #333333;
-  padding: 20px;
-  border-radius: 8px;
   text-align: center;
+  color: white;
 }
 
 .loading-text {
-  color: #FFFFFF;
+  margin-top: 16px;
   font-size: 14px;
-}
-
-@media screen and (max-width: 480px) {
-  .logo {
-    width: 64px;
-    height: 64px;
-  }
-
-  .brand-name {
-    font-size: 20px;
-  }
-
-  input {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  button {
-    padding: 12px;
-    font-size: 14px;
-  }
 }
 </style>

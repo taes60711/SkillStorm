@@ -54,56 +54,46 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
+import { useLoginForm } from '../composables/useLoginForm'
 
 const router = useRouter()
-const showPassword = ref(false)
-
-const form = ref({
-  email: '',
-  password: ''
-})
-
-const errors = ref({
-  email: false,
-  password: false
-})
-
-// 密碼驗證計算屬性
-const passwordLength = computed(() => form.value.password.length >= 6)
-const hasEnglish = computed(() => /[a-zA-Z]/.test(form.value.password))
-const hasNumber = computed(() => /[0-9]/.test(form.value.password))
-
-const isFormValid = computed(() => {
-  return form.value.email && 
-         passwordLength.value && 
-         hasEnglish.value && 
-         hasNumber.value
-})
+//loading 和 error 我先設起來
+const { login, googleSignIn, loading, error } = useAuth()
+const {
+  form,
+  errors,
+  showPassword,
+  passwordLength,
+  hasEnglish,
+  hasNumber,
+  isFormValid,
+  validateForm,
+  resetForm
+} = useLoginForm()
 
 const handleSubmit = async () => {
-  if (!isFormValid.value) {
-    if (!form.value.email) errors.value.email = true
-    if (!form.value.password) errors.value.password = true
-    return
-  }
+  if (!validateForm()) return
 
-  try {
-    // TODO: 實作登入邏輯
-    console.log('Login attempt:', form.value)
-  } catch (error) {
-    console.error('Login error:', error)
+  const success = await login(form.value)
+  
+  if (success) {
+    resetForm()
+    router.push('/welcome')
   }
 }
 
-const handleGoogleSignIn = () => {
-  // TODO: 實作 Google 登入
-  console.log('Google sign in clicked')
+const handleGoogleSignIn = async () => {
+  const success = await googleSignIn()
+  if (success) {
+    router.push('/welcome')
+  }
 }
 
 const handleForgotPassword = () => {
-  router.push('/forgot-password')
+  // TODO: 實作忘記密碼功能
+  console.log('Forgot password clicked')
 }
 </script>
 
@@ -227,8 +217,9 @@ button {
   color: #FFFFFF;
 }
 
-.login-button:disabled {
-  opacity: 0.5;
+.login-button:disabled,
+.google-button:disabled {
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
@@ -244,6 +235,21 @@ button {
 .google-icon {
   width: 20px;
   height: 20px;
+}
+
+.error-message {
+  color: #ff4d4f;
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
 }
 
 @media screen and (max-width: 480px) {
