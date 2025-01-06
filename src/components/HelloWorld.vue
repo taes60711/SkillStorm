@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import APIClient from '../api_service/api_client';
-import UserService from '@/api_service/user_service';
+import UserService from '../api_service/user_service';
 
 const value = ref('');
 const editorRef = ref<any>(null); 
