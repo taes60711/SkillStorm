@@ -3,6 +3,11 @@ import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import UserService from '../services/user_service';
+import { ProfileData } from '@/models/reponse/profile_data_reponse_data';
+
+
+
+const userData = ref<ProfileData|null>(null);
 
 const value = ref('');
 const editorRef = ref<any>(null); 
@@ -40,10 +45,12 @@ const outputValue = () => {
 
 
 const callApi = async () => {
-  /// 暫時
-   await new UserService().getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
 
+  userData.value = await new UserService().getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
+  console.log(userData.value.email);
 };
+
+
 
 
 </script>

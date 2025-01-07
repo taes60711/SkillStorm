@@ -1,15 +1,14 @@
+import { ip, port } from '../main';
 import axios, { AxiosResponse } from 'axios';
 
 export default class APIClient {
-  _ip: string = "192.168.1.160";
-  _port: string = "80";
-  baseUrl: string = `http://${this._ip}:${this._port}`;
+  baseUrl: string = `http://${ip}:${port}`;
 
-  apiGet = async (
+  apiGet = async <T>(
     url: string,
     parameters?: { [key: string]: any },
     needReturnPrint = false
-  ): Promise<string> => {
+  ): Promise<T | string> => {
 
     const fullUrl = new URL(url, this.baseUrl);
 
@@ -41,11 +40,11 @@ export default class APIClient {
     }
   };
 
-  apiPush = async (
+  apiPush = async <T>(
     url: string,
     headers: { [key: string]: string } = { 'content-type': 'application/json' },
     body?: { [key: string]: any },
-  ): Promise<string> => {
+  ): Promise<T | string> => {
     const fullUrl = new URL(url, this.baseUrl);
 
     try {
@@ -65,7 +64,4 @@ export default class APIClient {
     }
 
   };
-
-
-
 }
