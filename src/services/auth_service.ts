@@ -1,6 +1,7 @@
 import APIClient from "./api_client";
 import { ProfileData } from "../models/reponse/profile_data_reponse_data";
 import * as cryptoJS from 'crypto-js';
+import { SignUpRequestData } from "@/models/request/sign_up_request_data";
 
 ///  登入/註冊相關API
 export default class AuthService extends APIClient {
@@ -21,25 +22,23 @@ export default class AuthService extends APIClient {
   }
 
   /**
-   * 註冊帳號
+   * 一般註冊
    * @param captchaCode 驗證碼
-   * @param email 信箱
-   * @param password 未加密的密碼
-   * @param name 名稱
+   * @param signUpdata 信箱, 未加密的密碼, 名稱
    */
-  async signUp(captchaCode: string, email: string, password: string, name: string) {
+  async signUp(captchaCode: string, signUpdata: SignUpRequestData) {
 
-    const sha256Password = cryptoJS.SHA256(password).toString(cryptoJS.enc.Hex);
+    const sha256Password = cryptoJS.SHA256(signUpdata.password).toString(cryptoJS.enc.Hex);
 
     console.log(`sha256Password : ${sha256Password}`);
 
     const body: { [key: string]: any } = {
-      "email": email,
+      "email": signUpdata.email,
       "password": `${sha256Password}`,
-      "name": name,
+      "name": signUpdata.name,
     };
 
-    const reponseData: string = await this.apiPush('/signUp/$captchaCode', body);
+    const reponseData: string = await this.apiPush(`/signUp/${captchaCode}`, body);
 
     console.log(`signUpUser : ${reponseData}`);
   }

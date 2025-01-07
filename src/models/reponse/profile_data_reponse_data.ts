@@ -1,3 +1,6 @@
+/**
+ * 使用者的Data
+ */
 export interface ProfileData {
     uid: string;
     email: string;
