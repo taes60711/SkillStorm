@@ -1,65 +1,113 @@
-// ViewModel層：管理認證相關的狀態和邏輯
-import { ref } from 'vue';
-import { authService } from '../services/AuthService';
-import type { UserCredentials, User } from '../models/UserModel';
+import { ref, type Ref } from 'vue'
+import { 
+  AuthService, 
+  type User, 
+  type UserCredentials, 
+  type RegisterData,
+  type GoogleSignInData 
+} from '../services/AuthService'
 
-/**
- * 認證相關的組合式函數
- * 管理認證狀態並提供認證方法
- */
-export function useAuth() {
-  // 狀態管理
-  const user = ref<User | null>(null);        // 當前用戶信息
-  const loading = ref(false);                 // 加載狀態
-  const error = ref<string | null>(null);     // 錯誤信息
+const authService = new AuthService()
+const currentUser: Ref<User | null> = ref(null)
+const loading: Ref<boolean> = ref(false)
+const error: Ref<string | null> = ref(null)
 
-  /**
-   * 用戶登入方法
-   * @param credentials - 用戶登入憑證
-   * @returns Promise<boolean> - 登入是否成功
-   */
+interface UseAuthReturn {
+  currentUser: Ref<User | null>
+  loading: Ref<boolean>
+  error: Ref<string | null>
+  login: (credentials: UserCredentials) => Promise<boolean>
+  googleSignIn: (userData: GoogleSignInData) => Promise<boolean>
+  sendVerificationCode: (email: string, type: 'signUp' | 'resetPwd') => Promise<boolean>
+  register: (userData: RegisterData, captchaCode: string) => Promise<boolean>
+  resetPassword: (email: string, newPassword: string, captchaCode: string) => Promise<boolean>
+  logout: () => void
+}
+
+export function useAuth(): UseAuthReturn {
   const login = async (credentials: UserCredentials) => {
-    loading.value = true;    // 開始加載
-    error.value = null;      // 清除之前的錯誤
+    loading.value = true
+    error.value = null
     try {
-      // 調用認證服務進行登入
-      user.value = await authService.login(credentials);
-      return true;
+      currentUser.value = await authService.login(credentials)
+      return true
     } catch (err) {
-      // 處理錯誤
-      error.value = err instanceof Error ? err.message : 'Login failed';
-      return false;
+      error.value = err instanceof Error ? err.message : '登入失敗'
+      return false
     } finally {
-      loading.value = false; // 結束加載
+      loading.value = false
     }
-  };
+  }
 
-  /**
-   * Google 登入方法
-   * @returns Promise<boolean> - 登入是否成功
-   */
-  const googleSignIn = async () => {
-    loading.value = true;    // 開始加載
-    error.value = null;      // 清除之前的錯誤
+  const googleSignIn = async (userData: GoogleSignInData) => {
+    loading.value = true
+    error.value = null
     try {
-      // 調用認證服務進行 Google 登入
-      user.value = await authService.googleSignIn();
-      return true;
+      currentUser.value = await authService.googleSignIn(userData)
+      return true
     } catch (err) {
-      // 處理錯誤
-      error.value = err instanceof Error ? err.message : 'Google sign-in failed';
-      return false;
+      error.value = err instanceof Error ? err.message : 'Google 登入失敗'
+      return false
     } finally {
-      loading.value = false; // 結束加載
+      loading.value = false
     }
-  };
+  }
 
-  // 返回狀態和方法
+  const sendVerificationCode = async (email: string, type: 'signUp' | 'resetPwd') => {
+    loading.value = true
+    error.value = null
+    try {
+      const result = await authService.sendVerificationCode(email, type)
+      return result === 'success'
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : '發送驗證碼失敗'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const register = async (userData: RegisterData, captchaCode: string) => {
+    loading.value = true
+    error.value = null
+    try {
+      const result = await authService.register(userData, captchaCode)
+      return result === 'success'
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : '註冊失敗'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const resetPassword = async (email: string, newPassword: string, captchaCode: string) => {
+    loading.value = true
+    error.value = null
+    try {
+      const result = await authService.resetPassword(email, newPassword, captchaCode)
+      return result === 'success'
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : '重設密碼失敗'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const logout = () => {
+    currentUser.value = null
+  }
+
   return {
-    user,       // 用戶信息
-    loading,    // 加載狀態
-    error,      // 錯誤信息
-    login,      // 登入方法
-    googleSignIn // Google 登入方法
-  };
+    currentUser,
+    loading,
+    error,
+    login,
+    googleSignIn,
+    sendVerificationCode,
+    register,
+    resetPassword,
+    logout
+  }
 }

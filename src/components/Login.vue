@@ -41,8 +41,9 @@
         <a href="#" @click.prevent="handleForgotPassword">忘記密碼？</a>
       </div>
 
-      <button type="submit" class="login-button" :disabled="!isFormValid">
-        登入
+      <div v-if="error" class="error-message">{{ error }}</div>
+      <button type="submit" class="login-button" :disabled="!isFormValid || loading">
+        {{ loading ? '登入中...' : '登入' }}
       </button>
 
       <button type="button" class="google-button" @click="handleGoogleSignIn">
@@ -54,46 +55,69 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
-import { useLoginForm } from '../composables/useLoginForm'
+import type { GoogleSignInData } from '../services/AuthService'
 
 const router = useRouter()
-//loading 和 error 我先設起來
 const { login, googleSignIn, loading, error } = useAuth()
-const {
-  form,
-  errors,
-  showPassword,
-  passwordLength,
-  hasEnglish,
-  hasNumber,
-  isFormValid,
-  validateForm,
-  resetForm
-} = useLoginForm()
+
+const showPassword: Ref<boolean> = ref(false)
+const form: Ref<{
+  email: string
+  password: string
+}> = ref({
+  email: '',
+  password: ''
+})
+
+const errors: Ref<{
+  email: boolean
+  password: boolean
+}> = ref({
+  email: false,
+  password: false
+})
+
+// 密碼驗證計算屬性
+const passwordLength: ComputedRef<boolean> = computed(() => form.value.password.length >= 6)
+const hasEnglish: ComputedRef<boolean> = computed(() => /[a-zA-Z]/.test(form.value.password))
+const hasNumber: ComputedRef<boolean> = computed(() => /[0-9]/.test(form.value.password))
+
+const isFormValid: ComputedRef<boolean> = computed(() => {
+  return passwordLength.value && 
+         hasEnglish.value && 
+         hasNumber.value && 
+         form.value.email !== ''
+})
 
 const handleSubmit = async () => {
-  if (!validateForm()) return
+  if (!isFormValid.value) return
 
-  const success = await login(form.value)
+  const success = await login({
+    email: form.value.email,
+    password: form.value.password
+  })
   
   if (success) {
-    resetForm()
-    router.push('/welcome')
+    router.push('/home')
   }
 }
 
 const handleGoogleSignIn = async () => {
-  const success = await googleSignIn()
+  const googleData: GoogleSignInData = {
+    email: form.value.email,
+    googlePwd: form.value.password
+  }
+  const success = await googleSignIn(googleData)
   if (success) {
-    router.push('/welcome')
+    router.push('/home')
   }
 }
 
 const handleForgotPassword = () => {
-  // TODO: 實作忘記密碼功能
-  console.log('Forgot password clicked')
+  router.push('/forgot-password')
 }
 </script>
 

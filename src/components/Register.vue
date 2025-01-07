@@ -59,27 +59,43 @@
         />
       </div>
 
-      <button type="submit" class="next-button" :disabled="!isFormValid">
+      <button type="submit" class="next-button" :disabled="!isFormValid || loading">
         下一步
       </button>
     </form>
+
+    <div v-if="error" class="error-message">{{ error }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, type Ref, type ComputedRef } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
+const { register, loading, error } = useAuth()
 
-const form = ref({
+const form: Ref<{
+  name: string
+  password: string
+  confirmPassword: string
+  verificationCode: string
+  email: string
+}> = ref({
   name: '',
   password: '',
   confirmPassword: '',
-  verificationCode: ''
+  verificationCode: '',
+  email: ''
 })
 
-const errors = ref({
+const errors: Ref<{
+  name: boolean
+  password: boolean
+  confirmPassword: boolean
+  verificationCode: boolean
+}> = ref({
   name: false,
   password: false,
   confirmPassword: false,
@@ -87,26 +103,49 @@ const errors = ref({
 })
 
 // 密碼驗證計算屬性
-const passwordLength = computed(() => form.value.password.length >= 6)
-const hasEnglish = computed(() => /[a-zA-Z]/.test(form.value.password))
-const hasNumber = computed(() => /[0-9]/.test(form.value.password))
+const passwordLength: ComputedRef<boolean> = computed(() => form.value.password.length >= 6)
+const hasEnglish: ComputedRef<boolean> = computed(() => /[a-zA-Z]/.test(form.value.password))
+const hasNumber: ComputedRef<boolean> = computed(() => /[0-9]/.test(form.value.password))
 
-const isFormValid = computed(() => {
+const isFormValid: ComputedRef<boolean> = computed(() => {
   return passwordLength.value && 
          hasEnglish.value && 
          hasNumber.value && 
          form.value.password === form.value.confirmPassword &&
-         form.value.name &&
-         form.value.verificationCode
+         form.value.name !== '' &&
+         form.value.verificationCode !== ''
 })
 
-const handleSubmit = () => {
-  // 這裡處理表單提交邏輯
-  console.log('Form submitted:', form.value)
+onMounted(() => {
+  // 從localStorage獲取email
+  const email = localStorage.getItem('registerEmail')
+  if (!email) {
+    router.push('/register-email')
+    return
+  }
+  form.value.email = email
+})
+
+const handleSubmit = async () => {
+  if (!isFormValid.value) return
+
+  const success = await register({
+    email: form.value.email,
+    name: form.value.name,
+    password: form.value.password,
+    isEmailVerified: false
+  }, form.value.verificationCode)
+
+  if (success) {
+    // 清除localStorage中的email
+    localStorage.removeItem('registerEmail')
+    // 導航到登入頁面
+    router.push('/login')
+  }
 }
 
 const goBack = () => {
-  router.push('/')
+  router.push('/register-email')
 }
 </script>
 

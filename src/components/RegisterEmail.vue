@@ -14,7 +14,7 @@
           required
           :class="{ 'error': emailError }"
         />
-        <span v-if="emailError" class="error-message">{{ errorMessage }}</span>
+        <span v-if="emailError" class="error-message">{{ error }}</span>
       </div>
 
       <button type="submit" class="register-button" :disabled="isLoading">
@@ -37,58 +37,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { useRouter } from 'vue-router'
-import { mockAuthApi } from '../mocks/authMock'
+import { useAuth } from '../composables/useAuth'
+import type { GoogleSignInData } from '../services/AuthService'
 
 const router = useRouter()
-const email = ref('')
-const emailError = ref(false)
-const errorMessage = ref('')
-const isLoading = ref(false)
-const loadingMessage = ref('')
+const { sendVerificationCode, googleSignIn, loading: isLoading, error } = useAuth()
+
+const email: Ref<string> = ref('')
+const loadingMessage: Ref<string> = ref('處理中...')
+const emailError: ComputedRef<boolean> = computed(() => !!error.value)
 
 const handleSubmit = async () => {
-  if (!email.value) {
-    emailError.value = true
-    errorMessage.value = '請輸入 Email'
-    return
-  }
+  if (!email.value) return
 
-  isLoading.value = true
-  loadingMessage.value = '檢查 Email...'
-  
-  try {
-    // 檢查 email 是否已存在
-    const emailExists = await mockAuthApi.checkEmailExists(email.value)
-    
-    if (emailExists) {
-      emailError.value = true
-      errorMessage.value = '此 Email 已被註冊'
-      return
-    }
-
-    // Email 可用，開始寄送驗證碼
-    loadingMessage.value = '驗證碼寄送至信箱中...'
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // 儲存 email 到 localStorage
+  const success = await sendVerificationCode(email.value, 'signUp')
+  if (success) {
+    // 將email存儲到localStorage，以便在下一步使用
     localStorage.setItem('registerEmail', email.value)
-    
-    // 導航到下一步
-    router.push('/register/info')
-  } catch (error) {
-    console.error('Error:', error)
-    emailError.value = true
-    errorMessage.value = '發生錯誤，請稍後再試'
-  } finally {
-    isLoading.value = false
+    router.push('/register')
   }
 }
 
-const handleGoogleSignIn = () => {
-  // 處理 Google 註冊邏輯
-  console.log('Google sign in clicked')
+const handleGoogleSignIn = async () => {
+  if (!email.value) return
+
+  const googleData: GoogleSignInData = {
+    email: email.value,
+    googlePwd: '' // 这里需要从Google OAuth获取
+  }
+  
+  const success = await googleSignIn(googleData)
+  if (success) {
+    router.push('/home')
+  }
 }
 </script>
 

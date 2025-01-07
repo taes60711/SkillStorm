@@ -3,3 +3,9 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module 'vue' {
+  import type { Ref, ComputedRef } from '@vue/reactivity'
+  export { ref, computed, onMounted } from '@vue/runtime-core'
+  export type { Ref, ComputedRef }
+}
