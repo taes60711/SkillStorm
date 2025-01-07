@@ -2,8 +2,7 @@
 import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
-import APIClient from '../api_service/api_client';
-import UserService from '../api_service/user_service';
+import UserService from '../services/user_service';
 
 const value = ref('');
 const editorRef = ref<any>(null); 
@@ -42,8 +41,8 @@ const outputValue = () => {
 
 const callApi = async () => {
   /// 暫時
-  new UserService().getUserDataByUID("uid");
-  
+   await new UserService().getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
+
 };
 
 
