@@ -50,7 +50,6 @@ export default class APIClient {
   ): Promise<T | string> => {
     const fullUrl = new URL(`${this.baseUrl}${url}`);
 
-
     try {
       console.log("Put API URL:", fullUrl.toString());
       console.log(`body: ${JSON.stringify(body)}`);
@@ -63,9 +62,7 @@ export default class APIClient {
 
       return response.data;
     } catch (error) {
-
       return "null";
     }
-
   };
 }

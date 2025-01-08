@@ -104,16 +104,26 @@ export default class UserService extends APIClient {
     const reponseData: string = await this.apiPush(`/update/${updateProfileData.uid}`, body);
 
     console.log(`updateProfileData : ${reponseData}`);
-
-    // const body: { [key: string]: any } = {
-    //   "uid": updateProfileData.uid,
-    //   "name": updateProfileData.name,
-    //   "image": updateProfileData.name,
-    //   "job": updateProfileData.job,
-    //   "introduction": updateProfileData.introduction,
-    //   "skills": updateProfileData.skills,
-    //   "wantSkills": updateProfileData.wantSkills,
-    // };
   }
 
+  /**
+   * MARK:修改密碼
+   * @param captchaCode 驗證碼
+   * @param email 信箱
+   * @param newPassword 新密碼
+   */
+  async updatePwd(captchaCode: string, email: string, newPassword: string) {
+    const sha256Password = cryptoJS.SHA256(newPassword).toString(cryptoJS.enc.Hex);
+
+    console.log(`sha256Password : ${sha256Password}`);
+
+    const body: { [key: string]: any } = {
+      "email": email,
+      "password": `${sha256Password}`,
+    };
+
+    const reponseData: string = await this.apiPush(`/updateUserPwdByEmail/${captchaCode}`, body);
+
+    console.log(`updatePwd : ${reponseData}`);
+  }
 }
