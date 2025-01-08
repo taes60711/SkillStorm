@@ -3,7 +3,9 @@ import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import AuthService from '../services/auth_service';
-import { ProfileData } from '../models/reponse/profile_data_reponse_data';
+import { ProfileData } from '../models/reponse/auth/profile_data_reponse_data';
+import { LoginRequestData } from '../models/request/auth/login_request_data';
+import EmailService from '../services/email_service';
 
 
 
@@ -38,18 +40,32 @@ const insertCustomText = () => {
   editor.setSelection(cursorPos + inputed.length);
 };
 
-
 const outputValue = () => {
   console.log('Editor Value:', value.value);
 };
 
-
-const callApi = async () => {
-
+/// 已確認過
+const getUserDataByUID = async () => {
   userData.value = await new AuthService().getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
-  console.log(userData.value.email);
+  console.log(userData.value);
 };
 
+/// 已確認過
+const getUserDataByEmail = async () => {
+  const loginData: LoginRequestData = {
+    email: '',
+    password: ''
+  };
+  
+  userData.value = await new AuthService().getUserDataByEmail(loginData, "normalSign");
+  console.log(userData.value);
+};
+
+/// 已確認過
+const sendEmail = async () => {
+ const email: string = '';
+ await new EmailService().sendCaptchaMail(email, "signUp");
+};
 
 
 
@@ -63,7 +79,10 @@ const callApi = async () => {
 
     <button @click="outputValue">輸出內容</button>
     <button @click="insertCustomText">插入自定義文字</button>
-    <button @click="callApi">呼叫API</button> 
+
+    <button @click="getUserDataByUID">取得使用者資料by Id</button> 
+    <button @click="getUserDataByEmail">取得使用者資料by Email&Pwd</button> 
+    <button @click="sendEmail">寄驗證碼</button> 
   </div>
 </template>
 

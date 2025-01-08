@@ -2,7 +2,11 @@ import { ip, port } from '../main';
 import axios, { AxiosResponse } from 'axios';
 
 export default class APIClient {
-  baseUrl: string = `http://${ip}:${port}`;
+  protected baseUrl: string;
+
+  constructor(baseUrl: string = `http://${ip}:${port}`) {
+    this.baseUrl = baseUrl;
+  }
 
   apiGet = async <T>(
     url: string,
@@ -10,7 +14,10 @@ export default class APIClient {
     needReturnPrint = false
   ): Promise<T | string> => {
 
-    const fullUrl = new URL(url, this.baseUrl);
+
+    const fullUrl = new URL(`${this.baseUrl}${url}`);
+
+    console.log(fullUrl);
 
     if (parameters) {
       Object.keys(parameters).forEach(key => {
