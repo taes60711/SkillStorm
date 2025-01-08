@@ -11,7 +11,7 @@ app.mount('#app');
 
 
 /// api用的ip & port
-export const ip: string = "192.168.2.62";
+export const ip: string = "192.168.1.160";
 export const port: string = "80";
 
 /// "192.168.2.62"

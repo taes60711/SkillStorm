@@ -65,6 +65,8 @@ export default class UserService extends APIClient {
       "uid": userUID,
       "lastlogin": lastLoginTime,
     };
+
+
     const reponseData: string = await this.apiPush(`/updateLoginTime/${userUID}`, body);
 
     console.log(`updateUserLoginLastTime : ${reponseData}`);
@@ -84,6 +86,7 @@ export default class UserService extends APIClient {
       "email": signUpdata.email,
       "password": `${sha256Password}`,
       "name": signUpdata.name,
+      "isEmailVerified": true,
     };
 
     const reponseData: string = await this.apiPush(`/signUp/${captchaCode}`, body);

@@ -6,6 +6,8 @@ import UserService from '../services/user_service';
 import { ProfileData } from '../models/reponse/auth/profile_data_reponse_data';
 import { LoginRequestData } from '../models/request/auth/login_request_data';
 import EmailService from '../services/email_service';
+import { SignUpRequestData } from '../models/request/auth/sign_up_request_data';
+import { UpdateProfileRequestData } from '@/models/request/auth/update_profile_request_data';
 
 
 
@@ -53,8 +55,8 @@ const getUserDataByUID = async () => {
 /// 已確認過
 const getUserDataByEmail = async () => {
   const loginData: LoginRequestData = {
-    email: '',
-    password: ''
+    email: 'test1234@gmail.com',
+    password: 'test1234'
   };
   
   userData.value = await new UserService().getUserDataByEmail(loginData, "normalSign");
@@ -63,10 +65,42 @@ const getUserDataByEmail = async () => {
 
 /// 已確認過
 const sendEmail = async () => {
- const email: string = '';
+ const email: string = 'test1234@gmail.com';
  await new EmailService().sendCaptchaMail(email, "signUp");
 };
 
+/// 已確認過
+const updateUserLastLoginTime = async () => {
+  await new UserService().updateUserLoginLastTime("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
+};
+
+/// 已確認過
+/// 需要先執行 寄送驗證碼（註冊）
+/// 直接在api server的log 找 generateCaptcha : 可以看到驗證碼 
+const signUp = async () => {
+  const signUpData: SignUpRequestData = {
+    email: 'test1234@gmail.com',
+    password: 'test1234',
+    name: 'testUserName'
+  };
+
+  await new UserService().signUp("F7N6Y9hF", signUpData);
+};
+
+/// 已確認過
+const updateUser = async () => {
+  const updateProfileData: UpdateProfileRequestData = {
+    uid: '86173abc4a034382950b48446417217a', // UID 是我在測試註冊帳號產出的
+    image: null,
+    introduction: 'updateTestIntroduction',
+    job: 'updateTestJob',
+    name: 'updateTestName',
+    skills: [],
+    wantSkills: [],
+  };
+
+  await new UserService().updateProfileData(updateProfileData);
+};
 
 
 </script>
@@ -83,6 +117,9 @@ const sendEmail = async () => {
     <button @click="getUserDataByUID">取得使用者資料by Id</button> 
     <button @click="getUserDataByEmail">取得使用者資料by Email&Pwd</button> 
     <button @click="sendEmail">寄驗證碼</button> 
+    <button @click="signUp">註冊</button> 
+    <button @click="updateUser">更新使用者資料</button> 
+    <button @click="updateUserLastLoginTime">更新使用者登入時間</button> 
   </div>
 </template>
 

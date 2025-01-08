@@ -13,11 +13,7 @@ export default class APIClient {
     parameters?: { [key: string]: any },
     needReturnPrint = false
   ): Promise<T | string> => {
-
-
     const fullUrl = new URL(`${this.baseUrl}${url}`);
-
-    console.log(fullUrl);
 
     if (parameters) {
       Object.keys(parameters).forEach(key => {
@@ -49,10 +45,11 @@ export default class APIClient {
 
   apiPush = async <T>(
     url: string,
-    headers: { [key: string]: string } = { 'content-type': 'application/json' },
     body?: { [key: string]: any },
+    headers: { [key: string]: string } = { 'content-type': 'application/json' },
   ): Promise<T | string> => {
-    const fullUrl = new URL(url, this.baseUrl);
+    const fullUrl = new URL(`${this.baseUrl}${url}`);
+
 
     try {
       console.log("Put API URL:", fullUrl.toString());
