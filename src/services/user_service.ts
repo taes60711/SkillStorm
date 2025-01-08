@@ -6,8 +6,8 @@ import { SignUpRequestData } from "@/models/request/auth/sign_up_request_data";
 import { LoginRequestData } from "@/models/request/auth/login_request_data";
 import { UpdateProfileRequestData } from "@/models/request/auth/update_profile_request_data";
 
-///  登入/註冊相關API
-export default class AuthService extends APIClient {
+///  使用者相關API
+export default class UserService extends APIClient {
 
   constructor() {
     super(`http://${ip}:${port}/user`);
@@ -53,6 +53,21 @@ export default class AuthService extends APIClient {
     }
 
     return reponseData;
+  }
+
+  /**
+   * MARK:更新使用者登入的時間
+   * @param userUID 登入的使用者的UID
+   */
+  async updateUserLoginLastTime(userUID: string) {
+    const lastLoginTime: string = new Date().toISOString();
+    const body: { [key: string]: any } = {
+      "uid": userUID,
+      "lastlogin": lastLoginTime,
+    };
+    const reponseData: string = await this.apiPush(`/updateLoginTime/${userUID}`, body);
+
+    console.log(`updateUserLoginLastTime : ${reponseData}`);
   }
 
   /**

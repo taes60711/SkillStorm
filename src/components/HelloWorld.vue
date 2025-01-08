@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
-import AuthService from '../services/auth_service';
+import UserService from '../services/user_service';
 import { ProfileData } from '../models/reponse/auth/profile_data_reponse_data';
 import { LoginRequestData } from '../models/request/auth/login_request_data';
 import EmailService from '../services/email_service';
@@ -46,7 +46,7 @@ const outputValue = () => {
 
 /// 已確認過
 const getUserDataByUID = async () => {
-  userData.value = await new AuthService().getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
+  userData.value = await new UserService().getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
   console.log(userData.value);
 };
 
@@ -57,7 +57,7 @@ const getUserDataByEmail = async () => {
     password: ''
   };
   
-  userData.value = await new AuthService().getUserDataByEmail(loginData, "normalSign");
+  userData.value = await new UserService().getUserDataByEmail(loginData, "normalSign");
   console.log(userData.value);
 };
 
