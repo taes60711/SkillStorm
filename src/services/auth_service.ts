@@ -1,9 +1,10 @@
 import APIClient from "./api_client";
-import { ProfileData } from "../models/reponse/auth/profile_data_reponse_data";
+import { ip, port } from "../main";
 import * as cryptoJS from 'crypto-js';
+import { ProfileData } from "../models/reponse/auth/profile_data_reponse_data";
 import { SignUpRequestData } from "@/models/request/auth/sign_up_request_data";
 import { LoginRequestData } from "@/models/request/auth/login_request_data";
-import { ip, port } from "../main";
+import { UpdateProfileRequestData } from "@/models/request/auth/update_profile_request_data";
 
 ///  登入/註冊相關API
 export default class AuthService extends APIClient {
@@ -73,6 +74,28 @@ export default class AuthService extends APIClient {
     const reponseData: string = await this.apiPush(`/signUp/${captchaCode}`, body);
 
     console.log(`signUp : ${reponseData}`);
+  }
+
+  /**
+   * MARK:更新使用者資料
+   * @param updateProfileData 
+   */
+  async updateProfileData(updateProfileData: UpdateProfileRequestData) {
+    const body = Object.fromEntries(Object.entries(updateProfileData));
+
+    const reponseData: string = await this.apiPush(`/update/${updateProfileData.uid}`, body);
+
+    console.log(`updateProfileData : ${reponseData}`);
+
+    // const body: { [key: string]: any } = {
+    //   "uid": updateProfileData.uid,
+    //   "name": updateProfileData.name,
+    //   "image": updateProfileData.name,
+    //   "job": updateProfileData.job,
+    //   "introduction": updateProfileData.introduction,
+    //   "skills": updateProfileData.skills,
+    //   "wantSkills": updateProfileData.wantSkills,
+    // };
   }
 
 }

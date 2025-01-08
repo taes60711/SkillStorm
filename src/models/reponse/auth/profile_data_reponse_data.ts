@@ -15,7 +15,7 @@ export interface ProfileData {
     status: number;
 }
 
-interface Skill {
+export interface Skill {
     name: string;
     level: number;
     month: number;
