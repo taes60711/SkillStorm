@@ -4,12 +4,13 @@ import { ref } from "vue";
 /// 忘記密碼ViewModel
 export default class PwdForgotViewModel {
     codeController = ref<string>(''); /// 驗證碼
-    pwdController = ref<string>(''); /// 密碼
-    newPwdController = ref<string>(''); /// 新密碼
+    codeIsEmpty = ref<boolean>(false); /// 驗證碼 錯誤
 
-    codeIsEmpty: boolean = false;
-    pwdIsEmpty: boolean = false;
-    newPwdIsEmpty: boolean = false;
+    pwdController = ref<string>(''); /// 密碼
+    pwdIsEmpty = ref<boolean>(false);  /// 密碼 錯誤
+
+    newPwdController = ref<string>(''); /// 新密碼
+    newPwdIsEmpty = ref<boolean>(false);  /// 新密碼 錯誤
 
     /**
      * MARK: 送出按鈕
@@ -35,19 +36,19 @@ export default class PwdForgotViewModel {
 
         /// 驗證碼
         if (this.codeController.value.replaceAll(" ", "") === "") {
-            this.codeIsEmpty = true;
+            this.codeIsEmpty.value = true;
             isOK = false;
         }
 
         /// 密碼
         if (this.pwdController.value.replaceAll(" ", "") === "") {
-            this.pwdIsEmpty = true;
+            this.pwdIsEmpty.value = true;
             isOK = false;
         }
 
         /// 新密碼
         if (this.newPwdController.value.replaceAll(" ", "") === "") {
-            this.newPwdIsEmpty = true;
+            this.newPwdIsEmpty.value = true;
             isOK = false;
         }
         return isOK;

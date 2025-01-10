@@ -4,5 +4,4 @@
 export interface SkillData {
     id: number;
     name: string;
-
 }
