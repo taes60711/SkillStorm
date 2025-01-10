@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import PwdForgotView from './components/account/PwdForgotView.vue';
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <HelloWorld/>
-  <PwdForgotView/>
+  <router-view></router-view>
 </template>
 
-<style scoped>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 
+body {
+  background-color: #000000;
+}
 </style>
