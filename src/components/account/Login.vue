@@ -57,8 +57,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, type Ref, type ComputedRef } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth } from '../composables/useAuth'
-import type { GoogleSignInData } from '../services/AuthService'
+import { useAuth } from '../../composables/useAuth'
+import type { GoogleSignInData } from '../../models/UserModel'
+import { RouterManger } from '../../router/router_manager'
+
 
 const router = useRouter()
 const { login, googleSignIn, loading, error } = useAuth()
@@ -117,7 +119,7 @@ const handleGoogleSignIn = async () => {
 }
 
 const handleForgotPassword = () => {
-  router.push('/forgot-password')
+  router.push(RouterManger.AUTH.PWDFORGOT)
 }
 </script>
 

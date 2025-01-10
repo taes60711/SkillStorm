@@ -1,5 +1,6 @@
-import { ip, port } from '../main';
-import axios, { AxiosResponse } from 'axios';
+import axios, { type AxiosResponse } from 'axios';
+import { ip, port } from "./api.config";
+
 
 export default class APIClient {
   protected baseUrl: string;

@@ -1,4 +1,4 @@
-import { Skill } from "@/models/reponse/auth/profile_data_reponse_data";
+import type { Skill } from "../../reponse/auth/profile_data_reponse_data";
 
 /**
  * 更新使用者的Data

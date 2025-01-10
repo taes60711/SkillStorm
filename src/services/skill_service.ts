@@ -1,5 +1,5 @@
-import { SkillData } from "../models/reponse/skill_reponse_data";
-import { ip, port } from "../main";
+import type { SkillData } from "../models/reponse/skill_reponse_data";
+import { API_CONFIG, ip, port } from "./api.config";
 import APIClient from "./api_client";
 
 ///  技能相關API
@@ -13,7 +13,7 @@ export default class SkillService extends APIClient {
      */
     async getSkillList(): Promise<SkillData> {
 
-        const reponseData: SkillData | string = await this.apiGet(`/getList`);
+        const reponseData: SkillData | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.SKILL.GET_ALL_SKILL}`);
 
         console.log(`getSkillList : ${reponseData}`);
 

@@ -34,6 +34,8 @@ export default class PwdForgotViewModel {
     private emptyCheck = (): boolean => {
         let isOK: boolean = true;
 
+        this.resetAllErr();
+
         /// 驗證碼
         if (this.codeController.value.replaceAll(" ", "") === "") {
             this.codeIsEmpty.value = true;
@@ -52,5 +54,11 @@ export default class PwdForgotViewModel {
             isOK = false;
         }
         return isOK;
+    }
+
+    private resetAllErr() {
+        this.codeIsEmpty.value = false;
+        this.pwdIsEmpty.value = false;
+        this.newPwdIsEmpty.value = false;
     }
 }

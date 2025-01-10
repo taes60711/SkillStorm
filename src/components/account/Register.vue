@@ -78,7 +78,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, type Ref, type ComputedRef } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth } from '../composables/useAuth'
+import { useAuth } from '../../composables/useAuth'
+import { RouterManger } from '../../router/router_manager'
+
 
 const router = useRouter()
 const { register, loading, error } = useAuth()
@@ -147,12 +149,12 @@ const handleSubmit = async () => {
     // 清除localStorage中的email
     localStorage.removeItem('registerEmail')
     // 導航到登入頁面
-    router.push('/login')
+    router.push(RouterManger.AUTH.LOGIN)
   }
 }
 
 const goBack = () => {
-  router.push('/register-email')
+  router.push(RouterManger.AUTH.REGISTEREMAIL)
 }
 </script>
 

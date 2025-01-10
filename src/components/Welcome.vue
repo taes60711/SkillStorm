@@ -13,15 +13,16 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { RouterManger } from '../router/router_manager';
 
 const router = useRouter()
 
 const goToLogin = () => {
-  router.push('/login')
+  router.push(RouterManger.AUTH.LOGIN)
 }
 
 const goToRegister = () => {
-  router.push('/register/email')
+  router.push(RouterManger.AUTH.REGISTEREMAIL)
 }
 </script>
 

@@ -38,7 +38,7 @@ export interface RegisterData {
  * 負責處理所有與用戶認證相關的業務邏輯
  */
 export class AuthService {
-  private baseUrl = API_CONFIG.BASE_URL
+  private baseUrl = "";//API_CONFIG.BASE_URL
 
   /**
    * 用戶登入
@@ -115,7 +115,7 @@ export class AuthService {
    */
   async sendVerificationCode(email: string, type: 'signUp' | 'resetPwd'): Promise<string> {
     try {
-      const response = await fetch(`${this.baseUrl}${API_CONFIG.ENDPOINTS.AUTH.SEND_CAPTCHA}?email=${email}&emailType=${type}`, {
+      const response = await fetch(`${this.baseUrl}${API_CONFIG.ENDPOINTS.EMAIL.SEND_CAPTCHA}?email=${email}&emailType=${type}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -232,16 +232,16 @@ export class AuthService {
    * @param token - 新的Token
    */
   async updateToken(uid: string, token: string): Promise<void> {
-    try {
-      await fetch(`${this.baseUrl}${API_CONFIG.ENDPOINTS.AUTH.UPDATE_TOKEN}/${uid}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token })
-      })
-    } catch (error) {
-      console.error('更新Token失敗:', error)
-    }
+    // try {
+    //   await fetch(`${this.baseUrl}${API_CONFIG.ENDPOINTS.AUTH.UPDATE_TOKEN}/${uid}`, {
+    //     method: 'PUT',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ token })
+    //   })
+    // } catch (error) {
+    //   console.error('更新Token失敗:', error)
+    // }
   }
 }

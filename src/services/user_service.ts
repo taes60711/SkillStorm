@@ -1,10 +1,11 @@
 import APIClient from "./api_client";
-import { ip, port } from "../main";
+
 import * as cryptoJS from 'crypto-js';
-import { ProfileData } from "../models/reponse/auth/profile_data_reponse_data";
-import { SignUpRequestData } from "@/models/request/auth/sign_up_request_data";
-import { LoginRequestData } from "@/models/request/auth/login_request_data";
-import { UpdateProfileRequestData } from "@/models/request/auth/update_profile_request_data";
+import type { ProfileData } from "../models/reponse/auth/profile_data_reponse_data";
+import type { LoginRequestData } from "../models/request/auth/login_request_data";
+import type { UpdateProfileRequestData } from "../models/request/auth/update_profile_request_data";
+import type { SignUpRequestData } from "../models/request/auth/sign_up_request_data";
+import { API_CONFIG, ip, port } from "./api.config";
 
 ///  使用者相關API
 export default class UserService extends APIClient {
@@ -46,7 +47,7 @@ export default class UserService extends APIClient {
       "password": `${sha256Password}`,
     };
 
-    const reponseData: ProfileData | string = await this.apiGet(`/login`, parameters);
+    const reponseData: ProfileData | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.AUTH.LOGIN}`, parameters);
 
     if (typeof reponseData === 'string') {
       throw new Error(`Failed`);
@@ -67,7 +68,7 @@ export default class UserService extends APIClient {
     };
 
 
-    const reponseData: string = await this.apiPush(`/updateLoginTime/${userUID}`, body);
+    const reponseData: string = await this.apiPush(`${API_CONFIG.ENDPOINTS.AUTH.UPDATE_LOGIN_TIME}/${userUID}`, body);
 
     console.log(`updateUserLoginLastTime : ${reponseData}`);
   }
@@ -89,7 +90,7 @@ export default class UserService extends APIClient {
       "isEmailVerified": true,
     };
 
-    const reponseData: string = await this.apiPush(`/signUp/${captchaCode}`, body);
+    const reponseData: string = await this.apiPush(`${API_CONFIG.ENDPOINTS.AUTH.SIGN_UP}/${captchaCode}`, body);
 
     console.log(`signUp : ${reponseData}`);
   }
@@ -101,7 +102,7 @@ export default class UserService extends APIClient {
   async updateProfileData(updateProfileData: UpdateProfileRequestData) {
     const body = Object.fromEntries(Object.entries(updateProfileData));
 
-    const reponseData: string = await this.apiPush(`/update/${updateProfileData.uid}`, body);
+    const reponseData: string = await this.apiPush(`${API_CONFIG.ENDPOINTS.AUTH.UPDATE}/${updateProfileData.uid}`, body);
 
     console.log(`updateProfileData : ${reponseData}`);
   }
@@ -122,7 +123,7 @@ export default class UserService extends APIClient {
       "password": `${sha256Password}`,
     };
 
-    const reponseData: string = await this.apiPush(`/updateUserPwdByEmail/${captchaCode}`, body);
+    const reponseData: string = await this.apiPush(`${API_CONFIG.ENDPOINTS.AUTH.UPDATE_PASSWORD}/${captchaCode}`, body);
 
     console.log(`updatePwd : ${reponseData}`);
   }

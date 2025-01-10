@@ -1,4 +1,4 @@
-import { ip, port } from "../main";
+import { API_CONFIG, ip, port } from "./api.config";
 import APIClient from "./api_client";
 
 ///  登入/註冊相關API
@@ -20,7 +20,7 @@ export default class EmailService extends APIClient {
             emailType: type,
         };
 
-        const reponseData: string = await this.apiGet(`/sendCaptchaMail`, params);
+        const reponseData: string = await this.apiGet(`${API_CONFIG.ENDPOINTS.EMAIL.SEND_CAPTCHA}`, params);
 
         console.log(`sendCaptchaMail : ${reponseData}`);
 

@@ -39,8 +39,9 @@
 <script setup lang="ts">
 import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth } from '../composables/useAuth'
-import type { GoogleSignInData } from '../services/AuthService'
+import type { GoogleSignInData } from '../../models/UserModel'
+import { useAuth } from '../../composables/useAuth'
+import { RouterManger } from '../../router/router_manager'
 
 const router = useRouter()
 const { sendVerificationCode, googleSignIn, loading: isLoading, error } = useAuth()
@@ -56,7 +57,7 @@ const handleSubmit = async () => {
   if (success) {
     // 將email存儲到localStorage，以便在下一步使用
     localStorage.setItem('registerEmail', email.value)
-    router.push('/register')
+    router.push(RouterManger.AUTH.REGISTER)
   }
 }
 
