@@ -3,11 +3,11 @@ import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import UserService from '../services/user_service';
-import { ProfileData } from '../models/reponse/auth/profile_data_reponse_data';
-import { LoginRequestData } from '../models/request/auth/login_request_data';
+import type { ProfileData } from '../models/reponse/auth/profile_data_reponse_data';
+import type { LoginRequestData } from '../models/request/auth/login_request_data';
 import EmailService from '../services/email_service';
-import { SignUpRequestData } from '../models/request/auth/sign_up_request_data';
-import { UpdateProfileRequestData } from '@/models/request/auth/update_profile_request_data';
+import type { SignUpRequestData } from '../models/request/auth/sign_up_request_data';
+import type { UpdateProfileRequestData } from '../models/request/auth/update_profile_request_data';
 
 
 

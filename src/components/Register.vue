@@ -65,6 +65,13 @@
     </form>
 
     <div v-if="error" class="error-message">{{ error }}</div>
+
+    <!-- 加載提示 -->
+    <div class="loading-overlay" v-if="loading">
+      <div class="loading-content">
+        <div class="loading-text">處理中...</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -208,7 +215,7 @@ label {
 }
 
 input {
-  background-color: transparent;
+  background-color: #1a1a1a;
   border: 1px solid #333333;
   border-radius: 8px;
   padding: 12px;
@@ -230,7 +237,8 @@ input.error {
 .password-requirements {
   margin-top: 8px;
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .requirement {
@@ -250,19 +258,56 @@ input.error {
 }
 
 .next-button {
+  padding: 12px;
   background-color: #333333;
   color: #FFFFFF;
   border: none;
   border-radius: 8px;
-  padding: 15px;
-  font-size: 16px;
   cursor: pointer;
-  margin-top: 20px;
+  font-weight: 500;
+  font-size: 16px;
+  width: 100%;
 }
 
 .next-button:disabled {
-  opacity: 0.5;
+  opacity: 0.7;
   cursor: not-allowed;
+}
+
+.error-message {
+  color: #FF4444;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loading-text {
+  font-size: 16px;
+  font-weight: 500;
 }
 
 @media screen and (max-width: 480px) {

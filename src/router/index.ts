@@ -23,7 +23,7 @@ const router = createRouter({
       component: RegisterEmail
     },
     {
-      path: '/register/info',
+      path: '/register',
       name: 'register',
       component: Register
     }
