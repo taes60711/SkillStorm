@@ -3,7 +3,6 @@ import Welcome from '../components/Welcome.vue'
 import RegisterEmail from '../components/RegisterEmail.vue'
 import Register from '../components/Register.vue'
 import Login from '../components/Login.vue'
-import ForgotPassword from '../components/ForgotPassword.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,11 +16,6 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
-    },
-    {
-      path: '/forgot-password',
-      name: 'forgotPassword',
-      component: ForgotPassword
     },
     {
       path: '/register/email',
