@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import UserService from '../../services/user_service';
-import type { GoogleSignInData } from '../../models/UserModel';
-import { RouterManger } from '../../router/router_manager';
+import type { LoginRequestData } from '../../models/request/auth/login_request_data';
+import type { ProfileData } from '../../models/reponse/auth/profile_data_reponse_data';
 
 export default class LoginViewModel {
     private userService = new UserService();
@@ -46,17 +46,25 @@ export default class LoginViewModel {
         this.error.value = '';
 
         try {
-            await this.userService.login({
+            const loginData: LoginRequestData = {
                 email: this.emailController.value,
                 password: this.pwdController.value
-            });
-            this.router.push('/home');
+            };
+
+            const userData: ProfileData = await this.userService.getUserDataByEmail(loginData, "normalSign");
+            if (userData) {
+                // 更新最後登入時間
+                await this.userService.updateUserLoginLastTime(userData.uid);
+                this.router.push('/home');
+            } else {
+                throw new Error('登入失敗');
+            }
         } catch (err) {
             this.error.value = err instanceof Error ? err.message : '登入失敗';
         } finally {
             this.loading.value = false;
         }
-    };
+    }
 
     /**
      * 處理 Google 登入
@@ -66,66 +74,31 @@ export default class LoginViewModel {
         this.error.value = '';
 
         try {
-            const googleData: GoogleSignInData = {
+            const userData = await this.userService.googleSignIn({
                 email: this.emailController.value,
-                googlePwd: this.pwdController.value
-            };
-            await this.userService.googleSignIn(googleData);
-            this.router.push('/home');
+                googlePwd: ''  // 這個值會由 Google OAuth 提供
+            });
+            if (userData) {
+                this.router.push('/home');
+            }
         } catch (err) {
             this.error.value = err instanceof Error ? err.message : 'Google 登入失敗';
         } finally {
             this.loading.value = false;
         }
-    };
+    }
 
     /**
      * 處理忘記密碼
      */
     handleForgotPassword = () => {
-        this.router.push(RouterManger.AUTH.PWDFORGOT);
-    };
-
-    /**
-     * 處理註冊導航
-     */
-    handleRegister = () => {
-        this.router.push(RouterManger.AUTH.REGISTEREMAIL);
-    };
-
-    /**
-     * 重置所有錯誤
-     */
-    private resetAllErr() {
-        this.emailIsEmpty.value = false;
-        this.pwdIsEmpty.value = false;
-        this.error.value = '';
+        this.router.push('/forgot-password');
     }
 
     /**
-     * 確認是否有為空的值
+     * 處理註冊
      */
-    private emptyCheck = (): boolean => {
-        let isOK = true;
-        this.resetAllErr();
-
-        if (this.emailController.value.replaceAll(" ", "") === "") {
-            this.emailIsEmpty.value = true;
-            isOK = false;
-        }
-
-        if (this.pwdController.value.replaceAll(" ", "") === "") {
-            this.pwdIsEmpty.value = true;
-            isOK = false;
-        }
-
-        return isOK;
-    };
-
-    /**
-     * 確認是否編輯過
-     */
-    isEdit(): boolean {
-        return this.emailController.value !== '' || this.pwdController.value !== '';
+    handleRegister = () => {
+        this.router.push('/register/email');
     }
 } 
