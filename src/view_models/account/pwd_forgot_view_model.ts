@@ -1,8 +1,11 @@
 import { ref } from "vue";
+import UserService from "../../services/user_service";
 
 
 /// 忘記密碼ViewModel
 export default class PwdForgotViewModel {
+    userService = new UserService();
+
     codeController = ref<string>(''); /// 驗證碼
     codeIsEmpty = ref<boolean>(false); /// 驗證碼 錯誤
 
@@ -18,11 +21,15 @@ export default class PwdForgotViewModel {
     /**
      * MARK: 送出按鈕
      */
-    send = () => {
+    send = async () => {
         if (this.emptyCheck()) {
             console.log(
                 `Code: ${this.codeController.value} Email: ${this.emailController.value} Pwd: ${this.pwdController.value} newPwd: ${this.newPwdController.value}`
             );
+
+            /// Call API 暫時註解掉
+            // await this.userService.updatePwd(this.codeController.value, this.emailController.value, this.pwdController.value);
+            console.log(`修改成功 彈回至登入頁面`);
         } else {
             console.log(
                 `驗證碼為空？${this.codeIsEmpty.value} Email為空？${this.emailIsEmpty.value} Pwd為空？${this.pwdIsEmpty.value} NewPwd為空？${this.newPwdIsEmpty.value}`
