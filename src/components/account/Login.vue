@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="logo-container">
-      <img src="../assets/logo.png" alt="SkillStorm" class="logo" />
+      <img src="../../assets/logo.png" alt="SkillStorm" class="logo" />
       <h1 class="brand-name">SKILLSTORM</h1>
     </div>
     
@@ -11,8 +11,8 @@
         <input 
           type="email" 
           id="email" 
-          v-model="form.email"
-          :class="{ 'error': errors.email }"
+          v-model="emailController"
+          :class="{ 'error': emailIsEmpty }"
         />
       </div>
 
@@ -21,8 +21,8 @@
         <input 
           :type="showPassword ? 'text' : 'password'"
           id="password" 
-          v-model="form.password"
-          :class="{ 'error': errors.password }"
+          v-model="pwdController"
+          :class="{ 'error': pwdIsEmpty }"
         />
         <div class="password-requirements">
           <div class="requirement" :class="{ 'met': passwordLength }">
@@ -47,80 +47,41 @@
       </button>
 
       <button type="button" class="google-button" @click="handleGoogleSignIn">
-        <img src="../assets/google-icon.svg" alt="Google" class="google-icon" />
+        <img src="../../assets/google-icon.svg" alt="Google" class="google-icon" />
         Google登入
       </button>
+
+      <div class="register-link">
+      <button type="button" class="register-button" @click="handleRegister">建立新帳號</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, type Ref, type ComputedRef } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '../../composables/useAuth'
-import type { GoogleSignInData } from '../../models/UserModel'
-import { RouterManger } from '../../router/router_manager'
+import { onMounted } from 'vue'
+import LoginViewModel from '../../view_models/account/login_view_model'
 
+const viewModel = new LoginViewModel()
 
-const router = useRouter()
-const { login, googleSignIn, loading, error } = useAuth()
-
-const showPassword: Ref<boolean> = ref(false)
-const form: Ref<{
-  email: string
-  password: string
-}> = ref({
-  email: '',
-  password: ''
-})
-
-const errors: Ref<{
-  email: boolean
-  password: boolean
-}> = ref({
-  email: false,
-  password: false
-})
-
-// 密碼驗證計算屬性
-const passwordLength: ComputedRef<boolean> = computed(() => form.value.password.length >= 6)
-const hasEnglish: ComputedRef<boolean> = computed(() => /[a-zA-Z]/.test(form.value.password))
-const hasNumber: ComputedRef<boolean> = computed(() => /[0-9]/.test(form.value.password))
-
-const isFormValid: ComputedRef<boolean> = computed(() => {
-  return passwordLength.value && 
-         hasEnglish.value && 
-         hasNumber.value && 
-         form.value.email !== ''
-})
-
-const handleSubmit = async () => {
-  if (!isFormValid.value) return
-
-  const success = await login({
-    email: form.value.email,
-    password: form.value.password
-  })
-  
-  if (success) {
-    router.push('/home')
-  }
-}
-
-const handleGoogleSignIn = async () => {
-  const googleData: GoogleSignInData = {
-    email: form.value.email,
-    googlePwd: form.value.password
-  }
-  const success = await googleSignIn(googleData)
-  if (success) {
-    router.push('/home')
-  }
-}
-
-const handleForgotPassword = () => {
-  router.push(RouterManger.AUTH.PWDFORGOT)
-}
+// 導出需要的屬性和方法
+const {
+  emailController,
+  pwdController,
+  emailIsEmpty,
+  pwdIsEmpty,
+  loading,
+  error,
+  showPassword,
+  passwordLength,
+  hasEnglish,
+  hasNumber,
+  isFormValid,
+  handleSubmit,
+  handleGoogleSignIn,
+  handleForgotPassword,
+  handleRegister
+} = viewModel
 </script>
 
 <style scoped>
@@ -278,6 +239,28 @@ input:disabled {
   cursor: not-allowed;
 }
 
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #FFFFFF;
+  font-size: 14px;
+}
+
+.register-button {
+  background: none;
+  border: none;
+  color: #4A90E2;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+  text-decoration: underline;
+}
+
+.register-button:hover {
+  color: #357ABD;
+}
+
 @media screen and (max-width: 480px) {
   .logo {
     width: 64px;
@@ -301,6 +284,14 @@ input:disabled {
   button {
     padding: 12px;
     font-size: 14px;
+  }
+
+  .register-link {
+    font-size: 12px;
+  }
+
+  .register-button {
+    font-size: 12px;
   }
 }
 </style>

@@ -35,3 +35,10 @@ export interface GoogleSignInData {
   email: string;     // Google郵箱
   googlePwd: string; // Google ID作為密碼
 }
+
+export interface RegisterData {
+  email: string
+  name: string
+  password: string
+  isEmailVerified: boolean
+}

@@ -1,30 +1,28 @@
 <template>
   <div class="register-container">
-    <div class="header">
-      <button class="back-button" @click="goBack">
-        <span class="back-icon">&#8592;</span>
-      </button>
-      <h1 class="title">註冊(1/2)</h1>
+    <div class="logo-container">
+      <img src="../../assets/logo.png" alt="SkillStorm" class="logo" />
+      <h1 class="brand-name">SKILLSTORM</h1>
     </div>
-
+    
     <form @submit.prevent="handleSubmit" class="register-form">
       <div class="form-group">
         <label for="name">名稱</label>
         <input 
           type="text" 
           id="name" 
-          v-model="form.name"
-          :class="{ 'error': errors.name }"
+          v-model="nameController"
+          :class="{ 'error': nameIsEmpty }"
         />
       </div>
 
       <div class="form-group">
         <label for="password">密碼</label>
         <input 
-          type="password" 
+          :type="showPassword ? 'text' : 'password'"
           id="password" 
-          v-model="form.password"
-          :class="{ 'error': errors.password }"
+          v-model="pwdController"
+          :class="{ 'error': pwdIsEmpty }"
         />
         <div class="password-requirements">
           <div class="requirement" :class="{ 'met': passwordLength }">
@@ -42,120 +40,66 @@
       <div class="form-group">
         <label for="confirmPassword">確認密碼</label>
         <input 
-          type="password" 
+          :type="showConfirmPassword ? 'text' : 'password'"
           id="confirmPassword" 
-          v-model="form.confirmPassword"
-          :class="{ 'error': errors.confirmPassword }"
+          v-model="confirmPwdController"
+          :class="{ 'error': confirmPwdIsEmpty }"
         />
+        <div class="password-match" v-if="confirmPwdController">
+          <div class="requirement" :class="{ 'met': passwordsMatch }">
+            <span class="x-mark">&#10005;</span>密碼相符
+          </div>
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="verificationCode">驗證碼</label>
+        <label for="captcha">驗證碼</label>
         <input 
           type="text" 
-          id="verificationCode" 
-          v-model="form.verificationCode"
-          :class="{ 'error': errors.verificationCode }"
+          id="captcha" 
+          v-model="captchaController"
+          :class="{ 'error': captchaIsEmpty }"
         />
       </div>
 
-      <button type="submit" class="next-button" :disabled="!isFormValid || loading">
-        下一步
+      <div v-if="error" class="error-message">{{ error }}</div>
+      <button type="submit" class="register-button" :disabled="!isFormValid || loading">
+        {{ loading ? '註冊中...' : '註冊' }}
       </button>
     </form>
-
-    <div v-if="error" class="error-message">{{ error }}</div>
-
-    <!-- 加載提示 -->
-    <div class="loading-overlay" v-if="loading">
-      <div class="loading-content">
-        <div class="loading-text">處理中...</div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, type Ref, type ComputedRef } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '../../composables/useAuth'
-import { RouterManger } from '../../router/router_manager'
+import { onMounted } from 'vue'
+import RegisterViewModel from '../../view_models/account/register_view_model'
 
+const viewModel = new RegisterViewModel()
 
-const router = useRouter()
-const { register, loading, error } = useAuth()
-
-const form: Ref<{
-  name: string
-  password: string
-  confirmPassword: string
-  verificationCode: string
-  email: string
-}> = ref({
-  name: '',
-  password: '',
-  confirmPassword: '',
-  verificationCode: '',
-  email: ''
-})
-
-const errors: Ref<{
-  name: boolean
-  password: boolean
-  confirmPassword: boolean
-  verificationCode: boolean
-}> = ref({
-  name: false,
-  password: false,
-  confirmPassword: false,
-  verificationCode: false
-})
-
-// 密碼驗證計算屬性
-const passwordLength: ComputedRef<boolean> = computed(() => form.value.password.length >= 6)
-const hasEnglish: ComputedRef<boolean> = computed(() => /[a-zA-Z]/.test(form.value.password))
-const hasNumber: ComputedRef<boolean> = computed(() => /[0-9]/.test(form.value.password))
-
-const isFormValid: ComputedRef<boolean> = computed(() => {
-  return passwordLength.value && 
-         hasEnglish.value && 
-         hasNumber.value && 
-         form.value.password === form.value.confirmPassword &&
-         form.value.name !== '' &&
-         form.value.verificationCode !== ''
-})
-
-onMounted(() => {
-  // 從localStorage獲取email
-  const email = localStorage.getItem('registerEmail')
-  if (!email) {
-    router.push('/register-email')
-    return
-  }
-  form.value.email = email
-})
-
-const handleSubmit = async () => {
-  if (!isFormValid.value) return
-
-  const success = await register({
-    email: form.value.email,
-    name: form.value.name,
-    password: form.value.password,
-    isEmailVerified: false
-  }, form.value.verificationCode)
-
-  if (success) {
-    // 清除localStorage中的email
-    localStorage.removeItem('registerEmail')
-    // 導航到登入頁面
-    router.push(RouterManger.AUTH.LOGIN)
-  }
-}
-
-const goBack = () => {
-  router.push(RouterManger.AUTH.REGISTEREMAIL)
-}
+// 導出需要的屬性和方法
+const {
+  emailController,
+  nameController,
+  pwdController,
+  confirmPwdController,
+  captchaController,
+  emailIsEmpty,
+  nameIsEmpty,
+  pwdIsEmpty,
+  confirmPwdIsEmpty,
+  captchaIsEmpty,
+  loading,
+  error,
+  showPassword,
+  showConfirmPassword,
+  passwordLength,
+  hasEnglish,
+  hasNumber,
+  passwordsMatch,
+  isFormValid,
+  handleSubmit,
+  sendVerificationCode
+} = viewModel
 </script>
 
 <style scoped>
@@ -163,43 +107,35 @@ const goBack = () => {
   min-height: 100vh;
   background-color: #000000;
   padding: 20px;
-  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.header {
+.logo-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
-  position: relative;
+  margin-top: 40px;
 }
 
-.back-button {
-  background: none;
-  border: none;
+.logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+}
+
+.brand-name {
   color: #FFFFFF;
   font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  position: absolute;
-  left: 0;
-}
-
-.back-icon {
-  display: inline-block;
-  transform: translateY(-2px);
-}
-
-.title {
-  flex: 1;
-  text-align: center;
-  font-size: 18px;
-  font-weight: normal;
+  font-weight: bold;
+  margin: 0;
 }
 
 .register-form {
   width: 100%;
   max-width: 300px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -211,20 +147,41 @@ const goBack = () => {
   gap: 8px;
 }
 
+.input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.input-group input {
+  flex: 1;
+}
+
+.input-group button {
+  padding: 0 16px;
+  background-color: #333333;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.input-group button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 label {
   color: #FFFFFF;
   font-size: 14px;
 }
 
 input {
-  background-color: #1a1a1a;
+  background-color: transparent;
   border: 1px solid #333333;
   border-radius: 8px;
   padding: 12px;
   color: #FFFFFF;
   font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 input:focus {
@@ -236,15 +193,15 @@ input.error {
   border-color: #FF4444;
 }
 
-.password-requirements {
-  margin-top: 8px;
+.password-requirements,
+.password-match {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+  margin-top: 8px;
 }
 
 .requirement {
-  color: #FF4444;
+  color: #666666;
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -252,92 +209,38 @@ input.error {
 }
 
 .requirement.met {
-  color: #00FF00;
+  color: #4A90E2;
+}
+
+.requirement.met .x-mark {
+  color: #4A90E2;
 }
 
 .x-mark {
   font-size: 10px;
-}
-
-.next-button {
-  padding: 12px;
-  background-color: #333333;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 16px;
-  width: 100%;
-}
-
-.next-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+  color: #666666;
 }
 
 .error-message {
   color: #FF4444;
-  font-size: 12px;
+  font-size: 14px;
   text-align: center;
-  margin-top: 16px;
 }
 
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.register-button {
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.loading-content {
-  background-color: #FFFFFF;
-  padding: 20px;
+  padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.loading-text {
+  border: none;
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
+  background-color: #333333;
+  color: #FFFFFF;
 }
 
-@media screen and (max-width: 480px) {
-  .register-container {
-    padding: 16px;
-  }
-
-  .header {
-    margin-bottom: 30px;
-  }
-
-  .title {
-    font-size: 16px;
-  }
-
-  input {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  .next-button {
-    padding: 12px;
-    font-size: 14px;
-  }
-
-  .password-requirements {
-    flex-direction: column;
-    gap: 8px;
-  }
+.register-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 </style>

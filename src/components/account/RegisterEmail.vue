@@ -1,7 +1,7 @@
 <template>
   <div class="register-container">
     <div class="logo-container">
-      <img src="../assets/logo.png" alt="SkillStorm" class="logo" />
+      <img src="../../assets/logo.png" alt="SkillStorm" class="logo" />
       <h1 class="brand-name">SKILLSTORM</h1>
     </div>
     <form @submit.prevent="handleSubmit" class="register-form">
@@ -22,7 +22,7 @@
       </button>
 
       <button type="button" class="google-button" @click="handleGoogleSignIn">
-        <img src="../assets/google-icon.svg" alt="Google" class="google-icon" />
+        <img src="../../assets/google-icon.svg" alt="Google" class="google-icon" />
         Google註冊
       </button>
     </form>
@@ -61,19 +61,19 @@ const handleSubmit = async () => {
   }
 }
 
-const handleGoogleSignIn = async () => {
-  if (!email.value) return
+// const handleGoogleSignIn = async () => {
+//   if (!email.value) return
 
-  const googleData: GoogleSignInData = {
-    email: email.value,
-    googlePwd: '' // 这里需要从Google OAuth获取
-  }
+//   const googleData: GoogleSignInData = {
+//     email: email.value,
+//     googlePwd: '' // 这里需要从Google OAuth获取
+//   }
   
-  const success = await googleSignIn(googleData)
-  if (success) {
-    router.push('/home')
-  }
-}
+//   const success = await googleSignIn(googleData)
+//   if (success) {
+//     router.push('/home')
+//   }
+// }
 </script>
 
 <style scoped>
