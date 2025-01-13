@@ -10,14 +10,14 @@
         <input 
           type="email" 
           id="email" 
-          v-model="email"
+          v-model="viewModel.emailController.value"
           required
           :class="{ 'error': emailError }"
         />
         <span v-if="emailError" class="error-message">{{ error }}</span>
       </div>
 
-      <button type="submit" class="register-button" :disabled="isLoading">
+      <button type="submit" class="register-button" @click="" :disabled="isLoading">
         開始註冊
       </button>
 
@@ -37,25 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref} from 'vue'
-import { useRouter } from 'vue-router'
-import { RouterManger } from '../../router/router_manager'
+import RegisterViewModel from '../../view_models/account/register_view_model';
 
-const router = useRouter()
 
-const email: Ref<string> = ref('')
-const loadingMessage: Ref<string> = ref('處理中...')
-// const emailError: ComputedRef<boolean> = computed(() => !!error.value)
+const viewModel = new RegisterViewModel()
 
 const handleSubmit = async () => {
-  if (!email.value) return
-
-  const success = true //await sendVerificationCode(email.value, 'signUp')
-  if (success) {
-    // 將email存儲到localStorage，以便在下一步使用
-    localStorage.setItem('registerEmail', email.value)
-    router.push(RouterManger.AUTH.REGISTER)
-  }
+  viewModel.signUpStart();
 }
 
 </script>

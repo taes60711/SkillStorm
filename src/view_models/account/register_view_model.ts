@@ -74,6 +74,16 @@ export default class RegisterViewModel {
         }
     };
 
+
+
+    signUpStart = async () => {
+        await this.sendVerificationCode();
+        this.router.push({
+            name: RouterManger.AUTH.REGISTER.name,
+            query: { email: this.emailController.value },
+        });
+    }
+
     /**
      * 發送驗證碼
      */
