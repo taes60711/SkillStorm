@@ -1,0 +1,21 @@
+/* 組件層：用於定義可重用的組件樣式 */
+@layer components {
+  /* MARK: 這些是範例 */
+  /* 定義按鈕組件 */
+  .btn {
+    @apply px-4 py-2 rounded-lg transition-colors;
+  }
+
+  .btn-primary {
+    @apply btn bg-blue-500 hover:bg-blue-600 text-white;
+  }
+
+  .btn-secondary {
+    @apply btn bg-gray-500 hover:bg-gray-600 text-white;
+  }
+
+  /* 定義卡片組件 */
+  .card {
+    @apply bg-gray-800 rounded-lg p-6 shadow-lg;
+  }
+}
