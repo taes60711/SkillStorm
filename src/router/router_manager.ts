@@ -3,7 +3,9 @@ import RegisterEmail from '../components/account/RegisterEmail.vue'
 import Register from '../components/account/Register.vue'
 import Login from '../components/account/Login.vue'
 import pwdForgot from '../components/account/PwdForgotView.vue'
-
+import HelloWorld from '../components/HelloWorld.vue'
+import Profile from '../components/profile/Index.vue'
+import EditProfile from '../components/profile/Edit.vue'
 export const RouterManger = {
     AUTH: {
         WELCOME: {
@@ -30,10 +32,25 @@ export const RouterManger = {
             path: '/forgotPassword',
             component: pwdForgot
             // name: 'register',
-        }
-
+        },
+        HELLOWORLD: {
+            path: '/helloworld',
+            component: HelloWorld
+            // name: 'helloworld',
+        },
     },
     HOME: {
-
-    }
+        PROFILE: {
+            INDEX: {
+                path: '/profile',
+                component: Profile
+                // name: 'profile',
+            },
+            EDIT: {
+                path: '/profile/edit',
+                component: EditProfile
+                // name: 'profile',
+            }
+        }
+    },
 }
