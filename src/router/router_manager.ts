@@ -44,13 +44,13 @@ export const RouterManger = {
         PROFILE: {
             INDEX: {
                 path: '/profile',
-                component: Profile
-                // name: 'profile',
+                component: Profile,
+                name: 'profile',
             },
             EDIT: {
                 path: '/profile/edit',
-                component: EditProfile
-                // name: 'profile',
+                component: EditProfile,
+                name: 'profileEdit',
             }
         }
     },
