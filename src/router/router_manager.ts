@@ -11,33 +11,34 @@ export const RouterManger = {
         WELCOME: {
             path: '/',
             component: Welcome,
-            // name: 'welcome',
+            name: 'welcome',
         },
         LOGIN: {
             path: '/login',
-            component: Login
-            // name: 'login',
+            component: Login,
+            name: 'login',
         },
         REGISTEREMAIL: {
             path: '/register/email',
-            component: RegisterEmail
-            // name: 'registerEmail',
+            component: RegisterEmail,
+            name: 'registerEmail',
         },
         REGISTER: {
             path: '/register',
-            component: Register
-            // name: 'register',
+            component: Register,
+            name: 'register',
         },
         PWDFORGOT: {
             path: '/forgotPassword',
-            component: pwdForgot
-            // name: 'register',
+            component: pwdForgot,
+            name: 'forgotPassword',
         },
         HELLOWORLD: {
             path: '/helloworld',
-            component: HelloWorld
-            // name: 'helloworld',
+            component: HelloWorld,
+            name: 'helloWorld',
         },
+
     },
     HOME: {
         PROFILE: {

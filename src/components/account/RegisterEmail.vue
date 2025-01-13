@@ -1,7 +1,7 @@
 <template>
   <div class="register-container">
     <div class="logo-container">
-      <img src="../assets/logo.png" alt="SkillStorm" class="logo" />
+      <img src="../../assets/logo.png" alt="SkillStorm" class="logo" />
       <h1 class="brand-name">SKILLSTORM</h1>
     </div>
     <form @submit.prevent="handleSubmit" class="register-form">
@@ -10,19 +10,19 @@
         <input 
           type="email" 
           id="email" 
-          v-model="email"
+          v-model="viewModel.emailController.value"
           required
           :class="{ 'error': emailError }"
         />
         <span v-if="emailError" class="error-message">{{ error }}</span>
       </div>
 
-      <button type="submit" class="register-button" :disabled="isLoading">
+      <button type="submit" class="register-button" @click="" :disabled="isLoading">
         開始註冊
       </button>
 
       <button type="button" class="google-button" @click="handleGoogleSignIn">
-        <img src="../assets/google-icon.svg" alt="Google" class="google-icon" />
+        <img src="../../assets/google-icon.svg" alt="Google" class="google-icon" />
         Google註冊
       </button>
     </form>
@@ -37,43 +37,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, type Ref, type ComputedRef } from 'vue'
-import { useRouter } from 'vue-router'
-import type { GoogleSignInData } from '../../models/UserModel'
-import { useAuth } from '../../composables/useAuth'
-import { RouterManger } from '../../router/router_manager'
+import RegisterViewModel from '../../view_models/account/register_view_model';
 
-const router = useRouter()
-const { sendVerificationCode, googleSignIn, loading: isLoading, error } = useAuth()
 
-const email: Ref<string> = ref('')
-const loadingMessage: Ref<string> = ref('處理中...')
-const emailError: ComputedRef<boolean> = computed(() => !!error.value)
+const viewModel = new RegisterViewModel()
 
 const handleSubmit = async () => {
-  if (!email.value) return
-
-  const success = await sendVerificationCode(email.value, 'signUp')
-  if (success) {
-    // 將email存儲到localStorage，以便在下一步使用
-    localStorage.setItem('registerEmail', email.value)
-    router.push(RouterManger.AUTH.REGISTER)
-  }
+  viewModel.signUpStart();
 }
 
-const handleGoogleSignIn = async () => {
-  if (!email.value) return
-
-  const googleData: GoogleSignInData = {
-    email: email.value,
-    googlePwd: '' // 这里需要从Google OAuth获取
-  }
-  
-  const success = await googleSignIn(googleData)
-  if (success) {
-    router.push('/home')
-  }
-}
 </script>
 
 <style scoped>
