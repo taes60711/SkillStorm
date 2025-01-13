@@ -1,24 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import PwdForgotViewModel from '../../view_models/account/pwd_forgot_view_model';
 import { ref } from 'vue';
   /// 創建View用的Model
   const viewModel = ref(new PwdForgotViewModel());
-
-  const router = useRouter();
-
-  /// 退出
-  const backToLoginPage = () => {
-    
-    /// 確認是否有編輯過
-    if(!viewModel.value.isEdit()){
-      router.back();
-    }else{
-      console.log(`正在編輯中 尚未給提示彈窗`);
-    }
-
-  }
-
 </script>
 
 <template>
@@ -39,7 +23,7 @@ import { ref } from 'vue';
     <p>新密碼: {{ viewModel.newPwdController }}</p>
     <p class="pwd_forgot_err" v-if="viewModel.newPwdIsEmpty">新密碼不得為空</p>
    
-    <button @click="backToLoginPage">退出</button>
+    <button @click="viewModel.close">退出</button>
     <button @click="viewModel.send">送出</button>
    
   </div>

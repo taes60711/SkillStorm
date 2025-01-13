@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import UserService from '../../services/user_service';
 import EmailService from '../../services/email_service';
 import type { SignUpRequestData } from '../../models/request/auth/sign_up_request_data';
+import { RouterManger } from '../../router/router_manager';
 
 export default class RegisterViewModel {
     private userService = new UserService();
@@ -15,18 +16,18 @@ export default class RegisterViewModel {
     pwdController = ref<string>('');
     confirmPwdController = ref<string>('');
     captchaController = ref<string>('');
-    
+
     // 錯誤狀態
     emailIsEmpty = ref<boolean>(false);
     nameIsEmpty = ref<boolean>(false);
     pwdIsEmpty = ref<boolean>(false);
     confirmPwdIsEmpty = ref<boolean>(false);
     captchaIsEmpty = ref<boolean>(false);
-    
+
     // 加載狀態
     loading = ref<boolean>(false);
     error = ref<string>('');
-    
+
     // 密碼顯示狀態
     showPassword = ref<boolean>(false);
     showConfirmPassword = ref<boolean>(false);
@@ -39,29 +40,21 @@ export default class RegisterViewModel {
 
     // 表單有效性
     isFormValid = computed(() => {
-        return this.passwordLength.value && 
-               this.hasEnglish.value && 
-               this.hasNumber.value && 
-               this.passwordsMatch.value &&
-               this.emailController.value !== '' &&
-               this.nameController.value !== '' &&
-               this.captchaController.value !== '';
+        return this.passwordLength.value &&
+            this.hasEnglish.value &&
+            this.hasNumber.value &&
+            this.passwordsMatch.value &&
+            this.emailController.value !== '' &&
+            this.nameController.value !== '' &&
+            this.captchaController.value !== '';
     });
-
-    constructor() {
-        // 從 localStorage 獲取註冊郵箱
-        const savedEmail = localStorage.getItem('registerEmail');
-        if (savedEmail) {
-            this.emailController.value = savedEmail;
-        }
-    }
 
     /**
      * 處理註冊提交
      */
     handleSubmit = async () => {
         if (!this.isFormValid.value) return;
-        
+
         this.loading.value = true;
         this.error.value = '';
 
@@ -73,7 +66,7 @@ export default class RegisterViewModel {
             };
 
             await this.userService.signUp(this.captchaController.value, signUpData);
-            this.router.push('/login');
+            this.router.push(RouterManger.AUTH.LOGIN);
         } catch (err) {
             this.error.value = err instanceof Error ? err.message : '註冊失敗';
         } finally {

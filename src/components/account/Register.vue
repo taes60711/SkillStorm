@@ -71,7 +71,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import RegisterViewModel from '../../view_models/account/register_view_model'
 
 const viewModel = new RegisterViewModel()
@@ -98,7 +97,6 @@ const {
   passwordsMatch,
   isFormValid,
   handleSubmit,
-  sendVerificationCode
 } = viewModel
 </script>
 

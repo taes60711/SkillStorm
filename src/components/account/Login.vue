@@ -59,7 +59,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import LoginViewModel from '../../view_models/account/login_view_model'
 
 const viewModel = new LoginViewModel()
