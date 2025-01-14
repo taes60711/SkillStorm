@@ -1,4 +1,4 @@
-import { ref, computed, type Ref } from "vue";
+import { ref, type Ref } from "vue";
 import { reactive } from "@vue/reactivity";
 import UserService from "@/services/user_service";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
@@ -6,6 +6,7 @@ import type { UpdateProfileRequestData } from "@/models/request/auth/update_prof
 import { useRouter } from "vue-router";
 
 export default class EditProfileViewModel {
+
   private router = useRouter();
   private userService: UserService;
   private _bypassGuard: boolean = false;

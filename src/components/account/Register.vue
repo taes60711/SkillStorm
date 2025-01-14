@@ -74,11 +74,7 @@
 import { useRoute } from 'vue-router';
 import RegisterViewModel from '../../view_models/account/register_view_model'
 
-
-
 const viewModel = new RegisterViewModel()
-
-
 
 /**
  * 暫時

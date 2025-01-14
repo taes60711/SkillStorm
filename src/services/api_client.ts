@@ -27,6 +27,7 @@ export default class APIClient {
       console.log("Parameters:", parameters);
 
       const response: AxiosResponse = await axios.get(fullUrl.toString());
+
       if (response.status !== 200) {
         throw new Error(`Error: ${response.status}`);
       }

@@ -7,6 +7,9 @@ export default class ProfileViewModel {
   // 初始化
   private router = useRouter();
 
+
+
+
   // 用戶 api
   private userService: UserService;
 
