@@ -2,13 +2,11 @@ import { ref, type Ref } from "vue";
 import UserService from "@/services/user_service";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
 import { useRouter } from "vue-router";
+import { userDataStore } from "@/global/user_data";
 
 export default class ProfileViewModel {
   // 初始化
   private router = useRouter();
-
-
-
 
   // 用戶 api
   private userService: UserService;
@@ -24,28 +22,9 @@ export default class ProfileViewModel {
     this.userService = new UserService();
     this.userData = ref<ProfileData | null>(null);
     this.imageLoadError = ref(false);
-  }
 
-  /**
-   * 根據 UID 獲取用戶資料
-   * @param uid 用戶的 UID
-   */
-  async getUserDataByUID(uid: string) {
-    if (!uid) {
-      console.warn("UID 不能為空");
-
-      // 如果 UID 為空倒回首頁
-      this.router.push("/");
-      return;
-    }
-
-    try {
-      const data = await this.userService.getUserDataByUID(uid);
-      this.userData.value = data;
-    } catch (error) {
-      console.error("獲取用戶資料失敗", error);
-      this.userData.value = null;
-    }
+    // 初始化時從全局狀態讀取資料
+    this.userData.value = userDataStore.userData.value;
   }
 
   // 獲取用戶資料

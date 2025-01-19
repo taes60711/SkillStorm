@@ -4,11 +4,6 @@ import ProfileViewModel from "@/view_models/profile/profile_view_model";
 
 // 初始化 ViewModel
 const viewModel = new ProfileViewModel();
-
-// 在組件掛載時，呼叫 ViewModel 的方法 (這邊暫時使用固定UID)
-onMounted(async () => {
-  await viewModel.getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
-});
 </script>
 
 <template>
