@@ -1,9 +1,10 @@
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import UserService from '../../services/user_service';
 import type { LoginRequestData } from '../../models/request/auth/login_request_data';
 import type { ProfileData } from '../../models/reponse/auth/profile_data_reponse_data';
 import { RouterManger } from '../../router/router_manager';
+import { userDataStore } from "@/global/user_data";
 
 export default class LoginViewModel {
     private userService = new UserService();
@@ -56,7 +57,13 @@ export default class LoginViewModel {
             if (userData) {
                 // 更新最後登入時間
                 await this.userService.updateUserLoginLastTime(userData.uid);
-                this.router.push('/home');
+
+                // 獲取完整用戶資料
+                const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
+                // 更新全局狀態與 localStorage
+                userDataStore.setUser(completeUserData);
+                
+                this.router.push(RouterManger.HOME.PROFILE.INDEX);
             } else {
                 throw new Error('登入失敗');
             }

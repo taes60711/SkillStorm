@@ -1,12 +1,12 @@
-import { ref, type Ref } from "vue";
+import { ref, type Ref, computed } from "vue";
 import { reactive } from "@vue/reactivity";
 import UserService from "@/services/user_service";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
 import type { UpdateProfileRequestData } from "@/models/request/auth/update_profile_request_data";
 import { useRouter } from "vue-router";
+import { userDataStore } from "@/global/user_data";
 
 export default class EditProfileViewModel {
-
   private router = useRouter();
   private userService: UserService;
   private _bypassGuard: boolean = false;
@@ -16,6 +16,9 @@ export default class EditProfileViewModel {
   private _error: Ref<string>;
   public formData: UpdateProfileRequestData;
   public imageLoadError: Ref<boolean>;
+
+  // 用戶資料
+  public userData = computed(() => userDataStore.userData.value);
 
   constructor() {
     this.userService = new UserService();
@@ -47,21 +50,20 @@ export default class EditProfileViewModel {
    * 初始化編輯表單
    * @param uid 使用者UID
    */
-  public async initializeForm(uid: string) {
-    console.log("開始初始化，當前 loading:", this._loading.value);
+  public async initializeForm() {
     this._loading.value = true;
-    console.log("設置 loading 為 true:", this._loading.value);
 
     try {
-      const userData = await this.userService.getUserDataByUID(uid);
-      console.log("獲取到的用戶數據:", userData);
-
-      if (!userData) {
-        throw new Error("無法獲取用戶數據");
+      if (!this.userData.value) {
+        throw new Error("用戶資料不存在，請重新登入");
       }
 
-      this.originalData.value = userData;
+      const userData = this.userData.value as ProfileData;
 
+      // 深拷貝保存原始數據
+      this.originalData.value = JSON.parse(JSON.stringify(userData));
+
+      // 初始化表單數據
       Object.assign(this.formData, {
         uid: userData.uid,
         name: userData.name,
@@ -101,6 +103,10 @@ export default class EditProfileViewModel {
       this._error.value = "";
 
       await this.userService.updateProfileData(this.formData);
+
+      // 更新全局狀態和 localStorage
+      userDataStore.updateUser(this.formData as ProfileData);
+
       this._bypassGuard = true;
       this.router.push(`/profile`);
     } catch (error) {
@@ -119,6 +125,36 @@ export default class EditProfileViewModel {
     if (this.formData.job === "") return "職業不能為空";
     if (this.formData.introduction === "") return "自我介紹不能為空";
     return "";
+  }
+
+  /**
+   * 深度比較兩個物件是否相等
+   * @param obj1 物件1
+   * @param obj2 物件2
+   * @returns 是否相等
+   */
+  private deepEqual(obj1: any, obj2: any): boolean {
+    if (
+      typeof obj1 !== "object" ||
+      typeof obj2 !== "object" ||
+      obj1 === null ||
+      obj2 === null
+    ) {
+      return obj1 === obj2;
+    }
+
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+
+    if (keys1.length !== keys2.length) return false;
+
+    for (const key of keys1) {
+      if (!this.deepEqual(obj1[key], obj2[key])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
@@ -147,7 +183,7 @@ export default class EditProfileViewModel {
       wantSkills: this.formData.wantSkills,
     };
 
-    return JSON.stringify(currentData) !== JSON.stringify(original);
+    return !this.deepEqual(original, currentData);
   }
 
   /**

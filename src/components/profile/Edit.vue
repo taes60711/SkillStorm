@@ -14,8 +14,7 @@ onBeforeRouteLeave((to, from, next) => {
 
 onMounted(async () => {
   try {
-    const uid = "tzLaMcP3V9XOAMOcD0FAY5Nf4tE2";
-    await viewModel.initializeForm(uid);
+    await viewModel.initializeForm();
   } catch (error) {
     console.error("初始化表單失敗:", error);
   }
