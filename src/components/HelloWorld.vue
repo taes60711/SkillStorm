@@ -2,16 +2,7 @@
 import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
-import UserService from '../services/user_service';
-import type { ProfileData } from '../models/reponse/auth/profile_data_reponse_data';
-import type { LoginRequestData } from '../models/request/auth/login_request_data';
-import EmailService from '../services/email_service';
-import type { SignUpRequestData } from '../models/request/auth/sign_up_request_data';
-import type { UpdateProfileRequestData } from '../models/request/auth/update_profile_request_data';
 
-
-
-const userData = ref<ProfileData | null>(null);
 const value = ref('');
 const editorRef = ref<any>(null);
 
@@ -44,61 +35,75 @@ const outputValue = () => {
   console.log('Editor Value:', value.value);
 };
 
-/// 已確認過
-const getUserDataByUID = async () => {
-  userData.value = await new UserService().getUserDataByUID("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
-  console.log(userData.value);
+const insertCustomImage = (imgUrl:string) => {
+  const editor: Quill = editorRef.value?.quill;
+  const cursorPos: number = editor.getSelection()?.index || 0;
+  const inputed: string = `<img src="${imgUrl}">`;
+  editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
+  value.value = editor.root.innerHTML;
+  editor.setSelection(cursorPos + inputed.length);
 };
 
-/// 已確認過
-const getUserDataByEmail = async () => {
-  const loginData: LoginRequestData = {
-    email: 'test1234@gmail.com',
-    password: 'test1234'
-  };
+const insertCustomVideo = (videoUrl:string) => {
+  const editor: Quill = editorRef.value?.quill;
+  const cursorPos: number = editor.getSelection()?.index || 0;
+  const ytId: string = getYtvideoID(videoUrl);        
+  const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
 
-  userData.value = await new UserService().getUserDataByEmail(loginData, "normalSign");
-  console.log(userData.value);
+  const inputed: string = `<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${ytURL}"></iframe><p><br></p>`;
+  editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
+  value.value = editor.root.innerHTML;
+  editor.setSelection(cursorPos + inputed.length);
 };
 
-/// 已確認過
-const sendEmail = async () => {
-  const email: string = 'test1234@gmail.com';
-  await new EmailService().sendCaptchaMail(email, "signUp");
+function getYtvideoID(url: string): string {
+  let start = 0;
+
+  if (url.includes('/shorts/')) {
+    start = url.indexOf('/shorts/') + '/shorts/'.length;
+  } else if (url.includes('/youtu.be/')) {
+    start = url.indexOf('/youtu.be/') + '/youtu.be/'.length;
+  } else if (url.includes('src=')) {
+    start = url.indexOf('src="https://www.youtube.com/embed/') + 'src="https://www.youtube.com/embed/'.length;
+  } else {
+    start = url.indexOf('?v=') + '?v='.length;
+  }
+
+  let end = 0;
+
+  if (url.includes('&list')) {
+    end = url.indexOf('&list');
+  } else if (url.includes('?si')) {
+    end = url.indexOf('?si');
+  } else if (url.includes('src=')) {
+    end = url.indexOf('">');
+  } else if (url.includes('&')) {
+    end = url.indexOf('&');
+  } else {
+    end = url.length;
+  }
+
+  let tmpId = "";
+
+  if (end === -1 || (!url.includes("youtu.be/") && !url.includes("youtube.com"))) {
+    tmpId = "err";
+  } else {
+    tmpId = url.substring(start, end);
+  }
+
+  return tmpId;
+}
+
+const insertCustomLink = (link: string, linkText: string) => {
+  const editor: Quill = editorRef.value?.quill;
+  const cursorPos: number = editor.getSelection()?.index || 0;
+  const inputed: string = `<p><a href=${link} rel="noopener noreferrer" target="_blank">${linkText}</a><br></p>`;
+  editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
+  value.value = editor.root.innerHTML;
+  editor.setSelection(cursorPos + inputed.length);
 };
 
-/// 已確認過
-const updateUserLastLoginTime = async () => {
-  await new UserService().updateUserLoginLastTime("tzLaMcP3V9XOAMOcD0FAY5Nf4tE2");
-};
 
-/// 已確認過
-/// 需要先執行 寄送驗證碼（註冊）
-/// 直接在api server的log 找 generateCaptcha : 可以看到驗證碼 
-const signUp = async () => {
-  const signUpData: SignUpRequestData = {
-    email: 'test1234@gmail.com',
-    password: 'test1234',
-    name: 'testUserName'
-  };
-
-  await new UserService().signUp("F7N6Y9hF", signUpData);
-};
-
-/// 已確認過
-const updateUser = async () => {
-  const updateProfileData: UpdateProfileRequestData = {
-    uid: '86173abc4a034382950b48446417217a', // UID 是我在測試註冊帳號產出的
-    image: null,
-    introduction: 'updateTestIntroduction',
-    job: 'updateTestJob',
-    name: 'updateTestName',
-    skills: [],
-    wantSkills: [],
-  };
-
-  await new UserService().updateProfileData(updateProfileData);
-};
 
 
 </script>
@@ -111,13 +116,10 @@ const updateUser = async () => {
 
     <button @click="outputValue">輸出內容</button>
     <button @click="insertCustomText">插入自定義文字</button>
+    <button @click="insertCustomVideo('https://youtu.be/PS9Ek7N7fvI?si=JsOsUNTGGc1M-yzf')">插入影片</button>
+    <button @click="insertCustomImage('https://d1b8dyiuti31bx.cloudfront.net/NewsPhotos/20230504/51_123347600602.jpg')">插入圖片</button>
 
-    <button @click="getUserDataByUID">取得使用者資料by Id</button>
-    <button @click="getUserDataByEmail">取得使用者資料by Email&Pwd</button>
-    <button @click="sendEmail">寄驗證碼</button>
-    <button @click="signUp">註冊</button>
-    <button @click="updateUser">更新使用者資料</button>
-    <button @click="updateUserLastLoginTime">更新使用者登入時間</button>
+    <button @click="insertCustomLink('https://www.youtube.com/watch?v=4UNhP9S1Iz4&ab_channel=KOCOWATVBrasil','testssss')">插入鏈結</button>
   </div>
 </template>
 
