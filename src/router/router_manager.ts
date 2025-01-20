@@ -29,6 +29,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!userDataStore.userData.value; // 判斷是否有登入資料
 
+
   if (to.meta.requiresAuth && !isAuthenticated) {
     // 如果需要驗證，且未登入，跳轉到首頁
     console.log("未登入，跳轉到首頁");

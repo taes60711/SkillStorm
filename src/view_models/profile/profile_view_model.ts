@@ -1,12 +1,9 @@
 import { ref, type Ref } from "vue";
 import UserService from "@/services/user_service";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
-import { useRouter } from "vue-router";
 import { userDataStore } from "@/global/user_data";
 
 export default class ProfileViewModel {
-  // 初始化
-  private router = useRouter();
 
   // 用戶 api
   private userService: UserService;
