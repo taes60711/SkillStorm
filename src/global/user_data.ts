@@ -8,12 +8,12 @@ import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_dat
  * 用於管理全局的用戶狀態，包括保存、更新、清除和恢復用戶資料。
  * 使用單例模式，確保全局只有一個實例。
  */
-class UserDataStore {
+export default class UserDataStore {
   // 單例實例
   private static instance: UserDataStore;
 
   // 私有構造函數，禁止外部直接創建實例
-  private constructor() {}
+  private constructor() { }
 
   /**
    * 獲取單例實例

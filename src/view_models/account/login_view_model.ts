@@ -1,15 +1,13 @@
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
 import UserService from '../../services/user_service';
 import type { LoginRequestData } from '../../models/request/auth/login_request_data';
 import type { ProfileData } from '../../models/reponse/auth/profile_data_reponse_data';
-import { RouterManger } from '../../router/router_manager';
+import { RouterPath } from '../../router/router_path';
 import { userDataStore } from "@/global/user_data";
+import router from '@/router/router_manager';
 
 export default class LoginViewModel {
     private userService = new UserService();
-    private router = useRouter();
-
     // 表單數據
     emailController = ref<string>('');
     pwdController = ref<string>('');
@@ -62,8 +60,8 @@ export default class LoginViewModel {
                 const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
                 // 更新全局狀態與 localStorage
                 userDataStore.setUser(completeUserData);
-                
-                this.router.push(RouterManger.HOME.PROFILE.INDEX);
+
+                router.push(RouterPath.HOME.PROFILE.INDEX);
             } else {
                 throw new Error('登入失敗');
             }
@@ -100,13 +98,13 @@ export default class LoginViewModel {
      * 處理忘記密碼
      */
     handleForgotPassword = () => {
-        this.router.push(RouterManger.AUTH.PWDFORGOT);
+        router.push(RouterPath.AUTH.PWDFORGOT);
     }
 
     /**
      * 處理註冊
      */
     handleRegister = () => {
-        this.router.push(RouterManger.AUTH.REGISTEREMAIL);
+        router.push(RouterPath.AUTH.REGISTEREMAIL);
     }
 } 

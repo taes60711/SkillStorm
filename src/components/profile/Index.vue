@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { userDataStore } from "@/global/user_data";
+import router from "@/router/router_manager";
+import { RouterPath } from "@/router/router_path";
 import ProfileViewModel from "@/view_models/profile/profile_view_model";
 
 // 初始化 ViewModel
 const viewModel = new ProfileViewModel();
+
 </script>
 
 <template>
@@ -21,7 +24,7 @@ const viewModel = new ProfileViewModel();
 
       <!-- 編輯按鈕 -->
       <router-link
-        :to="`/profile/edit`"
+        :to="RouterPath.HOME.PROFILE.EDIT"
         class="absolute -bottom-1 -right-1 bg-gray-500 p-2 rounded-lg hover:bg-gray-600 transition-colors"
       >
         編輯
@@ -66,13 +69,19 @@ const viewModel = new ProfileViewModel();
     <div class="mt-2">
       <h3>更多功能</h3>
       <div class="w-full flex flex-col gap-2">
-        <router-link :to="`/profile`">我的文章</router-link>
-        <router-link :to="`/profile`">技術分享</router-link>
-        <router-link :to="`/profile`">一般</router-link>
-        <router-link :to="`/profile`">問題回報</router-link>
+        <router-link :to="RouterPath.HOME.PROFILE.INDEX">我的文章</router-link>
+        <router-link :to="RouterPath.HOME.PROFILE.INDEX">技術分享</router-link>
+        <router-link :to="RouterPath.HOME.PROFILE.INDEX">一般</router-link>
+        <router-link :to="RouterPath.HOME.PROFILE.INDEX">問題回報</router-link>
       </div>
     </div>
 
+
+    <button @click="()=>{
+      userDataStore.clearUser();
+      router.push(RouterPath.AUTH.WELCOME);
+     }">登出（暫時）</button>
+     
     <!-- <pre class="mt-2">{{ viewModel.profile }}</pre> -->
   </div>
 </template>

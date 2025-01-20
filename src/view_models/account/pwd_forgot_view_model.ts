@@ -1,12 +1,11 @@
 import { ref } from "vue";
 import UserService from "../../services/user_service";
-import { useRouter } from "vue-router";
-
+import router from "@/router/router_manager";
 
 /// 忘記密碼ViewModel
 export default class PwdForgotViewModel {
     private userService = new UserService();
-    private router = useRouter();
+
 
     codeController = ref<string>(''); /// 驗證碼
     codeIsEmpty = ref<boolean>(false); /// 驗證碼 錯誤
@@ -104,7 +103,7 @@ export default class PwdForgotViewModel {
 
         /// 確認是否有編輯過
         if (!this.isEdit()) {
-            this.router.back();
+            router.back();
         } else {
             console.log(`正在編輯中 尚未給提示彈窗`);
         }

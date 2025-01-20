@@ -3,11 +3,12 @@ import { reactive } from "@vue/reactivity";
 import UserService from "@/services/user_service";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
 import type { UpdateProfileRequestData } from "@/models/request/auth/update_profile_request_data";
-import { useRouter } from "vue-router";
 import { userDataStore } from "@/global/user_data";
+import { RouterPath } from "@/router/router_path";
+import router from "@/router/router_manager";
 
 export default class EditProfileViewModel {
-  private router = useRouter();
+
   private userService: UserService;
   private _bypassGuard: boolean = false;
 
@@ -108,7 +109,7 @@ export default class EditProfileViewModel {
       userDataStore.updateUser(this.formData as ProfileData);
 
       this._bypassGuard = true;
-      this.router.push(`/profile`);
+      router.push(RouterPath.HOME.PROFILE.INDEX);
     } catch (error) {
       this._error.value = "更新失敗";
       console.error("更新失敗:", error);
@@ -213,7 +214,7 @@ export default class EditProfileViewModel {
    * 處理取消編輯
    */
   public handleCancel(): void {
-    this.router.push(`/profile`);
+    router.push(RouterPath.HOME.PROFILE.INDEX);
   }
 
   /**

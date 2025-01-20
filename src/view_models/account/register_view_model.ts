@@ -1,14 +1,13 @@
 import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import UserService from '../../services/user_service';
 import EmailService from '../../services/email_service';
 import type { SignUpRequestData } from '../../models/request/auth/sign_up_request_data';
-import { RouterManger } from '../../router/router_manager';
+import { RouterPath } from '../../router/router_path';
+import router from '@/router/router_manager';
 
 export default class RegisterViewModel {
     private userService = new UserService();
     private emailService = new EmailService();
-    private router = useRouter();
 
     // 表單數據
     emailController = ref<string>('');
@@ -66,7 +65,7 @@ export default class RegisterViewModel {
             };
 
             await this.userService.signUp(this.captchaController.value, signUpData);
-            this.router.push(RouterManger.AUTH.LOGIN);
+            router.push(RouterPath.AUTH.LOGIN);
         } catch (err) {
             this.error.value = err instanceof Error ? err.message : '註冊失敗';
         } finally {
@@ -78,8 +77,8 @@ export default class RegisterViewModel {
 
     signUpStart = async () => {
         await this.sendVerificationCode();
-        this.router.push({
-            name: RouterManger.AUTH.REGISTER.name,
+        router.push({
+            name: RouterPath.AUTH.REGISTER.name,
             query: { email: this.emailController.value },
         });
     }
