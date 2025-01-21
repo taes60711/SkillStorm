@@ -38,7 +38,7 @@ export interface RegisterData {
  * 負責處理所有與用戶認證相關的業務邏輯
  */
 export class AuthService {
-  private baseUrl = "";//API_CONFIG.BASE_URL
+  private baseUrl = "http://localhost:8080/user";//API_CONFIG.BASE_URL
 
   /**
    * 用戶登入

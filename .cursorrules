@@ -1,0 +1,62 @@
+# AuthService.ts 的 private baseUrl = "";//在本地運作要記得這個要改成下面的
+# private baseUrl = "http://localhost:8080/user";//API_CONFIG.BASE_URL
+
+
+
+# existing project structure
+.
+├── README.md
+├── index.html
+├── package-lock.json
+├── package.json
+├── src
+│   ├── App.vue
+│   ├── assets
+│   │   ├── google-icon.svg
+│   │   └── logo.png
+│   ├── components
+│   │   ├── HelloWorld.vue
+│   │   ├── Welcome.vue
+│   │   └── account
+│   │       ├── Login.vue
+│   │       ├── PwdForgotView.vue
+│   │       ├── Register.vue
+│   │       └── RegisterEmail.vue
+│   ├── composables
+│   │   ├── useAuth.ts
+│   │   └── useLoginForm.ts
+│   ├── env.d.ts
+│   ├── main.ts
+│   ├── mocks
+│   ├── models
+│   │   ├── UserModel.ts
+│   │   ├── reponse
+│   │   │   ├── auth
+│   │   │   │   └── profile_data_reponse_data.ts
+│   │   │   └── skill_reponse_data.ts
+│   │   └── request
+│   │       └── auth
+│   │           ├── login_request_data.ts
+│   │           ├── sign_up_request_data.ts
+│   │           └── update_profile_request_data.ts
+│   ├── router
+│   │   ├── index.ts
+│   │   └── router_manager.ts
+│   ├── services
+│   │   ├── AuthService.ts
+│   │   ├── api.config.ts
+│   │   ├── api_client.ts
+│   │   ├── email_service.ts
+│   │   ├── skill_service.ts
+│   │   └── user_service.ts
+│   ├── shims-vue.d.ts
+│   ├── view_models
+│   │   └── account
+│   │       ├── login_view_model.ts
+│   │       ├── pwd_forgot_view_model.ts
+│   │       └── register_view_model.ts
+│   └── vite-env.d.ts
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts

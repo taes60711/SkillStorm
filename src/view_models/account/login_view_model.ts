@@ -69,24 +69,24 @@ export default class LoginViewModel {
     /**
      * 處理 Google 登入
      */
-    handleGoogleSignIn = async () => {
-        this.loading.value = true;
-        this.error.value = '';
+    // handleGoogleSignIn = async () => {
+    //     this.loading.value = true;
+    //     this.error.value = '';
 
-        try {
-            const userData = await this.userService.googleSignIn({
-                email: this.emailController.value,
-                googlePwd: ''  // 這個值會由 Google OAuth 提供
-            });
-            if (userData) {
-                this.router.push('/home');
-            }
-        } catch (err) {
-            this.error.value = err instanceof Error ? err.message : 'Google 登入失敗';
-        } finally {
-            this.loading.value = false;
-        }
-    }
+    //     try {
+    //         const userData = await this.userService.googleSignIn({
+    //             email: this.emailController.value,
+    //             googlePwd: ''  // 這個值會由 Google OAuth 提供
+    //         });
+    //         if (userData) {
+    //             this.router.push('/home');
+    //         }
+    //     } catch (err) {
+    //         this.error.value = err instanceof Error ? err.message : 'Google 登入失敗';
+    //     } finally {
+    //         this.loading.value = false;
+    //     }
+    // }
 
     /**
      * 處理忘記密碼
