@@ -1,10 +1,11 @@
 import { ref } from "vue";
 import UserService from "../../services/user_service";
-
+import router from "@/router/router_manager";
 
 /// 忘記密碼ViewModel
 export default class PwdForgotViewModel {
-    userService = new UserService();
+    private userService = new UserService();
+
 
     codeController = ref<string>(''); /// 驗證碼
     codeIsEmpty = ref<boolean>(false); /// 驗證碼 錯誤
@@ -88,13 +89,26 @@ export default class PwdForgotViewModel {
     */
     isEdit(): boolean {
         let isEdit: boolean = false;
-        if (this.codeController.value != "" || this.emailController.value != ""
-            || this.pwdController.value != "" || this.newPwdController.value != "") {
+        // if (this.codeController.value != "" || this.emailController.value != ""
+        //     || this.pwdController.value != "" || this.newPwdController.value != "") {
 
-            isEdit = true;
-        }
+        //     isEdit = true;
+        // }
 
         return isEdit;
+    }
+
+
+    close(): void {
+
+        /// 確認是否有編輯過
+        if (!this.isEdit()) {
+            router.back();
+        } else {
+            console.log(`正在編輯中 尚未給提示彈窗`);
+        }
+
+
     }
 
 }

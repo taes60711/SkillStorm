@@ -71,19 +71,27 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { useRoute } from 'vue-router';
 import RegisterViewModel from '../../view_models/account/register_view_model'
 
 const viewModel = new RegisterViewModel()
 
+/**
+ * 暫時
+ */
+const route = useRoute()
+const email = route.query.email;
+if(typeof email === "string"){
+  viewModel.emailController.value = email;
+  console.log(viewModel.emailController.value)
+}
+
 // 導出需要的屬性和方法
 const {
-  emailController,
   nameController,
   pwdController,
   confirmPwdController,
   captchaController,
-  emailIsEmpty,
   nameIsEmpty,
   pwdIsEmpty,
   confirmPwdIsEmpty,
@@ -98,7 +106,6 @@ const {
   passwordsMatch,
   isFormValid,
   handleSubmit,
-  sendVerificationCode
 } = viewModel
 </script>
 
