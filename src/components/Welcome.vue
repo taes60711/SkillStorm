@@ -22,7 +22,7 @@ const goToLogin = () => {
 }
 
 const goToRegister = () => {
-  router.push(RouterPath.AUTH.REGISTEREMAIL)
+  router.push(RouterPath.AUTH.REGISTER)
 }
 </script>
 

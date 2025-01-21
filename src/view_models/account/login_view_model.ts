@@ -61,7 +61,7 @@ export default class LoginViewModel {
                 // 更新全局狀態與 localStorage
                 userDataStore.setUser(completeUserData);
 
-                router.push(RouterPath.HOME.PROFILE.INDEX);
+                router.push(RouterPath.HOME.PROFILE.INDEX.path);
             } else {
                 throw new Error('登入失敗');
             }
@@ -80,12 +80,24 @@ export default class LoginViewModel {
         this.error.value = '';
 
         try {
-            const userData = await this.userService.googleSignIn({
+            const loginData: LoginRequestData = {
                 email: this.emailController.value,
-                googlePwd: ''  // 這個值會由 Google OAuth 提供
-            });
+                password: ''  // 這個值會由 Google OAuth 提供
+            };
+
+            const userData: ProfileData = await this.userService.getUserDataByEmail(loginData, "googleSign");
             if (userData) {
-                this.router.push('/home');
+                // 更新最後登入時間
+                await this.userService.updateUserLoginLastTime(userData.uid);
+
+                // 獲取完整用戶資料
+                const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
+                // 更新全局狀態與 localStorage
+                userDataStore.setUser(completeUserData);
+
+                router.push(RouterPath.HOME.PROFILE.INDEX.path);
+            } else {
+                throw new Error('Google 登入失敗');
             }
         } catch (err) {
             this.error.value = err instanceof Error ? err.message : 'Google 登入失敗';
@@ -98,13 +110,13 @@ export default class LoginViewModel {
      * 處理忘記密碼
      */
     handleForgotPassword = () => {
-        router.push(RouterPath.AUTH.PWDFORGOT);
+        router.push(RouterPath.AUTH.PWDFORGOT.path);
     }
 
     /**
      * 處理註冊
      */
     handleRegister = () => {
-        router.push(RouterPath.AUTH.REGISTEREMAIL);
+        router.push(RouterPath.AUTH.REGISTER.path);
     }
 } 

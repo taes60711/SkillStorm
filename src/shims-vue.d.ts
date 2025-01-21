@@ -6,6 +6,6 @@ declare module '*.vue' {
 
 declare module 'vue' {
   import type { Ref, ComputedRef } from '@vue/reactivity'
-  export { ref, computed, onMounted } from '@vue/runtime-core'
+  export { ref, computed, onMounted, onUnmounted } from '@vue/runtime-core'
   export type { Ref, ComputedRef }
 }
