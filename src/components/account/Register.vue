@@ -107,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted } from 'vue';
 import RegisterViewModel from '../../view_models/account/register_view_model';
 import { registerState } from '@/global/register_state';
 import router from '@/router/router_manager';
@@ -117,19 +117,7 @@ const viewModel = new RegisterViewModel();
 
 onMounted(() => {
   // 初始化註冊步驟
-  if (registerState.currentStep.value === 0) {
-    registerState.setStep(1);
-  }
-  
-  // 如果已有郵箱，設置到 viewModel
-  if (registerState.registeredEmail.value) {
-    viewModel.emailController.value = registerState.registeredEmail.value;
-  }
-});
-
-// 離開組件時清除狀態
-onUnmounted(() => {
-  registerState.reset();
+  registerState.setStep(1);
 });
 
 // 處理郵箱提交
@@ -137,7 +125,6 @@ const handleEmailSubmit = async () => {
   try {
     const success = await viewModel.signUpStart();
     if (success) {
-      // 只有在成功時才設置註冊狀態並進入第二步
       registerState.setEmail(viewModel.emailController.value);
       registerState.setStep(2);
     }
@@ -147,7 +134,27 @@ const handleEmailSubmit = async () => {
 }
 
 // 處理註冊提交
-const handleSubmit = viewModel.handleSubmit;
+const handleSubmit = async () => {
+  if (!viewModel.isFormValid.value) return;
+
+  viewModel.loading.value = true;
+  viewModel.error.value = '';
+
+  try {
+    const signUpData = {
+      email: viewModel.emailController.value,
+      password: viewModel.pwdController.value,
+      name: viewModel.nameController.value
+    };
+
+    await viewModel.userService.signUp(viewModel.captchaController.value, signUpData);
+    router.push(RouterPath.AUTH.LOGIN);
+  } catch (err) {
+    viewModel.error.value = err instanceof Error ? err.message : '註冊失敗';
+  } finally {
+    viewModel.loading.value = false;
+  }
+};
 
 // 導出需要的屬性和方法
 const {

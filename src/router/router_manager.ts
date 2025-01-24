@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { RouterPath } from "./router_path";
 import { userDataStore } from "@/global/user_data"; // 引入全局用戶資料管理
-import { registerState } from "@/global/register_state";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,11 +27,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!userDataStore.userData.value; // 判斷是否有登入資料
-
-  // 如果從註冊頁面離開，重置註冊狀態
-  if (from.path === RouterPath.AUTH.REGISTER.path && to.path !== RouterPath.AUTH.REGISTER.path) {
-    registerState.reset();
-  }
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     // 如果需要驗證，且未登入，跳轉到首頁

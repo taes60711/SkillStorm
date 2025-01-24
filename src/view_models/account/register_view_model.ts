@@ -4,7 +4,6 @@ import EmailService from '../../services/email_service';
 import type { SignUpRequestData } from '../../models/request/auth/sign_up_request_data';
 import { RouterPath } from '../../router/router_path';
 import router from '@/router/router_manager';
-import { registerState } from '@/global/register_state';
 
 export default class RegisterViewModel {
     private userService = new UserService();
@@ -69,7 +68,6 @@ export default class RegisterViewModel {
             };
 
             await this.userService.signUp(this.captchaController.value, signUpData);
-            registerState.reset(); // 註冊成功後重置狀態
             router.push(RouterPath.AUTH.LOGIN);
         } catch (err) {
             this.error.value = err instanceof Error ? err.message : '註冊失敗';
