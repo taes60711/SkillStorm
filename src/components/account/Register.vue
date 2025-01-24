@@ -135,25 +135,7 @@ const handleEmailSubmit = async () => {
 
 // 處理註冊提交
 const handleSubmit = async () => {
-  if (!viewModel.isFormValid.value) return;
-
-  viewModel.loading.value = true;
-  viewModel.error.value = '';
-
-  try {
-    const signUpData = {
-      email: viewModel.emailController.value,
-      password: viewModel.pwdController.value,
-      name: viewModel.nameController.value
-    };
-
-    await viewModel.userService.signUp(viewModel.captchaController.value, signUpData);
-    router.push(RouterPath.AUTH.LOGIN);
-  } catch (err) {
-    viewModel.error.value = err instanceof Error ? err.message : '註冊失敗';
-  } finally {
-    viewModel.loading.value = false;
-  }
+  await viewModel.handleSubmit();
 };
 
 // 導出需要的屬性和方法
