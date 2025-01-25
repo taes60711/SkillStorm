@@ -2,10 +2,11 @@
 import { ref } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
+import Modal from '../components/utilities/Modal.vue';
 
 const value = ref('');
 const editorRef = ref<any>(null);
-
+const showModal = ref(false);
 
 const COLORS = [
   '#000000', '#e60000', '#ff9900', '#ffff00', '#008A00', '#0066cc', '#9933ff',
@@ -35,7 +36,7 @@ const outputValue = () => {
   console.log('Editor Value:', value.value);
 };
 
-const insertCustomImage = (imgUrl:string) => {
+const insertCustomImage = (imgUrl: string) => {
   const editor: Quill = editorRef.value?.quill;
   const cursorPos: number = editor.getSelection()?.index || 0;
   const inputed: string = `<img src="${imgUrl}">`;
@@ -44,10 +45,10 @@ const insertCustomImage = (imgUrl:string) => {
   editor.setSelection(cursorPos + inputed.length);
 };
 
-const insertCustomVideo = (videoUrl:string) => {
+const insertCustomVideo = (videoUrl: string) => {
   const editor: Quill = editorRef.value?.quill;
   const cursorPos: number = editor.getSelection()?.index || 0;
-  const ytId: string = getYtvideoID(videoUrl);        
+  const ytId: string = getYtvideoID(videoUrl);
   const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
 
   const inputed: string = `<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${ytURL}"></iframe><p><br></p>`;
@@ -117,9 +118,19 @@ const insertCustomLink = (link: string, linkText: string) => {
     <button @click="outputValue">輸出內容</button>
     <button @click="insertCustomText">插入自定義文字</button>
     <button @click="insertCustomVideo('https://youtu.be/PS9Ek7N7fvI?si=JsOsUNTGGc1M-yzf')">插入影片</button>
-    <button @click="insertCustomImage('https://d1b8dyiuti31bx.cloudfront.net/NewsPhotos/20230504/51_123347600602.jpg')">插入圖片</button>
+    <button
+      @click="insertCustomImage('https://d1b8dyiuti31bx.cloudfront.net/NewsPhotos/20230504/51_123347600602.jpg')">插入圖片</button>
+    <button
+      @click="insertCustomLink('https://www.youtube.com/watch?v=4UNhP9S1Iz4&ab_channel=KOCOWATVBrasil', 'testssss')">插入鏈結</button>
 
-    <button @click="insertCustomLink('https://www.youtube.com/watch?v=4UNhP9S1Iz4&ab_channel=KOCOWATVBrasil','testssss')">插入鏈結</button>
+    <button @click="showModal = true">Modal</button>
+
+    <Modal :visible="showModal" @update:visible="showModal = $event">
+      <h2>这是模态框的内容！</h2>
+      <input type="text">
+    </Modal>
+
+
   </div>
 </template>
 
