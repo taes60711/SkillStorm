@@ -2,7 +2,7 @@
     <div v-if="visible" class="modal-overlay" @click.self="close">
         <div class="modal-content">
             <slot></slot>
-            <button @click="close" class="modal-close-btn">关闭</button>
+            <button @click="close" class="modal-close-btn">關閉</button>
         </div>
     </div>
 </template>

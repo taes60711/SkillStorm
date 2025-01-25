@@ -6,7 +6,18 @@ import Modal from '../components/utilities/Modal.vue';
 
 const value = ref('');
 const editorRef = ref<any>(null);
+
+
 const showModal = ref(false);
+const urlImgController = ref<string>('');
+
+const showVideoModal = ref(false);
+const youtubeController = ref<string>('');
+
+
+const showLinkModal = ref(false);
+const LinkTextController = ref<string>('');
+const LinkController = ref<string>('');
 
 const COLORS = [
   '#000000', '#e60000', '#ff9900', '#ffff00', '#008A00', '#0066cc', '#9933ff',
@@ -37,6 +48,8 @@ const outputValue = () => {
 };
 
 const insertCustomImage = (imgUrl: string) => {
+
+  console.log(imgUrl);
   const editor: Quill = editorRef.value?.quill;
   const cursorPos: number = editor.getSelection()?.index || 0;
   const inputed: string = `<img src="${imgUrl}">`;
@@ -117,17 +130,37 @@ const insertCustomLink = (link: string, linkText: string) => {
 
     <button @click="outputValue">輸出內容</button>
     <button @click="insertCustomText">插入自定義文字</button>
-    <button @click="insertCustomVideo('https://youtu.be/PS9Ek7N7fvI?si=JsOsUNTGGc1M-yzf')">插入影片</button>
-    <button
-      @click="insertCustomImage('https://d1b8dyiuti31bx.cloudfront.net/NewsPhotos/20230504/51_123347600602.jpg')">插入圖片</button>
-    <button
-      @click="insertCustomLink('https://www.youtube.com/watch?v=4UNhP9S1Iz4&ab_channel=KOCOWATVBrasil', 'testssss')">插入鏈結</button>
+ 
+    
+    <!-- link Insert -->
+    <button @click="showLinkModal = true">插入Link</button>
+    <Modal :visible="showLinkModal" @update:visible="showLinkModal = $event">
 
-    <button @click="showModal = true">Modal</button>
+      <p>Link Text: </p>
+      <input type="text" v-model="LinkTextController">
+      <p>Link: </p>
+      <input type="text" v-model="LinkController">
 
+      <button
+      @click="insertCustomLink(LinkController, LinkTextController)">插入鏈結</button>
+    </Modal>
+
+    <!-- youtubeVideo Insert -->
+    <button @click="showVideoModal = true">插入影片</button>
+    <Modal :visible="showVideoModal" @update:visible="showVideoModal = $event">
+      <h2>youtube URL</h2>
+      <input type="text" v-model="youtubeController">
+      <button
+      @click="insertCustomVideo(youtubeController)">插入影片</button>
+    </Modal>
+
+    <!-- Img Insert -->
+    <button @click="showModal = true">插入圖片</button>
     <Modal :visible="showModal" @update:visible="showModal = $event">
-      <h2>这是模态框的内容！</h2>
-      <input type="text">
+      <h2>Image URL</h2>
+      <input type="text" v-model="urlImgController">
+      <button
+      @click="insertCustomImage(urlImgController)">插入圖片</button>
     </Modal>
 
 
