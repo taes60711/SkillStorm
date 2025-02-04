@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import Modal from '../components/utilities/Modal.vue';
@@ -13,7 +13,6 @@ const urlImgController = ref<string>('');
 
 const showVideoModal = ref(false);
 const youtubeController = ref<string>('');
-
 
 const showLinkModal = ref(false);
 const LinkTextController = ref<string>('');
@@ -29,23 +28,55 @@ const COLORS = [
 
 const editorModules = {
   toolbar: [
-    ['link'],
+    ['image'],
     [{ color: COLORS }],
   ],
 };
 
-const insertCustomText = () => {
-  const editor: Quill = editorRef.value?.quill;
-  const cursorPos: number = editor.getSelection()?.index || 0;
-  const inputed: string = "這是自定義文字";
-  editor.insertText(cursorPos, inputed);
-  value.value = editor.root.innerHTML;
-  editor.setSelection(cursorPos + inputed.length);
-};
+onMounted(async () => {
+  setTimeout(() => {
+    addCustomButton();
+  }, 100); 
+});
 
-const outputValue = () => {
-  console.log('Editor Value:', value.value);
-};
+
+
+const addCustomButton = () =>{
+
+  const quill = editorRef.value?.quill; 
+  const toolbar = quill.getModule('toolbar'); 
+
+    // 创建自定义按钮数组
+    const buttons = [
+    {
+      id: 'custom-button-1',
+      text: '影',
+      action: ()=> { showVideoModal.value = !showVideoModal.value }
+    },
+    {
+      id: 'custom-button-2',
+      text: '圖',
+      action: ()=> { showModal.value = !showModal.value }
+    },
+    {
+      id: 'custom-button-3',
+      text: '鏈',
+      action: ()=> { showLinkModal.value = !showLinkModal.value }
+    },
+  ];
+
+  buttons.forEach(button => {
+    const customButton = document.createElement('button');
+    customButton.innerHTML = button.text;
+    customButton.id = button.id;
+
+    toolbar.container.appendChild(customButton);
+
+    customButton.addEventListener('click', button.action);
+  });
+
+}
+    
 
 const insertCustomImage = (imgUrl: string) => {
 
@@ -117,23 +148,21 @@ const insertCustomLink = (link: string, linkText: string) => {
   editor.setSelection(cursorPos + inputed.length);
 };
 
-
-
+const outputValue = () => {
+  console.log('Editor Value:', value.value);
+};
 
 </script>
 
 <template>
   <div>
     <Editor ref="editorRef" v-model="value" editorStyle="height: 320px;" placeholder="請輸入文字" :modules="editorModules">
-
     </Editor>
 
-    <button @click="outputValue">輸出內容</button>
-    <button @click="insertCustomText">插入自定義文字</button>
+    <button @click="outputValue">送出</button>
  
     
     <!-- link Insert -->
-    <button @click="showLinkModal = true">插入Link</button>
     <Modal :visible="showLinkModal" @update:visible="showLinkModal = $event">
 
       <p>Link Text: </p>
@@ -146,7 +175,6 @@ const insertCustomLink = (link: string, linkText: string) => {
     </Modal>
 
     <!-- youtubeVideo Insert -->
-    <button @click="showVideoModal = true">插入影片</button>
     <Modal :visible="showVideoModal" @update:visible="showVideoModal = $event">
       <h2>youtube URL</h2>
       <input type="text" v-model="youtubeController">
@@ -155,7 +183,6 @@ const insertCustomLink = (link: string, linkText: string) => {
     </Modal>
 
     <!-- Img Insert -->
-    <button @click="showModal = true">插入圖片</button>
     <Modal :visible="showModal" @update:visible="showModal = $event">
       <h2>Image URL</h2>
       <input type="text" v-model="urlImgController">
