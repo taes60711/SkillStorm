@@ -1,7 +1,7 @@
 import { API_CONFIG, ip, port } from "./api.config";
 import APIClient from "./api_client";
 
-///  登入/註冊相關API
+///  寄信相關API
 export default class EmailService extends APIClient {
     constructor() {
         super(`http://${ip}:${port}/user`);

@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
-import Modal from '../components/utilities/Modal.vue';
+import Modal from '../utilities/Modal.vue';
 
 const value = ref('');
 const editorRef = ref<any>(null);
@@ -149,8 +149,39 @@ const insertCustomLink = (link: string, linkText: string) => {
 };
 
 const outputValue = () => {
-  console.log('Editor Value:', value.value);
+
+
+  let htmlString: string = value.value;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(value.value, 'text/html');
+  const elements = doc.querySelectorAll('*');
+
+
+  elements.forEach(async (element) => {
+    if (element.localName === 'p') {
+      const innerDoc = parser.parseFromString(element.innerHTML, 'text/html');
+      const innerElements = innerDoc.body.querySelectorAll('*');
+      
+      innerElements.forEach((innerElement) => { 
+        const imgSrc = innerElement.outerHTML;
+        if(imgSrc.includes('base64,')){
+          let uid:String = "test";
+          const imgStringToHttp = `<img src="https://$domain/images/${uid}">`;
+          htmlString = htmlString.replace(imgSrc, imgStringToHttp);
+        }
+      });
+    }
+  });
+
+  console.log(htmlString);
+
 };
+
+function getImage(base64Html: string): string {
+
+  const base64Match = base64Html.match(/src="data:image\/[a-z]+;base64,([A-Za-z0-9+/=]+)"/);
+  return base64Match ? base64Match[1] : '';
+}
 
 </script>
 
