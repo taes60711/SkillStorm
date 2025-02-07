@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import Modal from '../utilities/Modal.vue';
+import ImageService from '@/services/image_service';
 
 const value = ref('');
 const editorRef = ref<any>(null);
@@ -148,34 +149,48 @@ const insertCustomLink = (link: string, linkText: string) => {
   editor.setSelection(cursorPos + inputed.length);
 };
 
-const outputValue = () => {
+const outputValue = async () => {
 
-
+  const imageService = new ImageService();
   let htmlString: string = value.value;
   const parser = new DOMParser();
   const doc = parser.parseFromString(value.value, 'text/html');
   const elements = doc.querySelectorAll('*');
 
-
-  elements.forEach(async (element) => {
+  for (const element of  Array.from(elements)) {
     if (element.localName === 'p') {
       const innerDoc = parser.parseFromString(element.innerHTML, 'text/html');
       const innerElements = innerDoc.body.querySelectorAll('*');
-      
-      innerElements.forEach((innerElement) => { 
+
+      for (const innerElement of Array.from(innerElements)) {
         const imgSrc = innerElement.outerHTML;
-        if(imgSrc.includes('base64,')){
-          let uid:String = "test";
+        if (imgSrc.includes('base64,')) {
+          let resultString: String = getImage(imgSrc);
+          let uid: String = crypto.randomUUID();
+
+          const imageId: String = await imageService.imageIsExist(resultString);
+
+          if(imageId != "-1"){
+            uid = imageId;
+          }else{
+            await imageService.saveImg(uid, resultString);
+          }
+ 
           const imgStringToHttp = `<img src="https://$domain/images/${uid}">`;
           htmlString = htmlString.replace(imgSrc, imgStringToHttp);
         }
-      });
+      }
     }
-  });
+  }
 
   console.log(htmlString);
 
 };
+
+
+
+
+
 
 function getImage(base64Html: string): string {
 

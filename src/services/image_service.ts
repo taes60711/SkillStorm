@@ -4,19 +4,19 @@ import APIClient from "./api_client";
 ///  圖片相關API
 export default class ImageService extends APIClient {
     constructor() {
-        super(`http://${ip}:${port}/user`);
+        super(`http://${ip}:${port}/images`);
     }
     /**
      * 判斷上傳的圖片資訊是否已經存在在Server 
      * @param base64ImgStr 
      * @returns 存在 > 圖片的id, 不存在 > Failed
      */
-    async imageIsExist(base64ImgStr: string): Promise<string> {
+    async imageIsExist(base64ImgStr: String): Promise<String> {
         const body = {
             image: base64ImgStr,
         };
 
-        const responseData: string = await this.apiPush('/checkImage', body);
+        const responseData: String = await this.apiPush('/checkImage', body);
 
         console.log("imageIsExist : " + responseData);
 
@@ -29,7 +29,7 @@ export default class ImageService extends APIClient {
      * @param id 圖片的uid(由前端創建)
      * @returns 
      */
-    async saveImg(id: string, base64ImgStr: string): Promise<boolean> {
+    async saveImg(id: String, base64ImgStr: String): Promise<boolean> {
         const body = {
             id: id,
             image: base64ImgStr,
