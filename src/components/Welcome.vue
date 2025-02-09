@@ -9,6 +9,8 @@
       <button class="register-button" @click="goToRegister">註冊</button>
     </div>
   </div>
+
+  
 </template>
 
 <script setup lang="ts">

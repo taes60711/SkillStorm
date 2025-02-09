@@ -242,7 +242,7 @@ function getImage(base64Html: string): string {
 
 <style scoped>
 ::v-deep(.p-editor) {
-  width: 500px;
+  width: 800px;
   border: 2px solid #45a049;
 }
 

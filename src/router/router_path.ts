@@ -6,6 +6,7 @@ import pwdForgot from '../components/account/PwdForgotView.vue'
 import RichTextEditor from '../components/utilities/RichTextEditor.vue'
 import Profile from '../components/profile/Index.vue'
 import EditProfile from '../components/profile/Edit.vue'
+import PostEditor from '../components/post/PostEditor.vue'
 
 export const RouterPath = {
     AUTH: {
@@ -53,6 +54,14 @@ export const RouterPath = {
                 component: EditProfile,
                 name: 'profileEdit',
             }
+        },
+        POST: {
+            EDIT: {
+                path: '/post/edit',
+                component: PostEditor,
+                name: 'postEdit',
+            },
+
         }
     },
 }
