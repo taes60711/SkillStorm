@@ -17,6 +17,9 @@ export const API_CONFIG = {
     },
     SKILL: {
       GET_ALL_SKILL: '/getList',
+    },
+    POST: {
+      GET_ALL_POST_BOARD: '/getAllPostBoard',
     }
   }
 }

@@ -22,7 +22,7 @@ export default class PwdForgotViewModel {
     /**
      * MARK: 送出按鈕
      */
-    send = async () => {
+    send = async (): Promise<void> => {
         if (this.emptyCheck()) {
             console.log(
                 `Code: ${this.codeController.value} Email: ${this.emailController.value} Pwd: ${this.pwdController.value} newPwd: ${this.newPwdController.value}`

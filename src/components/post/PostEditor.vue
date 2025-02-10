@@ -1,18 +1,18 @@
 <script setup lang="ts">
-
-import { ref } from 'vue';
 import RichTextEditor from '../utilities/RichTextEditor.vue';
+import PostEditViewModel from '@/view_models/post/post_edit_view.model';
 
-
+  const viewModel = new PostEditViewModel();
 </script>
 
 <template>
   <div>
-    <input type="text">
+    <p>標題</p>
+    <input type="text" v-model="viewModel.titleController.value">
     
-    <RichTextEditor></RichTextEditor>
+    <RichTextEditor v-model:htmlString="viewModel.htmlString.value"></RichTextEditor>
    
-    <button @click="">送出</button>
+    <button @click="viewModel.send">送出</button>
    
   </div>
 </template>
@@ -20,9 +20,5 @@ import RichTextEditor from '../utilities/RichTextEditor.vue';
 <style scoped>
   p{
     color: #FFFFFF;
-  }
-
-  .pwd_forgot_err{
-    color: #f90202;
   }
 </style>

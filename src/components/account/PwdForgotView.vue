@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PwdForgotViewModel from '../../view_models/account/pwd_forgot_view_model';
 import { ref } from 'vue';
-  // /// 創建View用的Model
+ /// 創建View用的Model
  const viewModel = ref(new PwdForgotViewModel());
 
 
