@@ -11,9 +11,9 @@ export default class SkillService extends APIClient {
     /**
      * MARK: 取得所有Skill項目
      */
-    async getSkillList(): Promise<SkillData> {
+    async getSkillList(): Promise<SkillData[]> {
 
-        const reponseData: SkillData | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.SKILL.GET_ALL_SKILL}`);
+        const reponseData: SkillData[] | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.SKILL.GET_ALL_SKILL}`);
 
         console.log(`getSkillList : ${reponseData}`);
 

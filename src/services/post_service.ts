@@ -11,9 +11,9 @@ export default class PostService extends APIClient {
     /**
      * MARK: 取得所有看板項目
      */
-    async getAllPostBoard(): Promise<PostBoard> {
+    async getAllPostBoard(): Promise<PostBoard[]> {
 
-        const reponseData: PostBoard | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.POST.GET_ALL_POST_BOARD}`);
+        const reponseData: PostBoard[] | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.POST.GET_ALL_POST_BOARD}`);
 
         console.log(`getPostBoard : ${reponseData}`);
 
