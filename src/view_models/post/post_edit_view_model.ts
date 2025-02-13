@@ -6,11 +6,11 @@ import { GlobalData } from "@/global/global_data";
 
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
-
+    /// 內文
     htmlString: Ref<string> = ref<string>('');
-
+    /// 標題
     titleController: Ref<string> = ref<string>('');
-
+    /// 看板
     selectedBoard: Ref<PostBoard> = ref<PostBoard>(GlobalData.posBoard[0]);
 
     /**

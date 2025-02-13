@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { GlobalData } from '@/global/global_data';
 import RichTextEditor from '../utilities/RichTextEditor.vue';
-import PostEditViewModel from '@/view_models/post/post_edit_view.model';
+import PostEditViewModel from '@/view_models/post/post_edit_view_model';
 import Dropdown from 'primevue/dropdown';
 
-
   const viewModel = new PostEditViewModel();
-
 
 </script>
 
@@ -15,7 +13,7 @@ import Dropdown from 'primevue/dropdown';
     <p>標題</p>
     <input type="text" v-model="viewModel.titleController.value">
     
-    <Dropdown v-model="viewModel.selectedBoard.value" :options="GlobalData.posBoard" optionLabel="chineseName" placeholder="選擇一個看板"/>
+    <Dropdown v-model="viewModel.selectedBoard.value" :panelStyle="{ backgroundColor: '#FF6347' }" :options="GlobalData.posBoard" optionLabel="chineseName" placeholder="選擇一個看板"/>
     
     <RichTextEditor v-model:htmlString="viewModel.htmlString.value"></RichTextEditor>
    

@@ -4,7 +4,7 @@ import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import Modal from '../utilities/Modal.vue';
 
-const value =  defineModel('htmlString');
+const value = defineModel('htmlString');
 const editorRef = ref<any>(null);
 
 const showModal= ref(false);

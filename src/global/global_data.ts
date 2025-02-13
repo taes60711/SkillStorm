@@ -18,7 +18,7 @@ export class GlobalData {
             GlobalData.instance = new GlobalData();
         }
         await this.getPostBoardData();
-        // await this.getSkillData();
+        await this.getSkillData();
 
         return GlobalData.instance;
     }
