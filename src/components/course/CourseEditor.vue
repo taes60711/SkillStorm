@@ -9,6 +9,7 @@ import { SkillTypes } from '@/models/skill_type';
 import { MultiSelect } from 'primevue';
 import { GlobalData } from '@/global/global_data';
 import CourseChapterEdit from './CourseChapterEdit.vue';
+import Modal from '../utilities/Modal.vue';
 
 const viewModel = new CourseEditViewModel();
 
@@ -52,6 +53,11 @@ const levelItems: string[] =["1","2","3","4","5"];
  
     <br>
     <button @click="viewModel.send">送出</button>
+
+    <Modal :visible="viewModel.showCourseSuccessModalController.value" @update:visible="viewModel.showCourseSuccessModalController.value = $event">
+      <h2>發布成功</h2>
+    </Modal>
+
   </div>
 </template>
 

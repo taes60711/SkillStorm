@@ -15,6 +15,10 @@ export default class PostEditViewModel {
     /// 看板
     selectedBoard: Ref<PostBoard> = ref<PostBoard>(GlobalData.posBoard[0]);
 
+    /// 發文成功的Modal顯示
+    showPostSuccessModalController = ref<boolean>(false);
+
+
     /**
      * MARK: 送出按鈕
      */
@@ -27,6 +31,17 @@ export default class PostEditViewModel {
             content: formattedString,
         };
         await new PostService().createPost(postData);
-
+        this.resetAllEditData();
+        this.showPostSuccessModalController.value = true;
     };
+
+    /**
+     * 清空所有編輯的資料（暫時）
+     */
+    private resetAllEditData = (): void => {
+        this.titleController.value = '';
+        this.selectedBoard.value = GlobalData.posBoard[0];
+        this.htmlString.value = '';
+    };
+
 }

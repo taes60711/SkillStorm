@@ -20,12 +20,13 @@ export default class CourseEditViewModel {
     selectedSkill = ref<SkillData[]>([]);
     chapters = ref<ChapterEditModel[]>([]);
 
+    /// 發文成功的Modal顯示
+    showCourseSuccessModalController = ref<boolean>(false);
 
     /**
      * MARK: 送出按鈕
      */
     send = async (): Promise<void> => {
-
         const formattedString: string = await new RichTextEditorViewModel().formatToDataBaseStr(this.htmlString.value);
         const formattedApiChapter: ChapterData[] = [];
 
@@ -53,21 +54,30 @@ export default class CourseEditViewModel {
             isPublic: this.isPublic.value,
         }
 
-
         await new CourseService().createCourse(data);
 
-        console.log(data);
 
-        debugger
+        this.resetAllEditData();
+        this.showCourseSuccessModalController.value = true;
     };
 
+    /**
+     * 清空所有編輯的資料（暫時）
+     */
+    private resetAllEditData = (): void => {
+        this.titleController.value = '';
+        this.outlineController.value = '';
+        this.beforeNeedController.value = '';
+        this.selectedLevel.value = '1';
+        this.selectedType.value = { id: SkillType.frontend, name: "前端" };
+        this.isPublic.value = true;
+        this.htmlString.value = '';
+        this.selectedSkill.value = [];
+        this.chapters.value = [];
+    };
 
     addChapter = (): void => {
-        const newChapter: ChapterEditModel = {
-            title: "",
-            content: ""
-        };
-
+        const newChapter: ChapterEditModel = { title: "", content: "" };
         this.chapters.value.push(newChapter);
     }
 
