@@ -20,6 +20,10 @@ export const API_CONFIG = {
     },
     POST: {
       GET_ALL_POST_BOARD: '/getAllPostBoard',
+      CREATE_POST: '/createPost',
+    },
+    COURSE: {
+      CREATE_COURSE: '/createCourse',
     }
   }
 }

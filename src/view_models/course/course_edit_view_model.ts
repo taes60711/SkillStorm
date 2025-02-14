@@ -1,8 +1,10 @@
-import { SkillType, SkillTypes, type SkillTypeModel } from "@/models/skill_type";
+import { SkillType, type SkillTypeModel } from "@/models/skill_type";
 import { ref } from "vue";
 import RichTextEditorViewModel from "../rich_text_ediotor_view_model";
 import type { SkillData } from "@/models/reponse/skill_reponse_data";
 import type { ChapterEditModel } from "./chapter_edit_model";
+import type { ChapterData, CreateCourseRequestData } from "@/models/request/course/create_course_request_data";
+import CourseService from "@/services/course_service";
 
 
 /// 課程編輯ViewModel
@@ -23,18 +25,38 @@ export default class CourseEditViewModel {
      * MARK: 送出按鈕
      */
     send = async (): Promise<void> => {
-        const formattedString: string = await new RichTextEditorViewModel().formatToDataBaseStr(this.htmlString.value);
-        console.log(`title: ${this.titleController.value} 
-            outline: ${this.outlineController.value} 
-            beforeNeed: ${this.beforeNeedController.value}
-            selectedLevel: ${this.selectedLevel.value}
-            selectedType: ${this.selectedType.value.name}
-            shousainaiyou: ${formattedString}
-            isPublic: ${this.isPublic.value}
-            selectedSkill: ${this.selectedSkill.value}
-            chapters: ${this.chapters.value}
-         `);
 
+        const formattedString: string = await new RichTextEditorViewModel().formatToDataBaseStr(this.htmlString.value);
+        const formattedApiChapter: ChapterData[] = [];
+
+        for (let i = 0; i < Array.from(this.chapters.value).length; i++) {
+            const chapterData: ChapterEditModel = this.chapters.value[i];
+            const formattedChapterStr: string = await new RichTextEditorViewModel().formatToDataBaseStr(chapterData.content);
+
+            formattedApiChapter.push({
+                chapter: i + 1,
+                chapterName: chapterData.title,
+                content: [formattedChapterStr],
+            });
+
+        }
+
+        const data: CreateCourseRequestData = {
+            title: this.titleController.value,
+            needLevel: parseInt(this.selectedLevel.value),
+            outline: this.outlineController.value,
+            beforeNeed: this.beforeNeedController.value,
+            prStory: formattedString,
+            courseChapters: formattedApiChapter,
+            learningkillList: this.selectedSkill.value.map((e) => e.name),
+            type: this.selectedType.value.id.toString(),
+            isPublic: this.isPublic.value,
+        }
+
+
+        await new CourseService().createCourse(data);
+
+        console.log(data);
 
         debugger
     };
@@ -50,7 +72,7 @@ export default class CourseEditViewModel {
     }
 
     deleteChapter = (index: number): void => {
-        this.chapters.value.splice(index);
+        this.chapters.value.splice(index, index + 1);
     }
 
     changeChapterIndex = (index: number): void => {
