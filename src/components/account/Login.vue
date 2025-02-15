@@ -46,7 +46,7 @@
         {{ loading ? '登入中...' : '登入' }}
       </button>
 
-      <button type="button" class="google-button" @click="handleGoogleSignIn">
+      <button type="button" class="google-button" @click="">
         <img src="../../assets/google-icon.svg" alt="Google" class="google-icon" />
         Google登入
       </button>
@@ -77,7 +77,7 @@ const {
   hasNumber,
   isFormValid,
   handleSubmit,
-  handleGoogleSignIn,
+  // handleGoogleSignIn,
   handleForgotPassword,
   handleRegister
 } = viewModel

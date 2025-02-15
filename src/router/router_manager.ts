@@ -8,7 +8,6 @@ const router = createRouter({
     RouterPath.AUTH.WELCOME,
     RouterPath.AUTH.LOGIN,
     RouterPath.AUTH.REGISTER,
-    RouterPath.AUTH.REGISTEREMAIL,
     RouterPath.AUTH.PWDFORGOT,
     RouterPath.AUTH.HELLOWORLD,
     {

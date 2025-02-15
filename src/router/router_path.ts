@@ -1,5 +1,4 @@
 import Welcome from '../components/Welcome.vue'
-import RegisterEmail from '../components/account/RegisterEmail.vue'
 import Register from '../components/account/Register.vue'
 import Login from '../components/account/Login.vue'
 import pwdForgot from '../components/account/PwdForgotView.vue'
@@ -21,11 +20,6 @@ export const RouterPath = {
             component: Login,
             name: 'login',
         },
-        REGISTEREMAIL: {
-            path: '/register/email',
-            component: RegisterEmail,
-            name: 'registerEmail',
-        },
         REGISTER: {
             path: '/register',
             component: Register,
@@ -41,7 +35,6 @@ export const RouterPath = {
             component: RichTextEditor,
             name: 'richtextEditor',
         },
-
     },
     HOME: {
         PROFILE: {

@@ -1,6 +1,6 @@
 /// api用的ip & port
-export const ip: string = import.meta.env.VITE_API_HOST || "localhost"
-export const port: string = import.meta.env.VITE_API_PORT || "80"
+export const ip: string = "localhost"
+export const port: string = "80"
 
 export const API_CONFIG = {
   ENDPOINTS: {

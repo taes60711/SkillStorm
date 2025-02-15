@@ -22,9 +22,12 @@ export default class RegisterViewModel {
     pwdIsEmpty = ref<boolean>(false);
     confirmPwdIsEmpty = ref<boolean>(false);
     captchaIsEmpty = ref<boolean>(false);
+    emailError = ref<boolean>(false);
 
     // 加載狀態
     loading = ref<boolean>(false);
+    isLoading = ref<boolean>(false);
+    loadingMessage = ref<string>('處理中...');
     error = ref<string>('');
 
     // 密碼顯示狀態
@@ -73,14 +76,23 @@ export default class RegisterViewModel {
         }
     };
 
-
-
     signUpStart = async () => {
-        await this.sendVerificationCode();
-        router.push({
-            name: RouterPath.AUTH.REGISTER.name,
-            query: { email: this.emailController.value },
-        });
+        this.isLoading.value = true;
+        this.loadingMessage.value = '發送驗證碼中...';
+        
+        try {
+            const result = await this.sendVerificationCode();
+            if (result === "success") {
+                return true;
+            }
+            return false;
+        } catch (err) {
+            this.emailError.value = true;
+            this.error.value = err instanceof Error ? err.message : '發送驗證碼失敗';
+            return false;
+        } finally {
+            this.isLoading.value = false;
+        }
     }
 
     /**
@@ -93,11 +105,36 @@ export default class RegisterViewModel {
         this.error.value = '';
 
         try {
-            await this.emailService.sendCaptchaMail(this.emailController.value, "signUp");
+            const response = await this.emailService.sendCaptchaMail(this.emailController.value, "signUp");
+            if (response === "emailExist") {
+                this.emailError.value = true;
+                this.error.value = "此信箱已被註冊";
+                return "emailExist";
+            }
+            return response;
         } catch (err) {
+            this.emailError.value = true;
             this.error.value = err instanceof Error ? err.message : '發送驗證碼失敗';
+            throw err;
         } finally {
             this.loading.value = false;
+        }
+    };
+
+    /**
+     * 處理 Google 註冊
+     */
+    handleGoogleSignIn = async () => {
+        this.isLoading.value = true;
+        this.loadingMessage.value = '正在處理 Google 註冊...';
+        
+        try {
+            // TODO: 實現 Google 註冊邏輯
+            console.log('Google 註冊功能待實現');
+        } catch (err) {
+            this.error.value = err instanceof Error ? err.message : 'Google 註冊失敗';
+        } finally {
+            this.isLoading.value = false;
         }
     };
 } 

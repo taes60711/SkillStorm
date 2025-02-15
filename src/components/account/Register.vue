@@ -5,86 +5,136 @@
       <h1 class="brand-name">SKILLSTORM</h1>
     </div>
     
-    <form @submit.prevent="handleSubmit" class="register-form">
-      <div class="form-group">
-        <label for="name">名稱</label>
-        <input 
-          type="text" 
-          id="name" 
-          v-model="nameController"
-          :class="{ 'error': nameIsEmpty }"
-        />
-      </div>
+    <!-- 第一步：郵箱註冊 -->
+    <div v-if="registerState.currentStep.value === 1">
+      <form @submit.prevent="handleEmailSubmit" class="register-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            v-model="viewModel.emailController.value"
+            required
+            :class="{ 'error': emailError }"
+          />
+          <span v-if="emailError" class="error-message">{{ error }}</span>
+        </div>
 
-      <div class="form-group">
-        <label for="password">密碼</label>
-        <input 
-          :type="showPassword ? 'text' : 'password'"
-          id="password" 
-          v-model="pwdController"
-          :class="{ 'error': pwdIsEmpty }"
-        />
-        <div class="password-requirements">
-          <div class="requirement" :class="{ 'met': passwordLength }">
-            <span class="x-mark">&#10005;</span>六碼以上
-          </div>
-          <div class="requirement" :class="{ 'met': hasEnglish }">
-            <span class="x-mark">&#10005;</span>含有英文
-          </div>
-          <div class="requirement" :class="{ 'met': hasNumber }">
-            <span class="x-mark">&#10005;</span>含有數字
+        <button type="submit" class="register-button" :disabled="isLoading">
+          開始註冊
+        </button>
+
+        <button type="button" class="google-button" @click="handleGoogleSignIn">
+          <img src="../../assets/google-icon.svg" alt="Google" class="google-icon" />
+          Google註冊
+        </button>
+      </form>
+    </div>
+
+    <!-- 第二步：完整註冊資料 -->
+    <div v-else-if="registerState.currentStep.value === 2">
+      <form @submit.prevent="handleSubmit" class="register-form">
+        <div class="form-group">
+          <label for="name">名稱</label>
+          <input 
+            type="text" 
+            id="name" 
+            v-model="nameController"
+            :class="{ 'error': nameIsEmpty }"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">密碼</label>
+          <input 
+            :type="showPassword ? 'text' : 'password'"
+            id="password" 
+            v-model="pwdController"
+            :class="{ 'error': pwdIsEmpty }"
+          />
+          <div class="password-requirements">
+            <div class="requirement" :class="{ 'met': passwordLength }">
+              <span class="x-mark">&#10005;</span>六碼以上
+            </div>
+            <div class="requirement" :class="{ 'met': hasEnglish }">
+              <span class="x-mark">&#10005;</span>含有英文
+            </div>
+            <div class="requirement" :class="{ 'met': hasNumber }">
+              <span class="x-mark">&#10005;</span>含有數字
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="confirmPassword">確認密碼</label>
-        <input 
-          :type="showConfirmPassword ? 'text' : 'password'"
-          id="confirmPassword" 
-          v-model="confirmPwdController"
-          :class="{ 'error': confirmPwdIsEmpty }"
-        />
-        <div class="password-match" v-if="confirmPwdController">
-          <div class="requirement" :class="{ 'met': passwordsMatch }">
-            <span class="x-mark">&#10005;</span>密碼相符
+        <div class="form-group">
+          <label for="confirmPassword">確認密碼</label>
+          <input 
+            :type="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword" 
+            v-model="confirmPwdController"
+            :class="{ 'error': confirmPwdIsEmpty }"
+          />
+          <div class="password-match" v-if="confirmPwdController">
+            <div class="requirement" :class="{ 'met': passwordsMatch }">
+              <span class="x-mark">&#10005;</span>密碼相符
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="captcha">驗證碼</label>
-        <input 
-          type="text" 
-          id="captcha" 
-          v-model="captchaController"
-          :class="{ 'error': captchaIsEmpty }"
-        />
-      </div>
+        <div class="form-group">
+          <label for="captcha">驗證碼</label>
+          <input 
+            type="text" 
+            id="captcha" 
+            v-model="captchaController"
+            :class="{ 'error': captchaIsEmpty }"
+          />
+        </div>
 
-      <div v-if="error" class="error-message">{{ error }}</div>
-      <button type="submit" class="register-button" :disabled="!isFormValid || loading">
-        {{ loading ? '註冊中...' : '註冊' }}
-      </button>
-    </form>
+        <div v-if="error" class="error-message">{{ error }}</div>
+        <button type="submit" class="register-button" :disabled="!isFormValid || loading">
+          {{ loading ? '註冊中...' : '註冊' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- 加載提示 -->
+    <div class="loading-overlay" v-if="isLoading">
+      <div class="loading-content">
+        <div class="loading-text">{{ loadingMessage }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import RegisterViewModel from '../../view_models/account/register_view_model'
+import { onMounted } from 'vue';
+import RegisterViewModel from '../../view_models/account/register_view_model';
+import { registerState } from '@/global/register_state';
 
-const viewModel = new RegisterViewModel()
+const viewModel = new RegisterViewModel();
 
-/**
- * 暫時
- */
-const route = useRoute()
-const email = route.query.email;
-if(typeof email === "string"){
-  viewModel.emailController.value = email;
-  console.log(viewModel.emailController.value)
+onMounted(() => {
+  // 初始化註冊步驟
+  registerState.setStep(1);
+});
+
+// 處理郵箱提交
+const handleEmailSubmit = async () => {
+  try {
+    const success = await viewModel.signUpStart();
+    if (success) {
+      registerState.setEmail(viewModel.emailController.value);
+      registerState.setStep(2);
+    }
+  } catch (error) {
+    console.error('註冊失敗:', error);
+  }
 }
+
+// 處理註冊提交
+const handleSubmit = async () => {
+  await viewModel.handleSubmit();
+};
 
 // 導出需要的屬性和方法
 const {
@@ -105,8 +155,11 @@ const {
   hasNumber,
   passwordsMatch,
   isFormValid,
-  handleSubmit,
-} = viewModel
+  isLoading,
+  loadingMessage,
+  emailError,
+  handleGoogleSignIn
+} = viewModel;
 </script>
 
 <style scoped>
@@ -249,5 +302,58 @@ input.error {
 .register-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading-text {
+  color: #000000;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.google-button {
+  width: 100%;
+  padding: 15px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #FFFFFF;
+  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.google-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
 }
 </style>
