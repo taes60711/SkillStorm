@@ -11,13 +11,10 @@ import Modal from '../utilities/Modal.vue';
 
 <template>
   <div>
-    <p>標題</p>
-    <input type="text" v-model="viewModel.titleController.value">
-    
     <Dropdown v-model="viewModel.selectedBoard.value" :panelStyle="{ backgroundColor: '#FF6347' }" :options="GlobalData.posBoard" optionLabel="chineseName" placeholder="選擇一個看板"/>
+    <p>內文</p>
+    <textarea v-model="viewModel.mainMessageController.value" placeholder="請輸入內文" rows="4" cols="50"></textarea>
     
-    <RichTextEditor v-model:htmlString="viewModel.htmlString.value"></RichTextEditor>
-   
     <button @click="viewModel.send">送出</button>
 
     <Modal :visible="viewModel.showPostSuccessModalController.value" @update:visible="viewModel.showPostSuccessModalController.value = $event">

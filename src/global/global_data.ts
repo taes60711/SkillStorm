@@ -30,4 +30,7 @@ export class GlobalData {
     private static async getSkillData() {
         this.skillData = await new SkillService().getSkillList();
     }
+
+
+
 }

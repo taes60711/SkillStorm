@@ -9,11 +9,13 @@ import PostService from "@/services/post_service";
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
     /// 內文
-    htmlString: Ref<string> = ref<string>('');
-    /// 標題
-    titleController: Ref<string> = ref<string>('');
+    mainMessageController: Ref<string> = ref<string>('');
+
     /// 看板
     selectedBoard: Ref<PostBoard> = ref<PostBoard>(GlobalData.posBoard[0]);
+
+    /// 圖片/影片
+    fileMessageController: Ref<string[]> = ref<string[]>([]);
 
     /// 發文成功的Modal顯示
     showPostSuccessModalController = ref<boolean>(false);
@@ -23,12 +25,12 @@ export default class PostEditViewModel {
      * MARK: 送出按鈕
      */
     send = async (): Promise<void> => {
-        const formattedString: string = await new RichTextEditorViewModel().formatToDataBaseStr(this.htmlString.value);
-        console.log(`title: ${this.titleController.value} selectedBoard:${this.selectedBoard.value?.chineseName}  richResult: ${formattedString}`);
+
+        console.log(`selectedBoard:${this.selectedBoard.value?.chineseName}  richResult: ${this.mainMessageController.value}`);
         const postData: CreatePostRequestData = {
-            title: this.titleController.value,
             type: this.selectedBoard.value.id,
-            content: formattedString,
+            content: this.mainMessageController.value,
+            fileMessage: this.fileMessageController.value,
         };
         await new PostService().createPost(postData);
         this.resetAllEditData();
@@ -39,9 +41,8 @@ export default class PostEditViewModel {
      * 清空所有編輯的資料（暫時）
      */
     private resetAllEditData = (): void => {
-        this.titleController.value = '';
         this.selectedBoard.value = GlobalData.posBoard[0];
-        this.htmlString.value = '';
+        this.mainMessageController.value = '';
     };
 
 }

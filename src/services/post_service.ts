@@ -33,8 +33,9 @@ export default class PostService extends APIClient {
     async createPost(postData: CreatePostRequestData): Promise<void> {
         const body = {
             createdBy: userDataStore.userData.value?.uid,// 創文章者
-            title: postData.title, // 標題
+            title: "", // 標題
             mainMessage: postData.content,// 內文
+            fileMessage: postData.fileMessage, // 圖片/影片
             type: postData.type,// 看板
         };
         const reponseData: string = await this.apiPush(`${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`, body);
