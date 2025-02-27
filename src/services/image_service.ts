@@ -1,10 +1,10 @@
-import { API_CONFIG, ip, port } from "./api.config";
+import { APIHttpController } from "@/global/api_http_controller";
 import APIClient from "./api_client";
 
 ///  圖片相關API
 export default class ImageService extends APIClient {
     constructor() {
-        super(`http://${ip}:${port}/images`);
+        super(`${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/images`);
     }
     /**
      * 判斷上傳的圖片資訊是否已經存在在Server 

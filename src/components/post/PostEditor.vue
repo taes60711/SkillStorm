@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { GlobalData } from '@/global/global_data';
-import RichTextEditor from '../utilities/RichTextEditor.vue';
 import PostEditViewModel from '@/view_models/post/post_edit_view_model';
 import Dropdown from 'primevue/dropdown';
 import Modal from '../utilities/Modal.vue';
@@ -28,3 +27,5 @@ import Modal from '../utilities/Modal.vue';
     color: #FFFFFF;
   }
 </style>
+
+

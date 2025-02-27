@@ -1,7 +1,3 @@
-/// api用的ip & port
-export const ip: string = "localhost"
-export const port: string = "80"
-
 export const API_CONFIG = {
   ENDPOINTS: {
     AUTH: {
@@ -27,6 +23,7 @@ export const API_CONFIG = {
     }
   }
 }
+
 
 
 

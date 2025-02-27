@@ -5,13 +5,14 @@ import type { ProfileData } from "../models/reponse/auth/profile_data_reponse_da
 import type { LoginRequestData } from "../models/request/auth/login_request_data";
 import type { UpdateProfileRequestData } from "../models/request/auth/update_profile_request_data";
 import type { SignUpRequestData } from "../models/request/auth/sign_up_request_data";
-import { API_CONFIG, ip, port } from "./api.config";
+import { API_CONFIG } from "./api.config";
+import { APIHttpController } from "@/global/api_http_controller";
 
 ///  使用者相關API
 export default class UserService extends APIClient {
 
   constructor() {
-    super(`http://${ip}:${port}/user`);
+    super(`${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/user`);
   }
 
   /**

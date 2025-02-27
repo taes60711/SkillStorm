@@ -3,8 +3,7 @@ import PwdForgotViewModel from '../../view_models/account/pwd_forgot_view_model'
 
  /// 創建View用的Model
  const viewModel = new PwdForgotViewModel();
-
-
+ 
 </script>
 
 <template>

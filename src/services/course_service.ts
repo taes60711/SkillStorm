@@ -1,4 +1,5 @@
-import { API_CONFIG, ip, port } from "./api.config";
+import { APIHttpController } from "@/global/api_http_controller";
+import { API_CONFIG } from "./api.config";
 import APIClient from "./api_client";
 import { userDataStore } from "@/global/user_data";
 import type { CreateCourseRequestData } from "@/models/request/course/create_course_request_data";
@@ -6,7 +7,7 @@ import type { CreateCourseRequestData } from "@/models/request/course/create_cou
 ///  課程相關API
 export default class CourseService extends APIClient {
     constructor() {
-        super(`http://${ip}:${port}/courses`);
+        super(`${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/courses`);
     }
 
     /**

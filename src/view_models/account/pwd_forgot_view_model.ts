@@ -28,8 +28,8 @@ export default class PwdForgotViewModel {
                 `Code: ${this.codeController.value} Email: ${this.emailController.value} Pwd: ${this.pwdController.value} newPwd: ${this.newPwdController.value}`
             );
 
-            /// Call API 暫時註解掉
-            // await this.userService.updatePwd(this.codeController.value, this.emailController.value, this.pwdController.value);
+            /// Call API
+            await this.userService.updatePwd(this.codeController.value, this.emailController.value, this.pwdController.value);
             console.log(`修改成功 彈回至登入頁面`);
         } else {
             console.log(

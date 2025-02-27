@@ -1,11 +1,10 @@
 import axios, { type AxiosResponse } from 'axios';
-import { ip, port } from "./api.config";
 
 
 export default class APIClient {
   protected baseUrl: string;
 
-  constructor(baseUrl: string = `http://${ip}:${port}`) {
+  constructor(baseUrl: string = `noInsertURL`) {
     this.baseUrl = baseUrl;
   }
 

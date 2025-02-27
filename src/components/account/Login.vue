@@ -77,7 +77,6 @@ const {
   hasNumber,
   isFormValid,
   handleSubmit,
-  // handleGoogleSignIn,
   handleForgotPassword,
   handleRegister
 } = viewModel

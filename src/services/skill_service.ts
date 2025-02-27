@@ -1,11 +1,12 @@
+import { APIHttpController } from "@/global/api_http_controller";
 import type { SkillData } from "../models/reponse/skill_reponse_data";
-import { API_CONFIG, ip, port } from "./api.config";
+import { API_CONFIG } from "./api.config";
 import APIClient from "./api_client";
 
 ///  技能相關API
 export default class SkillService extends APIClient {
     constructor() {
-        super(`http://${ip}:${port}/skill`);
+        super(`${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/skill`);
     }
 
     /**

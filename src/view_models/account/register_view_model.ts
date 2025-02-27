@@ -6,135 +6,143 @@ import { RouterPath } from '../../router/router_path';
 import router from '@/router/router_manager';
 
 export default class RegisterViewModel {
+
+    stepIndex = ref<number>(0);
+
     private userService = new UserService();
     private emailService = new EmailService();
 
-    // 表單數據
+    // 輸入框
     emailController = ref<string>('');
+
     nameController = ref<string>('');
     pwdController = ref<string>('');
     confirmPwdController = ref<string>('');
     captchaController = ref<string>('');
 
     // 錯誤狀態
-    emailIsEmpty = ref<boolean>(false);
-    nameIsEmpty = ref<boolean>(false);
-    pwdIsEmpty = ref<boolean>(false);
-    confirmPwdIsEmpty = ref<boolean>(false);
-    captchaIsEmpty = ref<boolean>(false);
-    emailError = ref<boolean>(false);
+    emailError = ref<string>("");
 
-    // 加載狀態
-    loading = ref<boolean>(false);
-    isLoading = ref<boolean>(false);
-    loadingMessage = ref<string>('處理中...');
-    error = ref<string>('');
+    nameError = ref<string>("");
+    captchaError = ref<string>("");
 
-    // 密碼顯示狀態
-    showPassword = ref<boolean>(false);
-    showConfirmPassword = ref<boolean>(false);
+    passwordLength = computed<boolean>(() => this.pwdController.value.length >= 6);
+    hasEnglish = computed<boolean>(() => /[a-zA-Z]/.test(this.pwdController.value));
+    hasNumber = computed<boolean>(() => /[0-9]/.test(this.pwdController.value));
+    passwordsMatch = computed<boolean>(() => this.pwdController.value === this.confirmPwdController.value);
 
-    // 密碼驗證計算屬性
-    passwordLength = computed(() => this.pwdController.value.length >= 6);
-    hasEnglish = computed(() => /[a-zA-Z]/.test(this.pwdController.value));
-    hasNumber = computed(() => /[0-9]/.test(this.pwdController.value));
-    passwordsMatch = computed(() => this.pwdController.value === this.confirmPwdController.value);
-
-    // 表單有效性
-    isFormValid = computed(() => {
-        return this.passwordLength.value &&
-            this.hasEnglish.value &&
-            this.hasNumber.value &&
-            this.passwordsMatch.value &&
-            this.emailController.value !== '' &&
-            this.nameController.value !== '' &&
-            this.captchaController.value !== '';
-    });
 
     /**
      * 處理註冊提交
      */
-    handleSubmit = async () => {
-        if (!this.isFormValid.value) return;
-
-        this.loading.value = true;
-        this.error.value = '';
-
-        try {
+    signUp = async () => {
+        this.errReset();
+        if (this.errCheck()) {
             const signUpData: SignUpRequestData = {
                 email: this.emailController.value,
                 password: this.pwdController.value,
                 name: this.nameController.value
             };
-
+            // 註冊提交
             await this.userService.signUp(this.captchaController.value, signUpData);
             router.push(RouterPath.AUTH.LOGIN);
-        } catch (err) {
-            this.error.value = err instanceof Error ? err.message : '註冊失敗';
-        } finally {
-            this.loading.value = false;
         }
     };
-
-    signUpStart = async () => {
-        this.isLoading.value = true;
-        this.loadingMessage.value = '發送驗證碼中...';
-        
-        try {
-            const result = await this.sendVerificationCode();
-            if (result === "success") {
-                return true;
-            }
-            return false;
-        } catch (err) {
-            this.emailError.value = true;
-            this.error.value = err instanceof Error ? err.message : '發送驗證碼失敗';
-            return false;
-        } finally {
-            this.isLoading.value = false;
-        }
-    }
 
     /**
-     * 發送驗證碼
+     * 普通註冊: 開始
      */
-    sendVerificationCode = async () => {
-        if (!this.emailController.value) return;
+    signUpStart = async () => {
 
-        this.loading.value = true;
-        this.error.value = '';
+        this.errReset();
 
-        try {
-            const response = await this.emailService.sendCaptchaMail(this.emailController.value, "signUp");
-            if (response === "emailExist") {
-                this.emailError.value = true;
-                this.error.value = "此信箱已被註冊";
-                return "emailExist";
+        if (this.errCheck()) {
+            // 發送驗證碼
+            const response: string = await this.emailService.sendCaptchaMail(this.emailController.value, "signUp");
+            if (response === "success") {
+                this.pageChange(1);
+            } else if (response === "emailExist") {
+                this.emailError.value = "信箱已經註冊過";
+                console.log("emailExist")
             }
-            return response;
-        } catch (err) {
-            this.emailError.value = true;
-            this.error.value = err instanceof Error ? err.message : '發送驗證碼失敗';
-            throw err;
-        } finally {
-            this.loading.value = false;
         }
-    };
+
+    }
 
     /**
      * 處理 Google 註冊
      */
-    handleGoogleSignIn = async () => {
-        this.isLoading.value = true;
-        this.loadingMessage.value = '正在處理 Google 註冊...';
-        
-        try {
-            // TODO: 實現 Google 註冊邏輯
-            console.log('Google 註冊功能待實現');
-        } catch (err) {
-            this.error.value = err instanceof Error ? err.message : 'Google 註冊失敗';
-        } finally {
-            this.isLoading.value = false;
-        }
+    googleSignIn = async () => {
+
     };
+
+    /**
+     * 檢查是否有輸入錯誤
+     * @returns true: 沒任何問題, false: 有問題
+     */
+    private errCheck = (): boolean => {
+        let isOK: boolean = true;
+        switch (this.stepIndex.value) {
+            case 0:
+
+                const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!this.checkInputValid(this.emailController.value, emailRegex)) {
+                    this.emailError.value = "信箱不可為空或格式不正確";
+                    isOK = false;
+                }
+
+                break;
+            case 1:
+
+                if (!this.checkInputValid(this.nameController.value)) {
+                    this.nameError.value = "名稱不可為空";
+                    isOK = false;
+                }
+                if (!this.checkInputValid(this.captchaController.value)) {
+                    this.captchaController.value = "驗證碼不可為空";
+                    isOK = false;
+                }
+
+
+                if (!this.hasNumber.value ||
+                    !this.hasEnglish.value ||
+                    !this.passwordsMatch.value ||
+                    !this.passwordLength.value) {
+                    isOK = false;
+                }
+
+                break;
+        }
+
+        return isOK;
+    }
+
+    /**
+     * 重置所有錯誤訊息
+     */
+    private errReset = () => {
+        this.emailError.value = "";
+        this.nameError.value = "";
+        this.captchaError.value = "";
+    }
+
+    /**
+     * 切換註冊頁面
+     * @param toIndex 要跳轉的頁面
+     */
+    private pageChange = (toIndex: number) => {
+        this.stepIndex.value = toIndex;
+    }
+
+    private checkInputValid = (controller: string, regex?: RegExp): boolean => {
+        let isOK: boolean = true;
+        const controllerStr: string = controller.replaceAll(" ", "");
+
+        if (controllerStr === "" || !regex?.test(controllerStr)) {
+            isOK = false;
+        }
+
+        return isOK;
+    }
+
 } 

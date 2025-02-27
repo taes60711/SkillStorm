@@ -1,10 +1,11 @@
-import { API_CONFIG, ip, port } from "./api.config";
+import { APIHttpController } from "@/global/api_http_controller";
+import { API_CONFIG } from "./api.config";
 import APIClient from "./api_client";
 
 ///  寄信相關API
 export default class EmailService extends APIClient {
     constructor() {
-        super(`http://${ip}:${port}/user`);
+        super(`${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/user`);
     }
 
     /**

@@ -1,5 +1,5 @@
 import Welcome from '../components/Welcome.vue'
-import Register from '../components/account/Register.vue'
+import Register from '../components/account/register/Register.vue'
 import Login from '../components/account/Login.vue'
 import pwdForgot from '../components/account/PwdForgotView.vue'
 import RichTextEditor from '../components/utilities/RichTextEditor.vue'

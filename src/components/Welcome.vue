@@ -9,23 +9,21 @@
       <button class="register-button" @click="goToRegister">註冊</button>
     </div>
   </div>
-
-  
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import router from '@/router/router_manager';
 import { RouterPath } from '../router/router_path';
 
-const router = useRouter()
-
+///跳至登入頁面
 const goToLogin = () => {
   router.push(RouterPath.AUTH.LOGIN)
 }
-
+///跳至註冊頁面
 const goToRegister = () => {
   router.push(RouterPath.AUTH.REGISTER)
 }
+
 </script>
 
 <style scoped>

@@ -2,6 +2,7 @@ import type { PostBoard } from "@/models/reponse/post_board_reponse_data";
 import type { SkillData } from "@/models/reponse/skill_reponse_data";
 import PostService from "@/services/post_service";
 import SkillService from "@/services/skill_service";
+import { APIHttpController, DevType } from "./api_http_controller";
 
 export class GlobalData {
 
@@ -17,8 +18,12 @@ export class GlobalData {
         if (!GlobalData.instance) {
             GlobalData.instance = new GlobalData();
         }
+
+        APIHttpController.getInstance().init(DevType.debug);
+
         await this.getPostBoardData();
         await this.getSkillData();
+
 
         return GlobalData.instance;
     }
@@ -30,6 +35,8 @@ export class GlobalData {
     private static async getSkillData() {
         this.skillData = await new SkillService().getSkillList();
     }
+
+
 
 
 
