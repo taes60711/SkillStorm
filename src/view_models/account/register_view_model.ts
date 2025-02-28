@@ -4,6 +4,7 @@ import EmailService from '../../services/email_service';
 import type { SignUpRequestData } from '../../models/request/auth/sign_up_request_data';
 import { RouterPath } from '../../router/router_path';
 import router from '@/router/router_manager';
+import { EditTools } from '@/global/edit_tools';
 
 export default class RegisterViewModel {
 
@@ -11,6 +12,7 @@ export default class RegisterViewModel {
 
     private userService = new UserService();
     private emailService = new EmailService();
+    private editTools = new EditTools();
 
     // 輸入框
     emailController = ref<string>('');
@@ -86,7 +88,7 @@ export default class RegisterViewModel {
             case 0:
 
                 const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                if (!this.checkInputValid(this.emailController.value, emailRegex)) {
+                if (!this.editTools.checkInputValid(this.emailController.value, emailRegex)) {
                     this.emailError.value = "信箱不可為空或格式不正確";
                     isOK = false;
                 }
@@ -94,11 +96,11 @@ export default class RegisterViewModel {
                 break;
             case 1:
 
-                if (!this.checkInputValid(this.nameController.value)) {
+                if (!this.editTools.checkInputValid(this.nameController.value)) {
                     this.nameError.value = "名稱不可為空";
                     isOK = false;
                 }
-                if (!this.checkInputValid(this.captchaController.value)) {
+                if (!this.editTools.checkInputValid(this.captchaController.value)) {
                     this.captchaController.value = "驗證碼不可為空";
                     isOK = false;
                 }
@@ -134,15 +136,15 @@ export default class RegisterViewModel {
         this.stepIndex.value = toIndex;
     }
 
-    private checkInputValid = (controller: string, regex?: RegExp): boolean => {
-        let isOK: boolean = true;
-        const controllerStr: string = controller.replaceAll(" ", "");
+    // private checkInputValid = (controller: string, regex?: RegExp): boolean => {
+    //     let isOK: boolean = true;
+    //     const controllerStr: string = controller.replaceAll(" ", "");
 
-        if (controllerStr === "" || !regex?.test(controllerStr)) {
-            isOK = false;
-        }
+    //     if (controllerStr === "" || !regex?.test(controllerStr)) {
+    //         isOK = false;
+    //     }
 
-        return isOK;
-    }
+    //     return isOK;
+    // }
 
 } 

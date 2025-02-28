@@ -1,15 +1,22 @@
 <template>
+  <img 
+    src="../../../assets/logo.png" 
+    alt="SkillStorm" 
+    class="logo" 
+  />
 
-<img src="../../../assets/logo.png" alt="SkillStorm" class="logo" />
-
-<div v-if="viewModel.stepIndex.value === 0">
-  <!-- 註冊輸入Email頁面 -->
-  <RegisterStepOne v-model:RegisterViewModel="viewModel"></RegisterStepOne>
-</div>
-<div v-else-if="viewModel.stepIndex.value === 1">
-  <!-- 註冊第1階段 -->
-  <RegisterStepTwo v-model:RegisterViewModel="viewModel"></RegisterStepTwo>
-</div>
+  <div v-if = "viewModel.stepIndex.value === 0">
+    <!-- 註冊輸入Email頁面 -->
+    <RegisterStepOne 
+      v-model:RegisterViewModel="viewModel">
+    </RegisterStepOne>
+  </div>
+  <div v-else-if = "viewModel.stepIndex.value === 1">
+    <!-- 註冊第1階段 -->
+    <RegisterStepTwo 
+      v-model:RegisterViewModel="viewModel">
+    </RegisterStepTwo>
+  </div>
 </template>
 
 <script setup lang="ts">

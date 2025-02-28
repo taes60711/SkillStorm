@@ -1,50 +1,54 @@
 <template>
   <div class="login-container">
-    <div class="logo-container">
-      <img src="../../assets/logo.png" alt="SkillStorm" class="logo" />
-      <h1 class="brand-name">SKILLSTORM</h1>
-    </div>
+    <img src="../../assets/logo.png" alt="SkillStorm" class="logo" />
     
-    <form @submit.prevent="handleSubmit" class="login-form">
+    <div class="login-form">
+
       <div class="form-group">
         <label for="email">Email</label>
         <input 
           type="email" 
           id="email" 
-          v-model="emailController"
-          :class="{ 'error': emailIsEmpty }"
+          v-model="viewModel.emailController.value"
         />
       </div>
 
       <div class="form-group">
+
         <label for="password">密碼</label>
         <input 
-          :type="showPassword ? 'text' : 'password'"
+          :type="'password'"
           id="password" 
-          v-model="pwdController"
-          :class="{ 'error': pwdIsEmpty }"
+          v-model="viewModel.pwdController.value"
         />
+
         <div class="password-requirements">
-          <div class="requirement" :class="{ 'met': passwordLength }">
+          <div class="requirement" :class="{ 'met': viewModel.passwordLength.value }">
             <span class="x-mark">&#10005;</span>六碼以上
           </div>
-          <div class="requirement" :class="{ 'met': hasEnglish }">
+          <div class="requirement" :class="{ 'met': viewModel.hasEnglish.value }">
             <span class="x-mark">&#10005;</span>含有英文
           </div>
-          <div class="requirement" :class="{ 'met': hasNumber }">
+          <div class="requirement" :class="{ 'met': viewModel.hasNumber.value }">
             <span class="x-mark">&#10005;</span>含有數字
           </div>
         </div>
+
       </div>
 
       <div class="forgot-password">
-        <a href="#" @click.prevent="handleForgotPassword">忘記密碼？</a>
+        <a href="#" @click.prevent="viewModel.toForgotPwdPage">忘記密碼？</a>
       </div>
 
-      <div v-if="error" class="error-message">{{ error }}</div>
-      <button type="submit" class="login-button" :disabled="!isFormValid || loading">
-        {{ loading ? '登入中...' : '登入' }}
+      <div 
+        v-if="viewModel.error.value != ''" 
+        class="error-message">{{ viewModel.error.value }}
+      </div>
+
+      <button type="button" class="login-button" @click="viewModel.handleLogin">
+        登入
       </button>
+    
 
       <button type="button" class="google-button" @click="">
         <img src="../../assets/google-icon.svg" alt="Google" class="google-icon" />
@@ -52,9 +56,9 @@
       </button>
 
       <div class="register-link">
-      <button type="button" class="register-button" @click="handleRegister">建立新帳號</button>
+        <button type="button" class="register-button" @click="viewModel.toRegisterPage">建立新帳號</button>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -63,23 +67,6 @@ import LoginViewModel from '../../view_models/account/login_view_model'
 
 const viewModel = new LoginViewModel()
 
-// 導出需要的屬性和方法
-const {
-  emailController,
-  pwdController,
-  emailIsEmpty,
-  pwdIsEmpty,
-  loading,
-  error,
-  showPassword,
-  passwordLength,
-  hasEnglish,
-  hasNumber,
-  isFormValid,
-  handleSubmit,
-  handleForgotPassword,
-  handleRegister
-} = viewModel
 </script>
 
 <style scoped>
@@ -90,14 +77,6 @@ const {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.logo-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 40px;
-  margin-top: 40px;
 }
 
 .logo {
@@ -146,9 +125,6 @@ input:focus {
   border-color: #E8A87C;
 }
 
-input.error {
-  border-color: #FF4444;
-}
 
 .password-requirements {
   display: flex;

@@ -5,118 +5,121 @@ import type { ProfileData } from '../../models/reponse/auth/profile_data_reponse
 import { RouterPath } from '../../router/router_path';
 import { userDataStore } from "@/global/user_data";
 import router from '@/router/router_manager';
+import { EditTools } from '@/global/edit_tools';
 
 export default class LoginViewModel {
     private userService = new UserService();
+    private editTools = new EditTools();
+
     // 表單數據
     emailController = ref<string>('');
     pwdController = ref<string>('');
 
     // 錯誤狀態
-    emailIsEmpty = ref<boolean>(false);
-    pwdIsEmpty = ref<boolean>(false);
-
-    // 加載狀態
-    loading = ref<boolean>(false);
     error = ref<string>('');
 
-    // 密碼顯示狀態
-    showPassword = ref<boolean>(false);
-
     // 密碼驗證計算屬性
-    passwordLength = computed(() => this.pwdController.value.length >= 6);
-    hasEnglish = computed(() => /[a-zA-Z]/.test(this.pwdController.value));
-    hasNumber = computed(() => /[0-9]/.test(this.pwdController.value));
-
-    // 表單有效性
-    isFormValid = computed(() => {
-        return this.passwordLength.value &&
-            this.hasEnglish.value &&
-            this.hasNumber.value &&
-            this.emailController.value !== '';
-    });
+    passwordLength = computed<boolean>(() => this.pwdController.value.length >= 6);
+    hasEnglish = computed<boolean>(() => /[a-zA-Z]/.test(this.pwdController.value));
+    hasNumber = computed<boolean>(() => /[0-9]/.test(this.pwdController.value));
 
     /**
      * 處理登入提交
      */
-    handleSubmit = async () => {
-        if (!this.isFormValid.value) return;
+    handleLogin = async () => {
 
-        this.loading.value = true;
-        this.error.value = '';
+        if (!this.errCheck()) {
+            return;
+        }
 
-        try {
-            const loginData: LoginRequestData = {
-                email: this.emailController.value,
-                password: this.pwdController.value
-            };
+        const loginData: LoginRequestData = {
+            email: this.emailController.value,
+            password: this.pwdController.value
+        };
 
-            const userData: ProfileData = await this.userService.getUserDataByEmail(loginData, "normalSign");
-            if (userData) {
-                // 更新最後登入時間
-                await this.userService.updateUserLoginLastTime(userData.uid);
+        const userData: ProfileData = await this.userService.getUserDataByEmail(loginData, "normalSign");
+        if (userData) {
+            // 更新最後登入時間
+            await this.userService.updateUserLoginLastTime(userData.uid);
 
-                // 獲取完整用戶資料
-                const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
-                // 更新全局狀態與 localStorage
-                userDataStore.setUser(completeUserData);
+            // 獲取完整用戶資料
+            const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
+            // 更新全局狀態與 localStorage
+            userDataStore.setUser(completeUserData);
 
-                router.push(RouterPath.HOME.PROFILE.INDEX.path);
-            } else {
-                throw new Error('登入失敗');
-            }
-        } catch (err) {
-            this.error.value = err instanceof Error ? err.message : '登入失敗';
-        } finally {
-            this.loading.value = false;
+            router.push(RouterPath.HOME.PROFILE.INDEX.path);
         }
     }
 
     /**
-     * 處理 Google 登入
-     */
-    handleGoogleSignIn = async () => {
-        this.loading.value = true;
-        this.error.value = '';
+ * 檢查是否有輸入錯誤
+ * @returns true: 沒任何問題, false: 有問題
+ */
+    private errCheck = (): boolean => {
+        this.error.value = "";
 
-        try {
-            const loginData: LoginRequestData = {
-                email: this.emailController.value,
-                password: ''  // 這個值會由 Google OAuth 提供
-            };
+        let isOK: boolean = true;
 
-            const userData: ProfileData = await this.userService.getUserDataByEmail(loginData, "googleSign");
-            if (userData) {
-                // 更新最後登入時間
-                await this.userService.updateUserLoginLastTime(userData.uid);
-
-                // 獲取完整用戶資料
-                const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
-                // 更新全局狀態與 localStorage
-                userDataStore.setUser(completeUserData);
-
-                router.push(RouterPath.HOME.PROFILE.INDEX.path);
-            } else {
-                throw new Error('Google 登入失敗');
-            }
-        } catch (err) {
-            this.error.value = err instanceof Error ? err.message : 'Google 登入失敗';
-        } finally {
-            this.loading.value = false;
+        const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!this.editTools.checkInputValid(this.emailController.value, emailRegex)) {
+            this.error.value = "信箱不可為空或格式不正確";
+            isOK = false;
         }
+
+        if (!this.hasNumber.value ||
+            !this.hasEnglish.value ||
+            !this.passwordLength.value) {
+            isOK = false;
+        }
+
+        return isOK;
     }
 
     /**
-     * 處理忘記密碼
+     *跳至 忘記密碼 頁面
      */
-    handleForgotPassword = () => {
+    toForgotPwdPage = () => {
         router.push(RouterPath.AUTH.PWDFORGOT.path);
     }
 
     /**
-     * 處理註冊
+     * 跳至 註冊 頁面
      */
-    handleRegister = () => {
+    toRegisterPage = () => {
         router.push(RouterPath.AUTH.REGISTER.path);
+    }
+
+    /**
+ * 處理 Google 登入
+ */
+    handleGoogleSignIn = async () => {
+        // this.loading.value = true;
+        // this.error.value = '';
+
+        // try {
+        //     const loginData: LoginRequestData = {
+        //         email: this.emailController.value,
+        //         password: ''  // 這個值會由 Google OAuth 提供
+        //     };
+
+        //     const userData: ProfileData = await this.userService.getUserDataByEmail(loginData, "googleSign");
+        //     if (userData) {
+        //         // 更新最後登入時間
+        //         await this.userService.updateUserLoginLastTime(userData.uid);
+
+        //         // 獲取完整用戶資料
+        //         const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
+        //         // 更新全局狀態與 localStorage
+        //         userDataStore.setUser(completeUserData);
+
+        //         router.push(RouterPath.HOME.PROFILE.INDEX.path);
+        //     } else {
+        //         throw new Error('Google 登入失敗');
+        //     }
+        // } catch (err) {
+        //     this.error.value = err instanceof Error ? err.message : 'Google 登入失敗';
+        // } finally {
+        //     this.loading.value = false;
+        // }
     }
 } 
