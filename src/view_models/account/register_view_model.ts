@@ -136,15 +136,5 @@ export default class RegisterViewModel {
         this.stepIndex.value = toIndex;
     }
 
-    // private checkInputValid = (controller: string, regex?: RegExp): boolean => {
-    //     let isOK: boolean = true;
-    //     const controllerStr: string = controller.replaceAll(" ", "");
-
-    //     if (controllerStr === "" || !regex?.test(controllerStr)) {
-    //         isOK = false;
-    //     }
-
-    //     return isOK;
-    // }
 
 } 

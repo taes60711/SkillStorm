@@ -1,3 +1,4 @@
+import { EditTools } from "@/global/edit_tools";
 import ImageService from "@/services/image_service";
 
 export default class RichTextEditorViewModel {
@@ -19,20 +20,13 @@ export default class RichTextEditorViewModel {
 
                 for (const innerElement of Array.from(innerElements)) {
                     const imgSrc = innerElement.outerHTML;
+
                     if (imgSrc.includes('base64,')) {
-                        let resultString: String = getImage(imgSrc);
-                        let uid: String = crypto.randomUUID();
-
-                        const imageId: String = await imageService.imageIsExist(resultString);
-
-                        if (imageId != "-1") {
-                            uid = imageId;
-                        } else {
-                            await imageService.saveImg(uid, resultString);
+                        const uploadedImgUrl: string = await new EditTools().uploadImgToDatabase(imgSrc);
+                        if (uploadedImgUrl !== "failed") {
+                            const imgStringToHttp = `<img src="${uploadedImgUrl}">`;
+                            htmlString = htmlString.replace(imgSrc, imgStringToHttp);
                         }
-
-                        const imgStringToHttp = `<img src="https://$domain/images/${uid}">`;
-                        htmlString = htmlString.replace(imgSrc, imgStringToHttp);
                     }
                 }
             }
@@ -43,7 +37,3 @@ export default class RichTextEditorViewModel {
     }
 }
 
-function getImage(base64Html: string): string {
-    const base64Match = base64Html.match(/src="data:image\/[a-z]+;base64,([A-Za-z0-9+/=]+)"/);
-    return base64Match ? base64Match[1] : '';
-}

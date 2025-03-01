@@ -3,6 +3,9 @@ import { ref, onMounted } from 'vue';
 import Editor from 'primevue/editor';
 import { Quill } from '@vueup/vue-quill';
 import Modal from '../utilities/Modal.vue';
+import { EditTools } from '@/global/edit_tools';
+
+const editTools = new EditTools();
 
 const value = defineModel('htmlString');
 const editorRef = ref<any>(null);
@@ -91,7 +94,7 @@ const insertCustomImage = (imgUrl: string) => {
 const insertCustomVideo = (videoUrl: string) => {
   const editor: Quill = editorRef.value?.quill;
   const cursorPos: number = editor.getSelection()?.index || 0;
-  const ytId: string = getYtvideoID(videoUrl);
+  const ytId: string = editTools.getYtvideoID(videoUrl);
   const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
 
   const inputed: string = `<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${ytURL}"></iframe><p><br></p>`;
@@ -100,43 +103,6 @@ const insertCustomVideo = (videoUrl: string) => {
   editor.setSelection(cursorPos + inputed.length);
 };
 
-function getYtvideoID(url: string): string {
-  let start = 0;
-
-  if (url.includes('/shorts/')) {
-    start = url.indexOf('/shorts/') + '/shorts/'.length;
-  } else if (url.includes('/youtu.be/')) {
-    start = url.indexOf('/youtu.be/') + '/youtu.be/'.length;
-  } else if (url.includes('src=')) {
-    start = url.indexOf('src="https://www.youtube.com/embed/') + 'src="https://www.youtube.com/embed/'.length;
-  } else {
-    start = url.indexOf('?v=') + '?v='.length;
-  }
-
-  let end = 0;
-
-  if (url.includes('&list')) {
-    end = url.indexOf('&list');
-  } else if (url.includes('?si')) {
-    end = url.indexOf('?si');
-  } else if (url.includes('src=')) {
-    end = url.indexOf('">');
-  } else if (url.includes('&')) {
-    end = url.indexOf('&');
-  } else {
-    end = url.length;
-  }
-
-  let tmpId = "";
-
-  if (end === -1 || (!url.includes("youtu.be/") && !url.includes("youtube.com"))) {
-    tmpId = "err";
-  } else {
-    tmpId = url.substring(start, end);
-  }
-
-  return tmpId;
-}
 
 const insertCustomLink = (link: string, linkText: string) => {
   const editor: Quill = editorRef.value?.quill;

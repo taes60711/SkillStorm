@@ -52,7 +52,8 @@ router.beforeEach((to, from, next) => {
   }
 
   /// 已登入
-  if (to.path === RouterPath.AUTH.LOGIN.path || to.path === RouterPath.AUTH.WELCOME.path) {
+  if (to.path === RouterPath.AUTH.LOGIN.path
+    || to.path === RouterPath.AUTH.WELCOME.path) {
     // 跳轉到 PROFILE 頁面
     console.log("已登入，用戶從首頁跳轉到 PROFILE 頁面");
     next(RouterPath.HOME.PROFILE.INDEX.path);

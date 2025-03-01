@@ -1,13 +1,16 @@
 import type { Ref } from "vue";
 import { ref } from "vue";
-import RichTextEditorViewModel from "../rich_text_ediotor_view_model";
 import type { PostBoard } from "@/models/reponse/post_board_reponse_data";
 import { GlobalData } from "@/global/global_data";
 import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
 import PostService from "@/services/post_service";
+import { EditTools } from "@/global/edit_tools";
 
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
+
+    editTools: EditTools = new EditTools();
+
     /// 內文
     mainMessageController: Ref<string> = ref<string>('');
 
@@ -26,14 +29,16 @@ export default class PostEditViewModel {
      */
     send = async (): Promise<void> => {
 
-        console.log(`selectedBoard:${this.selectedBoard.value?.chineseName}  richResult: ${this.mainMessageController.value}`);
+        console.log(`selectedBoard: ${this.selectedBoard.value?.chineseName}  mainMessage: ${this.mainMessageController.value} fileMessage: ${this.fileMessageController.value}`);
         const postData: CreatePostRequestData = {
             type: this.selectedBoard.value.id,
             content: this.mainMessageController.value,
             fileMessage: this.fileMessageController.value,
         };
+
         await new PostService().createPost(postData);
         this.resetAllEditData();
+
         this.showPostSuccessModalController.value = true;
     };
 
@@ -43,6 +48,7 @@ export default class PostEditViewModel {
     private resetAllEditData = (): void => {
         this.selectedBoard.value = GlobalData.posBoard[0];
         this.mainMessageController.value = '';
+        this.fileMessageController.value = [];
     };
 
 }

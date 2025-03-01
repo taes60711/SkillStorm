@@ -1,11 +1,12 @@
 import { ref } from "vue";
 import UserService from "../../services/user_service";
 import router from "@/router/router_manager";
+import { EditTools } from "@/global/edit_tools";
 
 /// 忘記密碼ViewModel
 export default class PwdForgotViewModel {
     private userService = new UserService();
-
+    private editTools = new EditTools();
 
     codeController = ref<string>(''); /// 驗證碼
     codeIsEmpty = ref<boolean>(false); /// 驗證碼 錯誤
@@ -47,29 +48,33 @@ export default class PwdForgotViewModel {
 
         this.resetAllErr();
 
+
         /// 驗證碼
-        if (this.codeController.value.replaceAll(" ", "") === "") {
+        if (!this.editTools.checkInputValid(this.codeController.value)) {
             this.codeIsEmpty.value = true;
             isOK = false;
         }
 
         /// 信箱
-        if (this.emailController.value.replaceAll(" ", "") === "") {
+        if (!this.editTools.checkInputValid(this.emailController.value)) {
             this.emailIsEmpty.value = true;
             isOK = false;
         }
 
+
+
         /// 密碼
-        if (this.pwdController.value.replaceAll(" ", "") === "") {
+        if (!this.editTools.checkInputValid(this.pwdController.value)) {
             this.pwdIsEmpty.value = true;
             isOK = false;
         }
 
         /// 新密碼
-        if (this.newPwdController.value.replaceAll(" ", "") === "") {
+        if (!this.editTools.checkInputValid(this.newPwdController.value)) {
             this.newPwdIsEmpty.value = true;
             isOK = false;
         }
+
         return isOK;
     }
 

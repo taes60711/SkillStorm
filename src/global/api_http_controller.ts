@@ -38,14 +38,14 @@ export class APIHttpController {
                 APIHttpController.prefixUrl = "http";
                 APIHttpController.domainUrl = `${this._ip}:${this._port}`;
                 APIHttpController.wsPreFixUrl = `ws://${this._ip}:${this._webSocketDebugPort}/${this._wsBranchUrl}`;
-                APIHttpController.databaseDomainStr = `${this._ip}:${this._port}`;
+                APIHttpController.databaseDomainStr = `\$ip:\$port`;
                 APIHttpController.shareDomain = "cant_use";
                 break;
             case DevType.release:
                 APIHttpController.prefixUrl = "https";
                 APIHttpController.domainUrl = this._domain;
                 APIHttpController.wsPreFixUrl = `wss://${this._domain}:${this._webSocketReleasePort}/${this._wsBranchUrl}`;
-                APIHttpController.databaseDomainStr = `${this._domain}`;
+                APIHttpController.databaseDomainStr = `\$domain`;
                 APIHttpController.shareDomain = this._domain;
                 break;
         }
