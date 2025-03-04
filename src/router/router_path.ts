@@ -7,6 +7,7 @@ import Profile from '../components/profile/Index.vue'
 import EditProfile from '../components/profile/Edit.vue'
 import PostEditor from '../components/post/PostEditor.vue'
 import CourseEditor from '@/components/course/CourseEditor.vue'
+import PostHome from '@/components/post/PostHome.vue'
 
 export const RouterPath = {
     AUTH: {
@@ -30,11 +31,7 @@ export const RouterPath = {
             component: pwdForgot,
             name: 'forgotPassword',
         },
-        HELLOWORLD: {
-            path: '/richtextEditor',
-            component: RichTextEditor,
-            name: 'richtextEditor',
-        },
+
     },
     HOME: {
         PROFILE: {
@@ -50,6 +47,11 @@ export const RouterPath = {
             }
         },
         POST: {
+            HOME: {
+                path: '/post',
+                component: PostHome,
+                name: 'postHome',
+            },
             EDIT: {
                 path: '/post/edit',
                 component: PostEditor,

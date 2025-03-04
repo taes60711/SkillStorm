@@ -2,6 +2,7 @@ import { ref, type Ref } from "vue";
 import UserService from "@/services/user_service";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
 import { userDataStore } from "@/global/user_data";
+import { AppImage } from "@/global/app_image";
 
 export default class ProfileViewModel {
 
@@ -42,7 +43,7 @@ export default class ProfileViewModel {
    */
   public get avatarUrl(): string {
     if (!this.profile?.image || this.imageLoadError.value) {
-      return "/src/assets/images/profile/default_avatar.png";
+      return AppImage.defaultUserImg;
     }
     return this.profile.image;
   }

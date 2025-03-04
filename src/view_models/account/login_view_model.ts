@@ -44,17 +44,18 @@ export default class LoginViewModel {
 
             // 獲取完整用戶資料
             const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
+
             // 更新全局狀態與 localStorage
             userDataStore.setUser(completeUserData);
 
-            router.push(RouterPath.HOME.PROFILE.INDEX.path);
+            router.push(RouterPath.HOME.POST.HOME.path);
         }
     }
 
     /**
- * 檢查是否有輸入錯誤
- * @returns true: 沒任何問題, false: 有問題
- */
+     * 檢查是否有輸入錯誤
+     * @returns true: 沒任何問題, false: 有問題
+     */
     private errCheck = (): boolean => {
         this.error.value = "";
 
@@ -90,36 +91,9 @@ export default class LoginViewModel {
     }
 
     /**
- * 處理 Google 登入
- */
+     * 處理 Google 登入
+     */
     handleGoogleSignIn = async () => {
-        // this.loading.value = true;
-        // this.error.value = '';
 
-        // try {
-        //     const loginData: LoginRequestData = {
-        //         email: this.emailController.value,
-        //         password: ''  // 這個值會由 Google OAuth 提供
-        //     };
-
-        //     const userData: ProfileData = await this.userService.getUserDataByEmail(loginData, "googleSign");
-        //     if (userData) {
-        //         // 更新最後登入時間
-        //         await this.userService.updateUserLoginLastTime(userData.uid);
-
-        //         // 獲取完整用戶資料
-        //         const completeUserData: ProfileData = await this.userService.getUserDataByUID(userData.uid);
-        //         // 更新全局狀態與 localStorage
-        //         userDataStore.setUser(completeUserData);
-
-        //         router.push(RouterPath.HOME.PROFILE.INDEX.path);
-        //     } else {
-        //         throw new Error('Google 登入失敗');
-        //     }
-        // } catch (err) {
-        //     this.error.value = err instanceof Error ? err.message : 'Google 登入失敗';
-        // } finally {
-        //     this.loading.value = false;
-        // }
     }
 } 

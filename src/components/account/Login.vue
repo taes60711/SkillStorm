@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <img src="../../assets/logo.png" alt="SkillStorm" class="logo" />
+    <img :src="AppImage.logo" alt="SkillStorm" class="logo" />
     
     <div class="login-form">
 
@@ -51,7 +51,7 @@
     
 
       <button type="button" class="google-button" @click="">
-        <img src="../../assets/google-icon.svg" alt="Google" class="google-icon" />
+        <img :src="AppImage.googleLogo" alt="Google" class="google-icon" />
         Google登入
       </button>
 
@@ -63,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import { AppImage } from '@/global/app_image';
 import LoginViewModel from '../../view_models/account/login_view_model'
 
 const viewModel = new LoginViewModel()

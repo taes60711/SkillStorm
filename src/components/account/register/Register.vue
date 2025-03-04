@@ -1,6 +1,6 @@
 <template>
   <img 
-    src="../../../assets/logo.png" 
+    :src="AppImage.logo" 
     alt="SkillStorm" 
     class="logo" 
   />
@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import { AppImage } from '@/global/app_image';
 import RegisterViewModel from '../../../view_models/account/register_view_model';
 import RegisterStepOne from './RegisterStepOne.vue';
 import RegisterStepTwo from './RegisterStepTwo.vue';

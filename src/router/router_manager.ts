@@ -9,7 +9,7 @@ const router = createRouter({
     RouterPath.AUTH.LOGIN,
     RouterPath.AUTH.REGISTER,
     RouterPath.AUTH.PWDFORGOT,
-    RouterPath.AUTH.HELLOWORLD,
+    RouterPath.HOME.POST.HOME,
     {
       ...RouterPath.HOME.PROFILE.INDEX,
       meta: { requiresAuth: true },
@@ -34,33 +34,30 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!userDataStore.userData.value; // 判斷是否有登入資料
+  const isLogin = userDataStore.isLogin(); // 判斷是否有登入資料
 
-  /// 不需驗證
-  if (!to.meta.requiresAuth) {
-    // 繼續導航
-    next();
-    return;
+
+  switch (isLogin) {
+
+    case true:
+      /// 已登入
+      if (to.path === RouterPath.AUTH.LOGIN.path
+        || to.path === RouterPath.AUTH.REGISTER.path
+        || to.path === RouterPath.AUTH.PWDFORGOT.path) {
+        console.log("已登入，用戶從首頁跳轉到 POST 頁面");
+        next(RouterPath.HOME.POST.HOME.path);
+      } else {
+        next();
+      }
+      break;
+
+    case false:
+      /// 未登入
+      if (!to.meta.requiresAuth) {
+        next();
+      }
+      break;
   }
-
-  /// 未登入
-  if (!isAuthenticated) {
-    console.log("未登入，跳轉到首頁");
-    // 跳轉到首頁
-    next(RouterPath.AUTH.WELCOME.path);
-    return;
-  }
-
-  /// 已登入
-  if (to.path === RouterPath.AUTH.LOGIN.path
-    || to.path === RouterPath.AUTH.WELCOME.path) {
-    // 跳轉到 PROFILE 頁面
-    console.log("已登入，用戶從首頁跳轉到 PROFILE 頁面");
-    next(RouterPath.HOME.PROFILE.INDEX.path);
-  } else {
-    next();
-  }
-
 });
 
 export default router;

@@ -28,18 +28,38 @@ export default class UserDataStore {
   }
 
   // 用戶狀態：存儲當前用戶資料
-  private user = ref<ProfileData | null>(null);
+  private user = ref<ProfileData>(this.guestData());
 
   /**
    * 獲取用戶資料
-   * @returns {computed<ProfileData | null>} 響應式用戶資料
+   * @returns {computed<ProfileData>} 響應式用戶資料
    */
   get userData() {
     return computed(() => this.user.value);
   }
 
   /**
-   * 設定用戶資料
+   * 訪客用戶資料
+   * @returns 訪客用戶資料
+   */
+  guestData(): ProfileData {
+    return {
+      uid: "guest",
+      email: "",
+      password: "",
+      image: null,
+      name: "未登入",
+      introduction: "",
+      lastlogin: "",
+      job: "",
+      skills: [],
+      wantSkills: [],
+      status: 999,
+    };
+  }
+
+  /**
+   * 設定用戶資料q
    * 將資料保存到內存和 localStorage 中，覆蓋現有資料。
    * @param {ProfileData} data 完整的用戶資料
    */
@@ -70,9 +90,17 @@ export default class UserDataStore {
    * 清空內存中的用戶資料，並移除 localStorage 中的對應資料。
    */
   clearUser() {
-    this.user.value = null;
+    this.user.value = this.guestData();
     localStorage.removeItem("skillStormUserData");
     console.log("清除用戶資料");
+  }
+
+  /**
+   * 是否有登入
+   * @returns true: 有登入, false: 未登入
+   */
+  isLogin(): boolean {
+    return this.user.value.uid != this.guestData().uid;
   }
 
   /**
@@ -80,15 +108,15 @@ export default class UserDataStore {
    * 在應用啟動時調用，從 localStorage 中載入用戶資料並恢復到內存。
    * @returns {boolean} 是否成功恢復用戶資料
    */
-  initializeFromLocalStorage(): boolean {
+  async initializeFromLocalStorage(): Promise<void> {
     const storedUser = localStorage.getItem("skillStormUserData");
+
     if (storedUser) {
       this.user.value = JSON.parse(storedUser) as ProfileData;
+      // 成功恢復
       console.log("從 localStorage 恢復用戶資料:", this.user.value);
-      return true; // 成功恢復
     }
-    console.log("localStorage 中沒有用戶資料");
-    return false; // 沒有用戶資料
+
   }
 }
 
