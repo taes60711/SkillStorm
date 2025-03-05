@@ -2,7 +2,7 @@ import { createApp as create } from '@vue/runtime-dom'
 import App from './App.vue'
 import router from './router/router_manager'
 import PrimeVue from 'primevue/config'
-import '@/assets/css/main.css' // 全局 CSS
+import '@/assets/css/tailwind_style.css' // 導入tailwind
 
 const app = create(App)
 app.use(router)

@@ -4,8 +4,6 @@ import { userDataStore } from './global/user_data';
 import { GlobalData } from './global/global_data';
 import { ref } from 'vue';
 
-
-
 const isInit= ref<boolean>(false);
 
 onMounted(async () => {
@@ -20,14 +18,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <router-view v-if="isInit"></router-view>
+<router-view v-if="isInit" name="aside"></router-view>
+<router-view v-if="isInit"></router-view>
 </template>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
+@import '../src/assets/css/base.css';
+
 </style>

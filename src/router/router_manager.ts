@@ -55,6 +55,8 @@ router.beforeEach((to, from, next) => {
       /// 未登入
       if (!to.meta.requiresAuth) {
         next();
+      } else {
+        console.log("Need Login");
       }
       break;
   }

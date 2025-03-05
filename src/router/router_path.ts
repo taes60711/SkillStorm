@@ -8,12 +8,16 @@ import EditProfile from '../components/profile/Edit.vue'
 import PostEditor from '../components/post/PostEditor.vue'
 import CourseEditor from '@/components/course/CourseEditor.vue'
 import PostHome from '@/components/post/PostHome.vue'
+import InfoBar from '@/components/utilities/InfoBar.vue'
 
 export const RouterPath = {
     AUTH: {
         WELCOME: {
             path: '/',
-            component: Welcome,
+            components: {
+                default: Welcome,
+                aside: InfoBar
+            },
             name: 'welcome',
         },
         LOGIN: {
@@ -49,7 +53,10 @@ export const RouterPath = {
         POST: {
             HOME: {
                 path: '/post',
-                component: PostHome,
+                components: {
+                    default: PostHome,
+                    aside: InfoBar
+                },
                 name: 'postHome',
             },
             EDIT: {
