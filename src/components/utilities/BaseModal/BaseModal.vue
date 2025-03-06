@@ -3,7 +3,6 @@
 <template>
     <div class="mark">
         <div class="baseModalContainer">
-            <!-- 使用 <component :is="modalContent" /> 动态渲染传递的组件 -->
             <component :is="modalContent" :modalProps="modalProps"/>
    
             <button class="baseModalCloseBtn" @click="props.closePage">
