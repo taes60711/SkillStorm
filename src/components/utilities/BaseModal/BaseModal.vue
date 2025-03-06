@@ -3,9 +3,15 @@
 <template>
     <div class="mark">
         <div class="baseModalContainer">
-            <component :is="modalContent" :modalProps="modalProps"/>
+            <component 
+              :is="modalContent" 
+              :modalProps="modalProps"
+            />
    
-            <button class="baseModalCloseBtn" @click="props.closePage">
+            <button 
+              v-if="props.needCloseBtn" 
+              class="baseModalCloseBtn" 
+              @click="props.closePage">
               關閉
             </button>
         </div>
@@ -25,10 +31,15 @@
       type: Object,
       required: true,
     },
+    needCloseBtn:{
+      type: Boolean,
+      required: true,
+    },
     closePage: {
       type: Function,
       required: true,
     },
+    
   });
 
 </script>

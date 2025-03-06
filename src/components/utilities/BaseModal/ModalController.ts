@@ -7,7 +7,7 @@ export class ModalController {
      * 開啟Modal
      * @param modalContent Modal內中間內容Vue
      */
-    show = (modalContent: DefineComponent<{}, {}, any>, modalProps: object = {}): void => {
+    show = (modalContent: DefineComponent<{}, {}, any>, modalProps: object = {}, needCloseBtn: boolean = true): void => {
         // 在 body 中添加新的 div
         const modalElement = document.createElement("div");
         modalElement.setAttribute("id", this.modalId);
@@ -22,8 +22,8 @@ export class ModalController {
             const app = createApp(ModalComponent, {
                 modalContent: contnet,
                 modalProps,
+                needCloseBtn: needCloseBtn,
                 closePage: this.close,
-
             });
 
             app.mount(modalElement);

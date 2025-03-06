@@ -16,12 +16,10 @@
     
 
     const createModal = () => {
-      const modalProps = {
-        message: '这是通过 show 方法传递的消息',
-      };
+      
 
       // 创建 Modal 并传递 props
-      new ModalController().show(TestModal, modalProps);
+      new ModalController().show(TestModal);
     };
 
 
