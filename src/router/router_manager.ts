@@ -5,7 +5,6 @@ import { userDataStore } from "@/global/user_data"; // 引入全局用戶資料�
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    RouterPath.AUTH.WELCOME,
     RouterPath.AUTH.LOGIN,
     RouterPath.AUTH.REGISTER,
     RouterPath.AUTH.PWDFORGOT,
