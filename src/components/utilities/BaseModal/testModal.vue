@@ -2,10 +2,18 @@
     <div class="testModal_Container">
       <h2>动态插入的内容</h2>
       <p>ModalContent</p>
+      <p>{{modalProps.message}}</p> 
     </div>
-  </template>
+</template>
   
   <script setup lang="ts">
+
+   // 接收 modalProps 作为 prop
+   const props = defineProps({
+    modalProps: {
+      type: Object,
+    },
+  });
   </script>
 
 <style scoped>

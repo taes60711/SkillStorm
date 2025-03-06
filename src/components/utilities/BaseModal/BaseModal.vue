@@ -4,8 +4,8 @@
     <div class="mark">
         <div class="baseModalContainer">
             <!-- 使用 <component :is="modalContent" /> 动态渲染传递的组件 -->
-            <component :is="modalContent" />
-
+            <component :is="modalContent" :modalProps="modalProps"/>
+   
             <button class="baseModalCloseBtn" @click="props.closePage">
               關閉
             </button>
@@ -19,6 +19,10 @@
   // 接收 Vue 组件作为 prop
   const props = defineProps({
     modalContent: {
+      type: Object,
+      required: true,
+    },
+    modalProps: {
       type: Object,
       required: true,
     },
