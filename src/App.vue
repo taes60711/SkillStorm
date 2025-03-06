@@ -18,8 +18,8 @@ onMounted(async () => {
 </script>
 
 <template>
-<router-view v-if="isInit" name="aside"></router-view>
-<router-view v-if="isInit"></router-view>
+  <router-view v-if="isInit" name="aside"></router-view>
+  <router-view v-if="isInit"></router-view>
 </template>
 
 <style>
