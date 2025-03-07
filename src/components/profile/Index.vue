@@ -10,7 +10,7 @@ const viewModel = new ProfileViewModel();
 </script>
 
 <template>
-  <div class="profile w-full" v-if="viewModel.profile">
+  <div v-if="viewModel.profile">
     <div class="relative w-[120px]">
       <!-- 頭像 -->
       <div class="w-[120px] rounded-full overflow-hidden">

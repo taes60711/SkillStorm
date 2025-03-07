@@ -30,6 +30,9 @@ export default class PostEditViewModel {
     send = async (): Promise<void> => {
 
         console.log(`selectedBoard: ${this.selectedBoard.value?.chineseName}  mainMessage: ${this.mainMessageController.value} fileMessage: ${this.fileMessageController.value}`);
+
+
+
         const postData: CreatePostRequestData = {
             type: this.selectedBoard.value.id,
             content: this.mainMessageController.value,

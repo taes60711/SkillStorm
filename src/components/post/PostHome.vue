@@ -1,8 +1,13 @@
 <template>
-    <div>
-        Post Home
-        <button @click="createModal">test</button>
-    </div>
+
+  <div class="postBody">
+    Post Home
+    <button @click="createModal">test</button>
+  </div>
+  <div class="postBoad">
+    postBoad
+   
+  </div>
     
    
   </template>
@@ -24,6 +29,18 @@
     p{
       color: #FFFFFF;
     }
+
+    .postBody{
+      min-width: 650px;
+      background-color: black;
+      flex-grow: 1;
+    }
+
+    .postBoad{
+      width: 250px;
+      background-color: rgb(149, 96, 96);
+    }
+
   </style>
   
   

@@ -11,3 +11,10 @@ html body,
     display: flex;
     flex-direction: row;
 }
+
+.basebody {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

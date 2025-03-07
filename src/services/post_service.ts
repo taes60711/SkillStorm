@@ -34,11 +34,16 @@ export default class PostService extends APIClient {
      * MARK: 創建文章
      */
     async createPost(postData: CreatePostRequestData): Promise<void> {
+
+        let fileMessageStr: string = "[]";
+
+        fileMessageStr = this.listToListStr(postData.fileMessage);
+
         const body = {
             createdBy: userDataStore.userData.value?.uid,// 創文章者
             title: "", // 標題
             mainMessage: postData.content,// 內文
-            fileMessage: postData.fileMessage, // 圖片/影片
+            fileMessage: fileMessageStr, // 圖片/影片
             type: postData.type,// 看板
         };
         const reponseData: string = await this.apiPush(`${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`, body);
@@ -48,5 +53,20 @@ export default class PostService extends APIClient {
         if (typeof reponseData === 'string') {
             throw new Error(`Failed`);
         }
+    }
+
+
+    listToListStr(list: string[]): string {
+        let result = '[';
+
+        for (let i = 0; i < list.length; i++) {
+            result += `"${list[i]}"`;
+            if (i < list.length - 1) {
+                result += ',';
+            }
+        }
+
+        result += ']';
+        return result;
     }
 }

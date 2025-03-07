@@ -29,7 +29,10 @@ export const RouterPath = {
         PROFILE: {
             INDEX: {
                 path: '/profile',
-                component: Profile,
+                components: {
+                    default: Profile,
+                    aside: InfoBar
+                },
                 name: 'profile',
             },
             EDIT: {

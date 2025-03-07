@@ -19,6 +19,8 @@
     >
     </textarea>
     
+     <!-- 暫時+br -->
+     <br>
 
     <PostFileEditor 
       v-model:fileUrls = "viewModel.fileMessageController.value"

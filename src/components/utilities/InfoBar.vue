@@ -6,14 +6,18 @@
         <img :src="AppImage.noTextLogo" alt="SkillStorm" class="w-[65px] h-[60px]"/>
         <div class="InfoBar_Message">
 
-            <button :class="buttonStyle('bg-yellow-500')" @click="goToLogin">登入</button>
-            <button :class="buttonStyle('bg-green-500')" @click="goToRegister">註冊</button>
+            
             <button :class="buttonStyle('bg-blue-500')" @click="goToPostEdit">發文</button>
-            <button @click="goToProfile">To Profile</button>
+         
         </div>
 
         <div class="InforBar_Setting">
-            
+            <button :class="buttonStyle('bg-red-500')" @click="goToProfile">Profile</button>
+            <button :class="buttonStyle('bg-yellow-500')" @click="goToLogin">
+                <span v-if="userDataStore.isLogin()">登出</span>
+                <span v-else>登入</span>
+            </button>
+            <button :class="buttonStyle('bg-green-500')" @click="goToRegister">註冊</button>
         </div>
     </div>
 
@@ -21,8 +25,10 @@
    
 <script setup lang="ts">
    import { AppImage } from '@/global/app_image';
+import { userDataStore } from '@/global/user_data';
    import router from '@/router/router_manager';
    import { RouterPath } from '@/router/router_path';
+
 
     function buttonStyle(style: string) {
         return `${style} pt-[5px] pb-[5px] pr-[10px] pl-[10px] m-[5px]`;
@@ -30,7 +36,11 @@
 
     ///跳至登入頁面
     const goToLogin = () => {
+       if(userDataStore.isLogin()){
+        userDataStore.clearUser();
+       }else {
         router.push(RouterPath.AUTH.LOGIN)
+       }
     }
 
     ///跳至註冊頁面
@@ -84,10 +94,15 @@
    .left {
         width: var(--width);
         height: 100%;
+        flex-shrink: 0;
         background-color: rgb(67, 71, 71);
     }
 
-   
-
+@media screen and (max-width: 950px) {
+    .InfoBar_Container,
+    .left {
+        --width: 100px;
+    }
+}
 </style>
    
