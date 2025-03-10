@@ -143,8 +143,11 @@ export class EditTools {
      * @returns 處理過的64字串
      */
     remove64ImgPreFixString(base64ImgStr: string): string {
-
-        if (base64ImgStr.includes("base64,")) {
+        /// <img src=\>
+        const match = base64ImgStr.match(/data:image\/png;base64,([^"]+)/);
+        if (match) {
+            return match[1];
+        } else if (base64ImgStr.includes("base64,")) {
             return base64ImgStr.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
         } else {
             return "no64Img";
