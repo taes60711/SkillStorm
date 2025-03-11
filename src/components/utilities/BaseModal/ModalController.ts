@@ -7,7 +7,7 @@ export class ModalController {
      * 開啟Modal
      * @param modalContent Modal內中間內容Vue
      */
-    show = (modalContent: DefineComponent<{}, {}, any>, modalProps: object = {}, needCloseBtn: boolean = true): void => {
+    show = (modalContent: DefineComponent<{}, {}, any>, modalProps: object = {}, needCloseBtn: boolean = true, markColor: string = 'rgba(0, 0, 0, 0.4)'): void => {
         // 在 body 中添加新的 div
         const modalElement = document.createElement("div");
         modalElement.setAttribute("id", this.modalId);
@@ -23,6 +23,7 @@ export class ModalController {
                 modalContent: contnet,
                 modalProps,
                 needCloseBtn: needCloseBtn,
+                markColor: markColor,
                 closePage: this.close,
             });
 

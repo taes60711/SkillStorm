@@ -1,7 +1,7 @@
 
 
 <template>
-    <div class="mark">
+    <div class="mark" :style="{ backgroundColor: props.markColor }">
         <div class="baseModalContainer">
             <component 
               :is="modalContent" 
@@ -39,6 +39,10 @@
       type: Function,
       required: true,
     },
+    markColor: {
+      type: String,
+      required:true,
+    },
     
   });
 
@@ -52,19 +56,17 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(36, 37, 36, 0.421);
+    background-color: rgba(37, 37, 37, 0.902);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .baseModalContainer{
-    background-color: aqua;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 5px 10px 5px 10px;
 }
 
 .baseModalCloseBtn{
