@@ -7,9 +7,12 @@ import PostEditor from '../components/post/PostEditor.vue'
 import CourseEditor from '@/components/course/CourseEditor.vue'
 import PostHome from '@/components/post/PostHome.vue'
 import InfoBar from '@/components/utilities/InfoBar.vue'
+import CourseHome from '@/components/course/CourseHome.vue'
+import SuggestUsersHome from '@/components/suggestusers/SuggestUsersHome.vue'
 
 export const RouterPath = {
     HOME: {
+        /// MARK: 文章
         POST: {
             HOME: {
                 path: '/',
@@ -26,6 +29,7 @@ export const RouterPath = {
             },
 
         },
+        /// MARK: 個人資料
         PROFILE: {
             INDEX: {
                 path: '/profile',
@@ -41,8 +45,28 @@ export const RouterPath = {
                 name: 'profileEdit',
             }
         },
+        /// MARK: 推薦使用者
+        SUGGESTUSERS: {
+            HOME: {
+                path: '/suggestusers',
+                components: {
+                    default: SuggestUsersHome,
+                    aside: InfoBar
+                },
+                name: 'suggestusers',
+            },
 
+        },
+        /// MARK: 技術分享
         COURSE: {
+            HOME: {
+                path: '/course',
+                components: {
+                    default: CourseHome,
+                    aside: InfoBar
+                },
+                name: 'courseHome',
+            },
             EDIT: {
                 path: '/course/edit',
                 component: CourseEditor,
@@ -52,16 +76,19 @@ export const RouterPath = {
         }
     },
     AUTH: {
+        /// MARK: 登入
         LOGIN: {
             path: '/login',
             component: Login,
             name: 'login',
         },
+        /// MARK: 註冊
         REGISTER: {
             path: '/register',
             component: Register,
             name: 'register',
         },
+        /// MARK: 忘記密碼
         PWDFORGOT: {
             path: '/forgotPassword',
             component: pwdForgot,

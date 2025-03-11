@@ -76,11 +76,6 @@ const viewModel = new ProfileViewModel();
       </div>
     </div>
 
-
-    <button @click="()=>{
-      userDataStore.clearUser();
-      router.push(RouterPath.AUTH.WELCOME);
-     }">登出（暫時）</button>
      
     <!-- <pre class="mt-2">{{ viewModel.profile }}</pre> -->
   </div>

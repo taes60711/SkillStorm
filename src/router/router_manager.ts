@@ -9,6 +9,8 @@ const router = createRouter({
     RouterPath.AUTH.REGISTER,
     RouterPath.AUTH.PWDFORGOT,
     RouterPath.HOME.POST.HOME,
+    RouterPath.HOME.COURSE.HOME,
+    RouterPath.HOME.SUGGESTUSERS.HOME,
     {
       ...RouterPath.HOME.PROFILE.INDEX,
       meta: { requiresAuth: true },

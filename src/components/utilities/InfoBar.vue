@@ -4,59 +4,100 @@
     <!-- InfoBar -->
     <div class="InfoBar_Container">
         <img :src="AppImage.noTextLogo" alt="SkillStorm" class="w-[65px] h-[60px]"/>
+      
         <div class="InfoBar_Message">
-
-            
-            <button :class="buttonStyle('bg-blue-500')" @click="goToPostEdit">發文</button>
-         
+            <button :class="buttonStyle('bg-blue-500')" @click="goToPost">主頁</button>
+            <button :class="buttonStyle('bg-blue-500')" @click="goToSuggestUser">技能交換</button>
+   
+            <button :class="buttonStyle('bg-blue-500')" @click="goToCourse">技術分享</button>
+            <button :class="buttonStyle('bg-blue-500')" @click="goToMessage">訊息</button>
+           
+            <button :class="buttonStyle('bg-red-500')" @click="goToProfile">
+                <span v-if="userDataStore.isLogin()">個人資料</span>
+                <span v-else>登入</span>
+            </button>
         </div>
 
         <div class="InforBar_Setting">
-            <button :class="buttonStyle('bg-red-500')" @click="goToProfile">Profile</button>
-            <button :class="buttonStyle('bg-yellow-500')" @click="goToLogin">
-                <span v-if="userDataStore.isLogin()">登出</span>
-                <span v-else>登入</span>
+            <button @click="turOnOffSettingBar">
+                <i class="fa-solid fa-bars" :style="{fontSize: '30px'}"></i>  
             </button>
-            <button :class="buttonStyle('bg-green-500')" @click="goToRegister">註冊</button>
         </div>
+
+        <div v-if="settingBarIsOpen" class="InforBar_SettingBar">
+            <button 
+                v-if="userDataStore.isLogin()" 
+                :class="buttonStyle('bg-yellow-500')" @click="logout">
+                登出
+            </button>
+        </div>
+
     </div>
 
 </template>
    
 <script setup lang="ts">
-   import { AppImage } from '@/global/app_image';
+import { AppImage } from '@/global/app_image';
 import { userDataStore } from '@/global/user_data';
-   import router from '@/router/router_manager';
-   import { RouterPath } from '@/router/router_path';
+import router from '@/router/router_manager';
+import { RouterPath } from '@/router/router_path';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 
+
+
+const settingBarIsOpen = ref<boolean>(false);
 
     function buttonStyle(style: string) {
         return `${style} pt-[5px] pb-[5px] pr-[10px] pl-[10px] m-[5px]`;
     }
 
-    ///跳至登入頁面
-    const goToLogin = () => {
+    ///登出
+    const logout= () => {
        if(userDataStore.isLogin()){
         userDataStore.clearUser();
-       }else {
-        router.push(RouterPath.AUTH.LOGIN)
+        router.push(RouterPath.HOME.POST.HOME);
        }
     }
 
-    ///跳至註冊頁面
-    const goToRegister = () => {
-        router.push(RouterPath.AUTH.REGISTER)
+    ///跳至文章頁面
+    const goToPost = () => {
+        router.push(RouterPath.HOME.POST.HOME)
     }
 
-       ///跳至文章編集頁面
-    const goToPostEdit = () => {
-        router.push(RouterPath.HOME.POST.EDIT);
+    ///跳至文章頁面
+    const goToSuggestUser = () => {
+        router.push(RouterPath.HOME.SUGGESTUSERS.HOME)
     }
+
+    ///跳至技術分享頁面
+    const goToCourse = () => {
+        router.push(RouterPath.HOME.COURSE.HOME)
+    }
+
+  
     
     ///跳至個人資料編輯頁面
     const goToProfile = () => {
+       if(userDataStore.isLogin()){
         router.push(RouterPath.HOME.PROFILE.INDEX);
+       } else {
+        router.push(RouterPath.AUTH.LOGIN);
+       }
+
     }
+
+    ///跳至訊息
+    const goToMessage = () => {
+        console.log("先引導至App")
+    }
+
+   ///開關 Bar
+   const turOnOffSettingBar = () => {
+    settingBarIsOpen.value = !settingBarIsOpen.value;
+        console.log(`turOnOffSettingBar ${settingBarIsOpen.value}`);
+    }
+
 </script>
    
 <style scoped>
@@ -64,6 +105,13 @@ import { userDataStore } from '@/global/user_data';
     .InfoBar_Container,
     .left {
         --width: 240px;
+    }
+
+    .InforBar_Setting,
+    .InforBar_SettingBar {
+        --height: 80px;
+        --paddingLeft: 20px;
+        --paddingTop: 10px;
     }
 
     .InfoBar_Container {
@@ -87,10 +135,21 @@ import { userDataStore } from '@/global/user_data';
 
     .InforBar_Setting {
        width: 100%;
-       height: 80px;
+       height: var(--height);
+       padding-left: var(--paddingLeft);
+       padding-top: calc( var(--paddingTop) * 2);
        background-color: rgb(62, 62, 129);
     }
 
+    .InforBar_SettingBar {
+       width: 200px;
+       height: 80px;
+       bottom: calc( var(--height) - var(--paddingTop) );
+       left: var(--paddingLeft);
+       background-color: rgb(206, 206, 225);
+       position: absolute;
+    }
+    
    .left {
         width: var(--width);
         height: 100%;
@@ -98,6 +157,7 @@ import { userDataStore } from '@/global/user_data';
         background-color: rgb(67, 71, 71);
     }
 
+   
 @media screen and (max-width: 950px) {
     .InfoBar_Container,
     .left {
