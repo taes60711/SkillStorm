@@ -7,66 +7,67 @@ import { APIHttpController } from "@/global/api_http_controller";
 
 ///  文章相關API
 export default class PostService extends APIClient {
-    constructor() {
-        super(`${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/posts`);
+  constructor() {
+    super(
+      `${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/posts`
+    );
+  }
+
+  /**
+   * MARK: 取得所有看板項目
+   */
+  async getAllPostBoard(): Promise<PostBoard[]> {
+    const reponseData: PostBoard[] | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.POST.GET_ALL_POST_BOARD}`
+    );
+
+    console.log(`getPostBoard : ${reponseData}`);
+
+    if (typeof reponseData === "string") {
+      throw new Error(`Failed`);
     }
 
-    /**
-     * MARK: 取得所有看板項目
-     */
-    async getAllPostBoard(): Promise<PostBoard[]> {
+    return reponseData;
+  }
 
+  /**
+   * MARK: 創建文章
+   */
+  async createPost(postData: CreatePostRequestData): Promise<void> {
+    let fileMessageStr: string = "[]";
 
+    fileMessageStr = this.listToListStr(postData.fileMessage);
 
-        const reponseData: PostBoard[] | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.POST.GET_ALL_POST_BOARD}`);
+    const body = {
+      createdBy: userDataStore.userData.value?.uid, // 創文章者
+      title: "", // 標題
+      mainMessage: postData.content, // 內文
+      fileMessage: fileMessageStr, // 圖片/影片
+      type: postData.type, // 看板
+    };
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`,
+      body
+    );
 
-        console.log(`getPostBoard : ${reponseData}`);
+    console.log(`createPost : ${reponseData}`);
 
-        if (typeof reponseData === 'string') {
-            throw new Error(`Failed`);
-        }
+    if (typeof reponseData === "string") {
+      throw new Error(`Failed`);
+    }
+  }
 
-        return reponseData;
+  listToListStr(list: string[]): string {
+    let result = "[";
+
+    for (let i = 0; i < list.length; i++) {
+      result += `"${list[i]}"`;
+      if (i < list.length - 1) {
+        result += ",";
+      }
     }
 
-
-    /**
-     * MARK: 創建文章
-     */
-    async createPost(postData: CreatePostRequestData): Promise<void> {
-
-        let fileMessageStr: string = "[]";
-
-        fileMessageStr = this.listToListStr(postData.fileMessage);
-
-        const body = {
-            createdBy: userDataStore.userData.value?.uid,// 創文章者
-            title: "", // 標題
-            mainMessage: postData.content,// 內文
-            fileMessage: fileMessageStr, // 圖片/影片
-            type: postData.type,// 看板
-        };
-        const reponseData: string = await this.apiPush(`${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`, body);
-
-        console.log(`createPost : ${reponseData}`);
-
-        if (typeof reponseData === 'string') {
-            throw new Error(`Failed`);
-        }
-    }
-
-
-    listToListStr(list: string[]): string {
-        let result = '[';
-
-        for (let i = 0; i < list.length; i++) {
-            result += `"${list[i]}"`;
-            if (i < list.length - 1) {
-                result += ',';
-            }
-        }
-
-        result += ']';
-        return result;
-    }
+    result += "]";
+    return result;
+  }
 }
