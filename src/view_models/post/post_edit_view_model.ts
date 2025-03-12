@@ -8,50 +8,46 @@ import { EditTools } from "@/global/edit_tools";
 
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
+  editTools: EditTools = new EditTools();
 
-    editTools: EditTools = new EditTools();
+  /// 內文
+  mainMessageController: Ref<string> = ref<string>("");
 
-    /// 內文
-    mainMessageController: Ref<string> = ref<string>('');
+  /// 看板
+  selectedBoard: Ref<PostBoard> = ref<PostBoard>(GlobalData.postBoard[0]);
 
-    /// 看板
-    selectedBoard: Ref<PostBoard> = ref<PostBoard>(GlobalData.posBoard[0]);
+  /// 圖片/影片
+  fileMessageController: Ref<string[]> = ref<string[]>([]);
 
-    /// 圖片/影片
-    fileMessageController: Ref<string[]> = ref<string[]>([]);
+  /// 發文成功的Modal顯示
+  showPostSuccessModalController = ref<boolean>(false);
 
-    /// 發文成功的Modal顯示
-    showPostSuccessModalController = ref<boolean>(false);
+  /**
+   * MARK: 送出按鈕
+   */
+  send = async (): Promise<void> => {
+    console.log(
+      `selectedBoard: ${this.selectedBoard.value?.chineseName}  mainMessage: ${this.mainMessageController.value} fileMessage: ${this.fileMessageController.value}`
+    );
 
-
-    /**
-     * MARK: 送出按鈕
-     */
-    send = async (): Promise<void> => {
-
-        console.log(`selectedBoard: ${this.selectedBoard.value?.chineseName}  mainMessage: ${this.mainMessageController.value} fileMessage: ${this.fileMessageController.value}`);
-
-
-
-        const postData: CreatePostRequestData = {
-            type: this.selectedBoard.value.id,
-            content: this.mainMessageController.value,
-            fileMessage: this.fileMessageController.value,
-        };
-
-        await new PostService().createPost(postData);
-        this.resetAllEditData();
-
-        this.showPostSuccessModalController.value = true;
+    const postData: CreatePostRequestData = {
+      type: this.selectedBoard.value.id,
+      content: this.mainMessageController.value,
+      fileMessage: this.fileMessageController.value,
     };
 
-    /**
-     * 清空所有編輯的資料（暫時）
-     */
-    private resetAllEditData = (): void => {
-        this.selectedBoard.value = GlobalData.posBoard[0];
-        this.mainMessageController.value = '';
-        this.fileMessageController.value = [];
-    };
+    await new PostService().createPost(postData);
+    this.resetAllEditData();
 
+    this.showPostSuccessModalController.value = true;
+  };
+
+  /**
+   * 清空所有編輯的資料（暫時）
+   */
+  private resetAllEditData = (): void => {
+    this.selectedBoard.value = GlobalData.postBoard[0];
+    this.mainMessageController.value = "";
+    this.fileMessageController.value = [];
+  };
 }

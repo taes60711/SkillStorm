@@ -9,6 +9,7 @@ const router = createRouter({
     RouterPath.AUTH.REGISTER,
     RouterPath.AUTH.PWDFORGOT,
     RouterPath.HOME.POST.HOME,
+    RouterPath.HOME.POST.BOARD,
     RouterPath.HOME.COURSE.HOME,
     RouterPath.HOME.SUGGESTUSERS.HOME,
     {
@@ -37,14 +38,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isLogin = userDataStore.isLogin(); // 判斷是否有登入資料
 
-
   switch (isLogin) {
-
     case true:
       /// 已登入
-      if (to.path === RouterPath.AUTH.LOGIN.path
-        || to.path === RouterPath.AUTH.REGISTER.path
-        || to.path === RouterPath.AUTH.PWDFORGOT.path) {
+      if (
+        to.path === RouterPath.AUTH.LOGIN.path ||
+        to.path === RouterPath.AUTH.REGISTER.path ||
+        to.path === RouterPath.AUTH.PWDFORGOT.path
+      ) {
         console.log("已登入，用戶從首頁跳轉到 POST 頁面");
         next(RouterPath.HOME.POST.HOME.path);
       } else {

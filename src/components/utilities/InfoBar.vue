@@ -3,28 +3,31 @@
 
   <!-- InfoBar -->
   <div class="InfoBar_Container">
-    <img
-      :src="AppImage.noTextLogo"
-      alt="SkillStorm"
-      class="w-[65px] h-[60px]"
-    />
+    <div class="InfoBar_Logo">
+      <img :src="AppImage.noTextLogo" class="w-[65px] h-[60px]" />
+      <p class="InfoBar_Text">SkillStorm</p>
+    </div>
 
     <div class="InfoBar_Message">
-      <button :class="buttonStyle('bg-blue-500')" @click="goToPost">
+      <button class="InfoBar_ItemBtn" @click="viewModel.goToPost">
+        <i class="fa-solid fa-house"></i>
         主頁
       </button>
-      <button :class="buttonStyle('bg-blue-500')" @click="goToSuggestUser">
+      <button class="InfoBar_ItemBtn" @click="viewModel.goToSuggestUser">
+        <i class="fa-solid fa-handshake-angle"></i>
         技能交換
       </button>
 
-      <button :class="buttonStyle('bg-blue-500')" @click="goToCourse">
+      <button class="InfoBar_ItemBtn" @click="viewModel.goToCourse">
+        <i class="fa-solid fa-book-open-reader"></i>
         技術分享
       </button>
-      <button :class="buttonStyle('bg-blue-500')" @click="goToMessage">
+      <button class="InfoBar_ItemBtn" @click="viewModel.goToMessage">
+        <i class="fa-solid fa-comments"></i>
         訊息
       </button>
 
-      <button :class="buttonStyle('bg-red-500')" @click="goToProfile">
+      <button class="InfoBar_MyItemBtn" @click="viewModel.goToProfile">
         <span v-if="userDataStore.isLogin()">個人資料</span>
         <span v-else>登入</span>
       </button>
@@ -37,14 +40,14 @@
     </div>
 
     <div
-      v-if="settingBarIsOpen"
+      v-if="viewModel.settingBarIsOpen.value"
       id="InforBar_SettingBar"
       class="InforBar_SettingBar"
     >
       <button
         v-if="userDataStore.isLogin()"
         :class="buttonStyle('bg-yellow-500')"
-        @click="logout"
+        @click="viewModel.logout"
       >
         登出
       </button>
@@ -55,59 +58,20 @@
 <script setup lang="ts">
 import { AppImage } from "@/global/app_image";
 import { userDataStore } from "@/global/user_data";
-import router from "@/router/router_manager";
-import { RouterPath } from "@/router/router_path";
-import { ref } from "vue";
+import InfoBarViewModel from "@/view_models/info_bar_view_model";
 
-const settingBarIsOpen = ref<boolean>(false);
+const viewModel = new InfoBarViewModel();
 
 function buttonStyle(style: string) {
   return `${style} pt-[5px] pb-[5px] pr-[10px] pl-[10px] m-[5px]`;
 }
 
-///登出
-const logout = () => {
-  if (userDataStore.isLogin()) {
-    userDataStore.clearUser();
-    router.push(RouterPath.HOME.POST.HOME);
-  }
-};
-
-///跳至文章頁面
-const goToPost = () => {
-  router.push(RouterPath.HOME.POST.HOME);
-};
-
-///跳至文章頁面
-const goToSuggestUser = () => {
-  router.push(RouterPath.HOME.SUGGESTUSERS.HOME);
-};
-
-///跳至技術分享頁面
-const goToCourse = () => {
-  router.push(RouterPath.HOME.COURSE.HOME);
-};
-
-///跳至個人資料編輯頁面
-const goToProfile = () => {
-  if (userDataStore.isLogin()) {
-    router.push(RouterPath.HOME.PROFILE.INDEX);
-  } else {
-    router.push(RouterPath.AUTH.LOGIN);
-  }
-};
-
-///跳至訊息
-const goToMessage = () => {
-  console.log("先引導至App");
-};
-
 ///開關 Bar
 const turOnOffSettingBar = () => {
-  settingBarIsOpen.value = !settingBarIsOpen.value;
-  console.log(`turOnOffSettingBar ${settingBarIsOpen.value}`);
+  viewModel.settingBarIsOpen.value = !viewModel.settingBarIsOpen.value;
+  console.log(`turOnOffSettingBar ${viewModel.settingBarIsOpen.value}`);
 
-  if (settingBarIsOpen.value) {
+  if (viewModel.settingBarIsOpen.value) {
     let settingBar: HTMLElement | null = null;
 
     setTimeout(() => {
@@ -120,7 +84,7 @@ const turOnOffSettingBar = () => {
       const target = event.target as Node;
 
       if (settingBar && !settingBar.contains(target)) {
-        settingBarIsOpen.value = false;
+        viewModel.settingBarIsOpen.value = false;
         document.removeEventListener("click", handleClick);
       }
     }
@@ -130,6 +94,7 @@ const turOnOffSettingBar = () => {
 
 <style scoped>
 .InfoBar_Container,
+.InfoBar_Logo,
 .left {
   --width: 240px;
 }
@@ -147,17 +112,27 @@ const turOnOffSettingBar = () => {
   top: 0;
   bottom: 0;
   width: var(--width);
-  background-color: red;
   display: flex;
   flex-direction: column;
+  border-right: 0.6px solid rgb(84, 82, 82);
+}
+
+.InfoBar_Logo {
+  width: var(--width);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 22px;
+  font-weight: 800;
+  padding-left: 15px;
 }
 
 .InfoBar_Message {
   width: 100%;
   flex-grow: 1;
-  background-color: blue;
   display: flex;
   flex-direction: column;
+  padding-top: 30px;
 }
 
 .InforBar_Setting {
@@ -165,7 +140,6 @@ const turOnOffSettingBar = () => {
   height: var(--height);
   padding-left: var(--paddingLeft);
   padding-top: calc(var(--paddingTop) * 2);
-  background-color: rgb(62, 62, 129);
 }
 
 .InforBar_SettingBar {
@@ -181,13 +155,38 @@ const turOnOffSettingBar = () => {
   width: var(--width);
   height: 100%;
   flex-shrink: 0;
-  background-color: rgb(67, 71, 71);
+}
+
+.InfoBar_ItemBtn,
+.InfoBar_MyItemBtn {
+  margin: 10px 10px 0 10px;
+  padding: 12px 20px;
+  border-radius: 32px;
+  display: flex;
+  align-items: start;
+}
+
+.InfoBar_ItemBtn:hover {
+  background-color: rgb(27, 26, 26);
+}
+
+.InfoBar_MyItemBtn {
+  margin-top: 20px;
+  background-color: rgb(225, 147, 58);
+}
+
+.InfoBar_MyItemBtn:hover {
+  background-color: rgb(233, 174, 144);
 }
 
 @media screen and (max-width: 950px) {
   .InfoBar_Container,
   .left {
     --width: 100px;
+  }
+
+  .InfoBar_Text {
+    display: none;
   }
 }
 </style>
