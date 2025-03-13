@@ -21,10 +21,6 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      ...RouterPath.HOME.POST.EDIT,
-      meta: { requiresAuth: true },
-    },
-    {
       ...RouterPath.HOME.COURSE.EDIT,
       meta: { requiresAuth: true },
     },

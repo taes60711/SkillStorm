@@ -21,6 +21,20 @@ export default class PostService extends APIClient {
       `${API_CONFIG.ENDPOINTS.POST.GET_ALL_POST_BOARD}`
     );
 
+    const iconData: string[] = [
+      "fa-solid fa-comment-dots",
+      "fa-solid fa-code",
+      "fa-solid fa-globe",
+      "fa-solid fa-microchip",
+      "fa-solid fa-head-side-virus",
+    ];
+
+    if (Array.isArray(reponseData)) {
+      reponseData.forEach((value, index) => {
+        value.iconData = iconData[index];
+      });
+    }
+
     console.log(`getPostBoard : ${reponseData}`);
 
     if (typeof reponseData === "string") {

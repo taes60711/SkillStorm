@@ -5,9 +5,9 @@
       <button @click="changePage()" class="postTabBtn">人氣</button>
     </div>
 
-    Post Home
-    <button @click="createModal">modalTest</button>
     <button @click="goToEdit">發文</button>
+
+    <VideoPlayer videoId="O78NzcXf2sw" />
   </div>
 
   <div class="postBoadContainer">
@@ -15,6 +15,7 @@
       <p class="postBoardTitle">看板</p>
       <div v-for="(item, index) in GlobalData.postBoard" v-bind:key="item.id">
         <p class="postBoardItem" @click="goToBoard">
+          <i :class="`${item.iconData}`"></i>
           {{ `${item.chineseName}` }}
         </p>
       </div>
@@ -23,25 +24,23 @@
 </template>
 
 <script setup lang="ts">
-import TestModal from "../utilities/BaseModal/testModal.vue";
-import { ModalController } from "../utilities/BaseModal/ModalController";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
 import { GlobalData } from "@/global/global_data";
+import PostEditor from "./PostEditor.vue";
+import VideoPlayer from "@/components/utilities/YoutubePlayer.vue";
+import { ModalController } from "../utilities/BaseModal/ModalController";
 
-const createModal = () => {
-  // 创建 Modal 并传递 props
-  new ModalController().show(TestModal);
-};
+const modalController = new ModalController();
 
 ///跳至看板頁面
 const goToBoard = () => {
   router.push(RouterPath.HOME.POST.BOARD);
 };
 
-///跳至文章編集頁面
+///開啟文章發佈頁面
 const goToEdit = () => {
-  router.push(RouterPath.HOME.POST.EDIT);
+  modalController.show(PostEditor);
 };
 
 const changePage = (type: string) => {

@@ -31,11 +31,6 @@ export const RouterPath = {
         },
         name: "postBoard",
       },
-      EDIT: {
-        path: "/post/edit",
-        component: PostEditor,
-        name: "postEdit",
-      },
     },
     /// MARK: 個人資料
     PROFILE: {

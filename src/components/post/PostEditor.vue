@@ -1,12 +1,15 @@
 <template>
-  <div>
-    <Dropdown
-      v-model="viewModel.selectedBoard.value"
-      :panelStyle="{ backgroundColor: '#FF6347' }"
-      :options="GlobalData.postBoard"
-      optionLabel="chineseName"
-      placeholder="選擇一個看板"
-    />
+  <div class="postEditor_Container">
+    <select v-model="viewModel.selectedBoard.value">
+      <option value="" disabled selected>選擇一個看板</option>
+      <option
+        v-for="(item, index) in GlobalData.postBoard"
+        v-bind:key="item"
+        :value="item"
+      >
+        {{ item.chineseName }}
+      </option>
+    </select>
 
     <p>內文</p>
 
@@ -18,12 +21,10 @@
     >
     </textarea>
 
-    <!-- 暫時+br -->
     <br />
 
     <PostFileEditor v-model:fileUrls="viewModel.fileMessageController.value" />
 
-    <!-- 暫時+br -->
     <br />
 
     <button @click="viewModel.send">送出</button>
@@ -40,8 +41,15 @@
 <script setup lang="ts">
 import { GlobalData } from "@/global/global_data";
 import PostEditViewModel from "@/view_models/post/post_edit_view_model";
-import Dropdown from "primevue/dropdown";
 import Modal from "../utilities/Modal.vue";
 import PostFileEditor from "./PostFileEditor.vue";
 const viewModel = new PostEditViewModel();
 </script>
+
+<style scoped>
+.postEditor_Container {
+  background-color: rgb(51, 50, 51);
+  padding: 20px 15px;
+  border-radius: 10px;
+}
+</style>

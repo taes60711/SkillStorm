@@ -36,6 +36,7 @@
     <div class="InforBar_Setting">
       <button @click="turOnOffSettingBar">
         <i class="fa-solid fa-bars" :style="{ fontSize: '30px' }"></i>
+        更多
       </button>
     </div>
 
@@ -44,11 +45,10 @@
       id="InforBar_SettingBar"
       class="InforBar_SettingBar"
     >
-      <button
-        v-if="userDataStore.isLogin()"
-        :class="buttonStyle('bg-yellow-500')"
-        @click="viewModel.logout"
-      >
+      <button v-if="userDataStore.isLogin()" @click="">我的文章</button>
+      <button v-if="userDataStore.isLogin()" @click="">技術分享</button>
+      <button @click="">一般</button>
+      <button v-if="userDataStore.isLogin()" @click="viewModel.logout">
         登出
       </button>
     </div>
@@ -61,10 +61,6 @@ import { userDataStore } from "@/global/user_data";
 import InfoBarViewModel from "@/view_models/info_bar_view_model";
 
 const viewModel = new InfoBarViewModel();
-
-function buttonStyle(style: string) {
-  return `${style} pt-[5px] pb-[5px] pr-[10px] pl-[10px] m-[5px]`;
-}
 
 ///開關 Bar
 const turOnOffSettingBar = () => {
@@ -96,7 +92,8 @@ const turOnOffSettingBar = () => {
 .InfoBar_Container,
 .InfoBar_Logo,
 .left {
-  --width: 240px;
+  --width: 280px;
+  padding: 0 20px;
 }
 
 .InforBar_Setting,
@@ -124,7 +121,6 @@ const turOnOffSettingBar = () => {
   align-items: center;
   font-size: 22px;
   font-weight: 800;
-  padding-left: 15px;
 }
 
 .InfoBar_Message {
@@ -144,11 +140,15 @@ const turOnOffSettingBar = () => {
 
 .InforBar_SettingBar {
   width: 200px;
-  height: 80px;
   bottom: calc(var(--height) - var(--paddingTop));
   left: var(--paddingLeft);
-  background-color: rgb(206, 206, 225);
+  border-radius: 10px;
+  border: 0.5px solid rgba(248, 248, 248, 0.28);
+  padding: 16px 16px;
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 .left {

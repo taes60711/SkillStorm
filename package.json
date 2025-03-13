@@ -16,6 +16,8 @@
     "crypto-js": "^4.2.0",
     "primevue": "^4.2.5",
     "quill": "^2.0.3",
+    "video.js": "^8.22.0",
+    "videojs-youtube": "^3.0.1",
     "vue": "^3.2.31",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^4.2.4"
