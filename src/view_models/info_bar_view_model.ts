@@ -1,5 +1,5 @@
-import { ModalController } from "@/components/utilities/BaseModal/ModalController";
-import phoneHintModal from "@/components/utilities/BaseModal/phoneHintModal.vue";
+import { ModalController } from "@/components/utilities/Modal/ModalController";
+import phoneHintModal from "@/components/utilities/Modal/phoneHintModal.vue";
 import { userDataStore } from "@/global/user_data";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
@@ -43,7 +43,13 @@ export default class InfoBarViewModel {
 
   ///跳至訊息
   goToMessage = () => {
-    this.modalController.show(phoneHintModal, {}, true, "rgba(0, 0, 0, 0.9)");
+    this.modalController.show(
+      phoneHintModal,
+      {},
+      true,
+      true,
+      "rgba(0, 0, 0, 0.9)"
+    );
     console.log("先引導至App");
   };
 }

@@ -1,20 +1,21 @@
 <template>
   <div class="mark" :style="{ backgroundColor: props.markColor }">
-    <div class="baseModalContainer">
+    <div ref="baseModalMark" class="baseModalContainer">
       <component :is="modalContent" :modalProps="modalProps" />
 
-      <button
+      <i
+        class="fa-solid fa-x baseModalCloseBtn"
         v-if="props.needCloseBtn"
-        class="baseModalCloseBtn"
         @click="props.closePage"
-      >
-        關閉
-      </button>
+      ></i>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+
+const baseModalMark = ref<HTMLDivElement | null>(null);
 // 接收 Vue 组件作为 prop
 const props = defineProps({
   modalContent: {
@@ -23,6 +24,10 @@ const props = defineProps({
   },
   modalProps: {
     type: Object,
+    required: true,
+  },
+  needModalClose: {
+    type: Boolean,
     required: true,
   },
   needCloseBtn: {
@@ -38,6 +43,25 @@ const props = defineProps({
     required: true,
   },
 });
+
+onMounted(async () => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+function handleClickOutside(event: MouseEvent) {
+  const target = event.target as Node;
+  if (baseModalMark.value && !baseModalMark.value.contains(target)) {
+    console.log("Clicked outside the modal!");
+    document.removeEventListener("click", handleClickOutside);
+    markClose();
+  }
+}
+
+const markClose = (): void => {
+  if (props.needModalClose) {
+    props.closePage();
+  }
+};
 </script>
 
 <style>
@@ -61,7 +85,11 @@ const props = defineProps({
 }
 
 .baseModalCloseBtn {
-  background-color: rgb(57, 88, 88);
-  padding: 3px 10px 3px 10px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  color: white;
+  padding: 20px;
+  font-size: 20px;
 }
 </style>

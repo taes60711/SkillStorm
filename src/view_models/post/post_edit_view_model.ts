@@ -5,7 +5,8 @@ import { GlobalData } from "@/global/global_data";
 import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
 import PostService from "@/services/post_service";
 import { EditTools } from "@/global/edit_tools";
-
+import { ModalController } from "@/components/utilities/Modal/ModalController";
+import confimModal from "@/components/utilities/Modal/confirmModal.vue";
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
   editTools: EditTools = new EditTools();
@@ -19,8 +20,7 @@ export default class PostEditViewModel {
   /// 圖片/影片
   fileMessageController: Ref<string[]> = ref<string[]>([]);
 
-  /// 發文成功的Modal顯示
-  showPostSuccessModalController = ref<boolean>(false);
+  modalController = new ModalController();
 
   /**
    * MARK: 送出按鈕
@@ -38,8 +38,7 @@ export default class PostEditViewModel {
 
     await new PostService().createPost(postData);
     this.resetAllEditData();
-
-    this.showPostSuccessModalController.value = true;
+    this.modalController.show(confimModal);
   };
 
   /**

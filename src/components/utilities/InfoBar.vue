@@ -11,24 +11,26 @@
     <div class="InfoBar_Message">
       <button class="InfoBar_ItemBtn" @click="viewModel.goToPost">
         <i class="fa-solid fa-house"></i>
-        主頁
+        <p class="InfoBar_Text">主頁</p>
       </button>
       <button class="InfoBar_ItemBtn" @click="viewModel.goToSuggestUser">
         <i class="fa-solid fa-handshake-angle"></i>
-        技能交換
+        <p class="InfoBar_Text">技能交換</p>
       </button>
 
       <button class="InfoBar_ItemBtn" @click="viewModel.goToCourse">
         <i class="fa-solid fa-book-open-reader"></i>
-        技術分享
+        <p class="InfoBar_Text">技術分享</p>
       </button>
       <button class="InfoBar_ItemBtn" @click="viewModel.goToMessage">
         <i class="fa-solid fa-comments"></i>
-        訊息
+        <p class="InfoBar_Text">訊息</p>
       </button>
 
       <button class="InfoBar_MyItemBtn" @click="viewModel.goToProfile">
-        <span v-if="userDataStore.isLogin()">個人資料</span>
+        <span v-if="userDataStore.isLogin()">
+          <p class="InfoBar_Text">個人資料</p>
+        </span>
         <span v-else>登入</span>
       </button>
     </div>
@@ -36,7 +38,7 @@
     <div class="InforBar_Setting">
       <button @click="turOnOffSettingBar">
         <i class="fa-solid fa-bars" :style="{ fontSize: '30px' }"></i>
-        更多
+        <p class="InfoBar_Text">更多</p>
       </button>
     </div>
 
@@ -90,7 +92,6 @@ const turOnOffSettingBar = () => {
 
 <style scoped>
 .InfoBar_Container,
-.InfoBar_Logo,
 .left {
   --width: 280px;
   padding: 0 20px;
@@ -115,7 +116,6 @@ const turOnOffSettingBar = () => {
 }
 
 .InfoBar_Logo {
-  width: var(--width);
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -29,7 +29,7 @@ import { RouterPath } from "@/router/router_path";
 import { GlobalData } from "@/global/global_data";
 import PostEditor from "./PostEditor.vue";
 import VideoPlayer from "@/components/utilities/YoutubePlayer.vue";
-import { ModalController } from "../utilities/BaseModal/ModalController";
+import { ModalController } from "../utilities/Modal/ModalController";
 
 const modalController = new ModalController();
 
@@ -40,7 +40,14 @@ const goToBoard = () => {
 
 ///開啟文章發佈頁面
 const goToEdit = () => {
-  modalController.show(PostEditor);
+  modalController.show(
+    PostEditor,
+    {},
+    true,
+    true,
+    "rgba(0, 0, 0, 0.4)",
+    "postedit"
+  );
 };
 
 const changePage = (type: string) => {
