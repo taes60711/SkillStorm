@@ -5,21 +5,16 @@ import { userDataStore } from "@/global/user_data";
 import { AppImage } from "@/global/app_image";
 
 export default class ProfileViewModel {
-
   // 用戶 api
   private userService: UserService;
 
   // 用戶資料
   public userData: Ref<ProfileData | null>;
 
-  // 用戶頭像圖片錯誤狀態
-  public imageLoadError: Ref<boolean>;
-
   // 初始化
   constructor() {
     this.userService = new UserService();
     this.userData = ref<ProfileData | null>(null);
-    this.imageLoadError = ref(false);
 
     // 初始化時從全局狀態讀取資料
     this.userData.value = userDataStore.userData.value;
@@ -28,23 +23,5 @@ export default class ProfileViewModel {
   // 獲取用戶資料
   public get profile(): ProfileData | null {
     return this.userData.value;
-  }
-
-  /**
-   * 處理圖片錯誤
-   */
-  public handleImageError(): void {
-    this.imageLoadError.value = true;
-  }
-
-  /**
-   * 獲取頭像 URL
-   * @returns 頭像 URL
-   */
-  public get avatarUrl(): string {
-    if (!this.profile?.image || this.imageLoadError.value) {
-      return AppImage.defaultUserImg;
-    }
-    return this.profile.image;
   }
 }

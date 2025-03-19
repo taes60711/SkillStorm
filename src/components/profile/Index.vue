@@ -3,6 +3,7 @@ import { userDataStore } from "@/global/user_data";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
 import ProfileViewModel from "@/view_models/profile/profile_view_model";
+import Avatar from "../utilities/Avatar.vue";
 
 // 初始化 ViewModel
 const viewModel = new ProfileViewModel();
@@ -13,12 +14,7 @@ const viewModel = new ProfileViewModel();
     <div class="relative w-[120px]">
       <!-- 頭像 -->
       <div class="w-[120px] rounded-full overflow-hidden">
-        <img
-          :src="viewModel.avatarUrl"
-          @error="viewModel.handleImageError"
-          alt="User Avatar"
-          class="cus-pic-auto"
-        />
+        <Avatar :imgurl="viewModel.profile.image" class="cus-pic-auto"></Avatar>
       </div>
 
       <!-- 編輯按鈕 -->

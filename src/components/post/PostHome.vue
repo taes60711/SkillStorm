@@ -1,5 +1,5 @@
 <template>
-  <div class="postBody">
+  <div class="mainbody">
     <div class="postTab">
       <button @click="changePage(news)" class="postTabBtn">最新</button>
       <button @click="changePage()" class="postTabBtn">人氣</button>
@@ -8,6 +8,12 @@
     <button @click="goToEdit">發文</button>
 
     <VideoPlayer videoId="O78NzcXf2sw" />
+
+    <Avatar
+      imgurl="https://www.pc-koubou.jp/magazine/wp-content/uploads/2019/10/css_rem_main2.png"
+      size="150px"
+      borderRadius="20px"
+    />
   </div>
 
   <div class="postBoadContainer">
@@ -30,6 +36,7 @@ import { GlobalData } from "@/global/global_data";
 import PostEditor from "./PostEditor.vue";
 import VideoPlayer from "@/components/utilities/YoutubePlayer.vue";
 import { ModalController } from "../utilities/Modal/ModalController";
+import Avatar from "../utilities/Avatar.vue";
 
 const modalController = new ModalController();
 
@@ -59,14 +66,6 @@ const changePage = (type: string) => {
 .postTab,
 .postBoard {
   --height: 50px;
-}
-
-.postBody {
-  width: 55vw;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .postTab {

@@ -28,6 +28,11 @@
       </button>
 
       <button class="InfoBar_MyItemBtn" @click="viewModel.goToProfile">
+        <Avatar
+          :imgurl="userDataStore.userData.value.image"
+          size="40px"
+          borderRadius="50px"
+        />
         <span v-if="userDataStore.isLogin()">
           <p class="InfoBar_Text">個人資料</p>
         </span>
@@ -61,6 +66,7 @@
 import { AppImage } from "@/global/app_image";
 import { userDataStore } from "@/global/user_data";
 import InfoBarViewModel from "@/view_models/info_bar_view_model";
+import Avatar from "./Avatar.vue";
 
 const viewModel = new InfoBarViewModel();
 
@@ -162,6 +168,7 @@ const turOnOffSettingBar = () => {
   border-radius: 32px;
   display: flex;
   align-items: start;
+  flex-direction: row;
 }
 
 .InfoBar_ItemBtn:hover {

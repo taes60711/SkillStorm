@@ -8,7 +8,7 @@ import phoneHintModal from "./components/utilities/Modal/phoneHintModal.vue";
 
 const isInit = ref<boolean>(false);
 
-const phoneWidth: number = 490; // 預設手機視窗寬度
+const phoneWidth: number = 600; // 預設手機視窗寬度
 
 const isShowModal = ref<boolean>(false);
 const modalController = new ModalController();
