@@ -36,10 +36,10 @@
     </div>
 
     <div class="InforBar_Setting">
-      <button @click="turOnOffSettingBar">
+      <div class="InfoBar_ItemBtn" @click="turOnOffSettingBar">
         <i class="fa-solid fa-bars" :style="{ fontSize: '30px' }"></i>
         <p class="InfoBar_Text">更多</p>
-      </button>
+      </div>
     </div>
 
     <div
@@ -100,7 +100,6 @@ const turOnOffSettingBar = () => {
 .InforBar_Setting,
 .InforBar_SettingBar {
   --height: 80px;
-  --paddingLeft: 20px;
   --paddingTop: 10px;
 }
 
@@ -134,7 +133,6 @@ const turOnOffSettingBar = () => {
 .InforBar_Setting {
   width: 100%;
   height: var(--height);
-  padding-left: var(--paddingLeft);
   padding-top: calc(var(--paddingTop) * 2);
 }
 
@@ -144,6 +142,7 @@ const turOnOffSettingBar = () => {
   left: var(--paddingLeft);
   border-radius: 10px;
   border: 0.5px solid rgba(248, 248, 248, 0.28);
+  background-color: rgb(34, 34, 34);
   padding: 16px 16px;
   position: absolute;
   display: flex;
@@ -159,7 +158,6 @@ const turOnOffSettingBar = () => {
 
 .InfoBar_ItemBtn,
 .InfoBar_MyItemBtn {
-  margin: 10px 10px 0 10px;
   padding: 12px 20px;
   border-radius: 32px;
   display: flex;

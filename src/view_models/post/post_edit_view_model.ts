@@ -36,17 +36,21 @@ export default class PostEditViewModel {
       fileMessage: this.fileMessageController.value,
     };
 
-    await new PostService().createPost(postData);
-    this.resetAllEditData();
-    this.modalController.show(confimModal);
+    if (this.sendBeforCheck()) {
+      await new PostService().createPost(postData);
+      this.modalController.show(confimModal);
+    }
   };
 
   /**
-   * 清空所有編輯的資料（暫時）
+   * MARK: 送出前check
    */
-  private resetAllEditData = (): void => {
-    this.selectedBoard.value = GlobalData.postBoard[0];
-    this.mainMessageController.value = "";
-    this.fileMessageController.value = [];
+  sendBeforCheck = (): boolean => {
+    let isOk: boolean = true;
+    if (this.mainMessageController.value.replaceAll(" ", "") === "") {
+      isOk = false;
+      console.log("內文不得為空");
+    }
+    return isOk;
   };
 }
