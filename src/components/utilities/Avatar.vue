@@ -2,7 +2,12 @@
   <div
     v-if="imageLoadError"
     class="normalImgContainer"
-    :style="{ width: size, height: size, borderRadius: borderRadius }"
+    :style="{
+      width: size,
+      height: size,
+      borderRadius: borderRadius,
+      padding: `${parseFloat(size) * 0.2}px`,
+    }"
   >
     <img :src="avatarUrl()" />
   </div>
@@ -54,7 +59,6 @@ const avatarUrl = (): string => {
 <style scoped>
 .normalImgContainer {
   background-color: aliceblue;
-  padding: 13px;
 }
 .avatarImg {
   object-fit: cover;

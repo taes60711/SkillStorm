@@ -8,12 +8,6 @@
     <button @click="goToEdit">發文</button>
 
     <VideoPlayer videoId="O78NzcXf2sw" />
-
-    <Avatar
-      imgurl="https://www.pc-koubou.jp/magazine/wp-content/uploads/2019/10/css_rem_main2.png"
-      size="150px"
-      borderRadius="20px"
-    />
   </div>
 
   <div class="postBoadContainer">
@@ -21,8 +15,7 @@
       <p class="postBoardTitle">看板</p>
       <div v-for="(item, index) in GlobalData.postBoard" v-bind:key="item.id">
         <p class="postBoardItem" @click="goToBoard">
-          <i :class="`${item.iconData}`"></i>
-          {{ `${item.chineseName}` }}
+          <IconText :icon="item.iconData" :text="item.chineseName"></IconText>
         </p>
       </div>
     </div>
@@ -37,6 +30,7 @@ import PostEditor from "./PostEditor.vue";
 import VideoPlayer from "@/components/utilities/YoutubePlayer.vue";
 import { ModalController } from "../utilities/Modal/ModalController";
 import Avatar from "../utilities/Avatar.vue";
+import IconText from "../utilities/IconText.vue";
 
 const modalController = new ModalController();
 

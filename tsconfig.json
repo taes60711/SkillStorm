@@ -13,12 +13,18 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-    "types": ["node", "vue", "vue-router"],
+    "types": ["node", "vue-router"],
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
-    },
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/global/screenResize.js"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
