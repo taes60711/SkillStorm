@@ -1,9 +1,10 @@
 <template>
-  <MainButton
-    :onPress="() => onChangePage('back')"
-    text="<"
-    class="leftBtn"
-  ></MainButton>
+  <MainButton :onPress="() => onChangePage('back')" class="leftBtn">
+    <i
+      class="fa-solid fa-circle-chevron-left"
+      :style="{ fontSize: '40px', color: 'white' }"
+    ></i>
+  </MainButton>
 
   <div class="imgVideoContainer">
     <img v-if="formatFileMsg.type == 'img'" :src="formatFileMsg.value" />
@@ -15,11 +16,12 @@
     </iframe>
   </div>
 
-  <MainButton
-    :onPress="() => onChangePage('next')"
-    text=">"
-    class="rightBtn"
-  ></MainButton>
+  <MainButton :onPress="() => onChangePage('next')" class="rightBtn">
+    <i
+      class="fa-solid fa-circle-chevron-right"
+      :style="{ fontSize: '40px', color: 'white' }"
+    ></i>
+  </MainButton>
 </template>
 
 <script setup lang="ts">
@@ -93,11 +95,11 @@ const getFormatFileMsg = () => {
 
 .leftBtn {
   position: fixed;
-  left: 0;
+  left: 40px;
 }
 
 .rightBtn {
   position: fixed;
-  right: 0;
+  right: 40px;
 }
 </style>

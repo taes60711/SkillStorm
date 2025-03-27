@@ -39,7 +39,7 @@ import { ref } from "vue";
 const modalController = new ModalController();
 
 const fileMsg = ref<string[]>([
-  "https://truth.bahamut.com.tw/s01/202503/forum/60076/338eedfd8cd48ce61653042e40264573.JPG",
+  // "https://truth.bahamut.com.tw/s01/202503/forum/60076/338eedfd8cd48ce61653042e40264573.JPG",
   "http://$ip:$port/images/f01162b0-ee6a-11ef-b180-c10e9d08d6f6",
   "https://www.youtube.com/embed/nyq_S7N7Ygo",
   "https://stickershop.line-scdn.net/stickershop/v1/product/12679691/LINEStorePC/main.png",
