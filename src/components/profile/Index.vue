@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { userDataStore } from "@/global/user_data";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
 import ProfileViewModel from "@/view_models/profile/profile_view_model";

@@ -6,13 +6,14 @@
       <i
         class="fa-solid fa-x baseModalCloseBtn"
         v-if="props.needCloseBtn"
-        @click="props.closePage"
+        @click="closeModal"
       ></i>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount } from "@vue/runtime-core";
 import { ref, onMounted } from "vue";
 
 const baseModalMark = ref<HTMLDivElement | null>(null);
@@ -52,15 +53,19 @@ function handleClickOutside(event: MouseEvent) {
   const target = event.target as Node;
   if (baseModalMark.value && !baseModalMark.value.contains(target)) {
     console.log("Clicked outside the modal!");
-    document.removeEventListener("click", handleClickOutside);
     markClose();
   }
 }
 
 const markClose = (): void => {
   if (props.needModalClose) {
-    props.closePage();
+    closeModal();
   }
+};
+
+const closeModal = () => {
+  document.removeEventListener("click", handleClickOutside);
+  props.closePage();
 };
 </script>
 

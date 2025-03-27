@@ -19,15 +19,11 @@ html body,
   align-items: center;
 }
 
-.mainbody {
-  width: 55vw;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 input,
 textarea {
   color: black !important;
+}
+
+img {
+  -webkit-user-drag: none;
 }

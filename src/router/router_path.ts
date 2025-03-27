@@ -4,7 +4,7 @@ import pwdForgot from "../components/account/PwdForgotView.vue";
 import Profile from "../components/profile/Index.vue";
 import EditProfile from "../components/profile/Edit.vue";
 import CourseEditor from "@/components/course/CourseEditor.vue";
-import PostHome from "@/components/post/PostHome.vue";
+import PostHome from "@/components/post/postHome/PostHome.vue";
 import InfoBar from "@/components/utilities/InfoBar/InfoBar.vue";
 import CourseHome from "@/components/course/CourseHome.vue";
 import SuggestUsersHome from "@/components/suggestusers/SuggestUsersHome.vue";

@@ -229,12 +229,13 @@ const turOnOffSettingBar = () => {
 .InfoBar_ItemBtnChoiced,
 .InfoBar_MyItemBtn,
 .InfoBar_MyItemBtnChoiced {
-  padding: 12px 20px;
+  padding: 10px 16px;
   border-radius: 32px;
   margin-bottom: 10px;
   display: flex;
   align-items: start;
   flex-direction: row;
+  cursor: pointer;
 }
 
 .InfoBar_ItemBtnChoiced {

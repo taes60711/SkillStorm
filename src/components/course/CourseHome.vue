@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="basebody">
     Course Home
     <button @click="goToEdit">發文</button>
   </div>

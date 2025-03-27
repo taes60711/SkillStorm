@@ -1,5 +1,5 @@
 <template>
-  <div>SuggestUsers Home</div>
+  <div class="basebody">SuggestUsers Home</div>
 </template>
 
 <script setup lang="ts"></script>
