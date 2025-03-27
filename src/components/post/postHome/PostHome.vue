@@ -52,7 +52,7 @@ const goToEdit = () => {
     PostEditor,
     {},
     true,
-    true,
+    false,
     "rgba(0, 0, 0, 0.4)",
     "postedit"
   );
