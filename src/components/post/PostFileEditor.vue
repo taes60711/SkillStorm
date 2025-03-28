@@ -5,8 +5,6 @@
     <button @click="deleteEditingFile(index)">刪除</button>
   </div>
 
-  <PostFile :fileMessage="fileUrls"></PostFile>
-
   <!-- 隱藏的檔案輸入框 -->
   <input
     type="file"
