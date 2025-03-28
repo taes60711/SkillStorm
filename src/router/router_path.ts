@@ -23,7 +23,7 @@ export const RouterPath = {
         name: "Home",
       },
       BOARD: {
-        path: "/post/board",
+        path: "/post/board/:boardtype",
         components: {
           default: PostByBoard,
           aside: InfoBar,

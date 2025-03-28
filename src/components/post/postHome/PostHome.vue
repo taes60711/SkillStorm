@@ -13,7 +13,7 @@
           borderRadius="50px"
         />
         <MainButton
-          :onPress="goToEdit"
+          :onPress="() => viewModel.createEditPage()"
           text="發佈新文章"
           class="postCreateBtn"
         ></MainButton>
@@ -27,36 +27,23 @@
 </template>
 
 <script setup lang="ts">
-import PostEditor from "@/components/post/PostEditor.vue";
-import { ModalController } from "../../utilities/Modal/ModalController";
 import MainButton from "@/components/utilities/MainButton.vue";
 import Avatar from "@/components/utilities/Avatar.vue";
 import { userDataStore } from "@/global/user_data";
 import PostHomeBoard from "./PostHomeBoard.vue";
 import PostFile from "./PostFile.vue";
 import { ref } from "vue";
+import PostHomeViewModel from "@/view_models/post/post_home_view_model";
 
-const modalController = new ModalController();
+const viewModel = new PostHomeViewModel();
 
 const fileMsg = ref<string[]>([
-  // "https://truth.bahamut.com.tw/s01/202503/forum/60076/338eedfd8cd48ce61653042e40264573.JPG",
+  "https://secretms.com/library/img/mob/_8190003.png",
   "http://$ip:$port/images/f01162b0-ee6a-11ef-b180-c10e9d08d6f6",
   "https://www.youtube.com/embed/nyq_S7N7Ygo",
   "https://stickershop.line-scdn.net/stickershop/v1/product/12679691/LINEStorePC/main.png",
   "https://www.youtube.com/embed/XiwY-syjwm4",
 ]);
-
-///開啟文章發佈頁面
-const goToEdit = () => {
-  modalController.show(
-    PostEditor,
-    {},
-    true,
-    false,
-    "rgba(0, 0, 0, 0.4)",
-    "postedit"
-  );
-};
 
 const changePage = (type: string) => {
   console.log(type);

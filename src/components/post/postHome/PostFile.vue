@@ -135,7 +135,7 @@
         </div>
       </div>
     </div>
-    <!-- 兩個以上項目時顯示的 -->
+    <!-- 三個以上項目時顯示的 -->
     <div v-else class="postFileContainer">
       <MainButton :onPress="() => onChangePage('back')" class="leftBtn">
         <i
@@ -221,8 +221,6 @@ onMounted(() => {
       formatFileMsg.value.push({ type: "ytvideo", value: element });
     }
   }
-
-  console.log(formatFileMsg.value.length);
 
   if (formatFileMsg.value.length > 3) {
     choicedFile.value = formatFileMsg.value[0];

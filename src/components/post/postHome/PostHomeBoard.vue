@@ -3,7 +3,7 @@
     <div class="postBoard">
       <p class="postBoardTitle">看板</p>
       <div v-for="(item, index) in GlobalData.postBoard" v-bind:key="item.id">
-        <p class="postBoardItem" @click="goToBoard">
+        <p class="postBoardItem" @click="() => goToBoard(item.type)">
           <IconText :icon="item.iconData" :text="item.chineseName"></IconText>
         </p>
       </div>
@@ -18,8 +18,13 @@ import { GlobalData } from "@/global/global_data";
 import IconText from "@/components/utilities/IconText.vue";
 
 ///跳至看板頁面
-const goToBoard = () => {
-  router.push(RouterPath.HOME.POST.BOARD);
+const goToBoard = (type: number) => {
+  router.push({
+    name: RouterPath.HOME.POST.BOARD.name,
+    params: {
+      boardtype: type,
+    },
+  });
 };
 </script>
 
