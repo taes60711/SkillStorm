@@ -34,6 +34,7 @@ import PostHomeBoard from "./PostHomeBoard.vue";
 import PostFile from "./PostFile.vue";
 import { ref } from "vue";
 import PostHomeViewModel from "@/view_models/post/post_home_view_model";
+import { onMounted } from "vue";
 
 const viewModel = new PostHomeViewModel();
 

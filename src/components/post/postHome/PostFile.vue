@@ -189,13 +189,12 @@ import { EditTools } from "@/global/edit_tools";
 import type { FileMsgModel } from "@/models/post_file_msg_model";
 import { ref } from "vue";
 import { onMounted } from "vue";
+import { watch } from "@vue/runtime-dom";
 
 const editTools: EditTools = new EditTools();
 const modalController = new ModalController();
 
-const props = defineProps<{
-  fileMessage: string[];
-}>();
+const fileMessage = defineModel("fileMessage");
 
 const formatFileMsg = ref<FileMsgModel[]>([]);
 
@@ -205,10 +204,20 @@ const nowIndex = ref<number>(0);
 
 onMounted(() => {
   /// 整形Url格式
-  for (let index = 0; index < props.fileMessage.length; index++) {
+  formatFileMessages();
+});
+
+watch(fileMessage, () => {
+  formatFileMessages();
+});
+/// 整形Url格式
+const formatFileMessages = () => {
+  formatFileMsg.value = [];
+
+  for (let index = 0; index < fileMessage.value.length; index++) {
     const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
 
-    const element = props.fileMessage[index];
+    const element = fileMessage.value[index];
     const fileExtension = element.split(".").pop()?.toLowerCase();
 
     if (
@@ -225,7 +234,7 @@ onMounted(() => {
   if (formatFileMsg.value.length > 3) {
     choicedFile.value = formatFileMsg.value[0];
   }
-});
+};
 
 /// 開啟預覽視窗
 const openView = (fileMsg: FileMsgModel[], index: number) => {

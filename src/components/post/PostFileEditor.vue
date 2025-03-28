@@ -5,6 +5,8 @@
     <button @click="deleteEditingFile(index)">刪除</button>
   </div>
 
+  <PostFile :fileMessage="fileUrls"></PostFile>
+
   <!-- 隱藏的檔案輸入框 -->
   <input
     type="file"
@@ -63,6 +65,7 @@
 import Modal from "../utilities/Modal.vue";
 import { EditTools } from "@/global/edit_tools";
 import { ref } from "vue";
+import PostFile from "./postHome/PostFile.vue";
 
 const fileUrls = defineModel("fileUrls");
 const editTools = new EditTools();
