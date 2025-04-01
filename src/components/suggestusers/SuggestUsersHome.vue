@@ -1,7 +1,13 @@
 <template>
-  <div class="basebody">SuggestUsers Home</div>
+  <BaseView>
+    <template #midbody>
+      <div>SuggestUsers Home</div>
+    </template>
+  </BaseView>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BaseView from "@/components/utilities/BaseView.vue";
+</script>
 
 <style scoped></style>

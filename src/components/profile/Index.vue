@@ -26,7 +26,7 @@ const viewModel = new ProfileViewModel();
     </div>
 
     <!-- 個人資料 -->
-    <div class="mt-2 w-full">
+    <div class="mt-2">
       <h2 class="whitespace-normal break-words">
         {{ viewModel.profile?.name }}
       </h2>

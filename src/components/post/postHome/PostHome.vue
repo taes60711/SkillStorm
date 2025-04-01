@@ -1,9 +1,25 @@
 <template>
-  <div class="mainbody">
-    <div class="postbody">
+  <BaseView>
+    <template #midbody>
       <div class="postTab">
-        <button @click="changePage(news)" class="postTabBtn">最新</button>
-        <button @click="changePage()" class="postTabBtn">人氣</button>
+        <button
+          @click="() => viewModel.changeHomePage('new')"
+          :class="{
+            choicePostTabBtn: viewModel.nowHomePage.value === 'new',
+            postTabBtn: viewModel.nowHomePage.value !== 'new',
+          }"
+        >
+          最新
+        </button>
+        <button
+          @click="() => viewModel.changeHomePage('popular')"
+          :class="{
+            choicePostTabBtn: viewModel.nowHomePage.value === 'popular',
+            postTabBtn: viewModel.nowHomePage.value !== 'popular',
+          }"
+        >
+          人氣
+        </button>
       </div>
 
       <div class="postCreateContainer">
@@ -18,12 +34,14 @@
           class="postCreateBtn"
         ></MainButton>
       </div>
-      <br />
 
-      <PostFile :fileMessage="fileMsg"></PostFile>
-    </div>
-  </div>
-  <PostHomeBoard></PostHomeBoard>
+      <!-- <PostFile :fileMessage="fileMsg"></PostFile> -->
+    </template>
+
+    <template #rightbody>
+      <PostHomeBoard></PostHomeBoard>
+    </template>
+  </BaseView>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +52,7 @@ import PostHomeBoard from "./PostHomeBoard.vue";
 import PostFile from "./PostFile.vue";
 import { ref } from "vue";
 import PostHomeViewModel from "@/view_models/post/post_home_view_model";
+import BaseView from "@/components/utilities/BaseView.vue";
 
 const viewModel = new PostHomeViewModel();
 
@@ -44,28 +63,9 @@ const fileMsg = ref<string[]>([
   "https://stickershop.line-scdn.net/stickershop/v1/product/12679691/LINEStorePC/main.png",
   "https://www.youtube.com/embed/XiwY-syjwm4",
 ]);
-
-const changePage = (type: string) => {
-  console.log(type);
-};
 </script>
 
 <style scoped>
-.mainbody {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-}
-
-.postbody {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 650px;
-}
-
 .postTab {
   width: 90%;
   height: 50px;
@@ -74,14 +74,19 @@ const changePage = (type: string) => {
   margin: 15px 0px;
 }
 
-.postTabBtn {
+.postTabBtn,
+.choicePostTabBtn {
   width: 50%;
   height: 100%;
   border-radius: 25px;
 }
 
-.postTabBtn:hover {
+.choicePostTabBtn {
   background-color: rgb(66, 66, 66);
+}
+
+.postTabBtn:hover {
+  background-color: rgb(23, 23, 23);
 }
 
 .postCreateContainer {
