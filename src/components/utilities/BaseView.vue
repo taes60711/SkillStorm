@@ -1,54 +1,103 @@
 <template>
   <div ref="apiList" class="apiList">
     <div class="mainBody">
-      <div class="postbody">
-        <slot name="midbody"></slot>
-      </div>
+      <slot name="midbody"></slot>
     </div>
 
     <slot name="rightbody"></slot>
   </div>
 </template>
 
-<script setup lang="ts">
-import { nextTick, onBeforeUnmount } from "@vue/runtime-core";
+<script setup lang="ts" generic="T">
+import { apiStatus } from "@/view_models/info_bar_view_model";
+import { onBeforeUnmount, watch } from "@vue/runtime-core";
 import { onMounted } from "vue";
 import { ref } from "vue";
 
 const apiList = ref<HTMLElement>();
+const apiListPage = ref<number>(0);
+const preloadList = ref<T[]>([]);
 
-onMounted(() => {
-  nextTick(() => {
-    if (apiList.value) {
-      console.log(
-        `clientHeight: ${apiList.value.clientHeight} scrollHeight ${apiList.value.scrollHeight}`
-      );
+const apiLoadingStatus = ref<apiStatus>(apiStatus.loadingFinish);
 
-      apiList.value.addEventListener("scroll", handleScroll);
-    }
-  });
+const props = defineProps({
+  apiFunc: {
+    type: Function,
+  },
+  page: {
+    type: Number,
+    default: 0,
+  },
+  size: {
+    type: Number,
+    default: 5,
+  },
 });
 
-// 在組件卸載之前移除事件監聽器
+const emit = defineEmits<{
+  (event: "apiReturnData", data: {}): number[];
+}>();
+
+onMounted(async () => {
+  if (apiList.value) {
+    apiList.value.addEventListener("scroll", handleScroll);
+    await firstLoadData();
+  }
+});
+
 onBeforeUnmount(() => {
   if (apiList.value) {
     apiList.value.removeEventListener("scroll", handleScroll);
   }
 });
 
-// 監聽滾動事件
 const handleScroll = () => {
   const scrollTop = apiList.value?.scrollTop ?? 0;
   const scrollHeight = apiList.value?.scrollHeight ?? 0;
   const clientHeight = apiList.value?.clientHeight ?? 0;
-
-  // 計算 scrollBottom
   const scrollBottom = scrollHeight - scrollTop - clientHeight;
 
-  console.log("scrollTop:", scrollTop);
-  console.log("scrollHeight:", scrollHeight);
-  console.log("clientHeight:", clientHeight);
-  console.log("scrollBottom:", scrollBottom);
+  if (apiLoadingStatus.value !== apiStatus.noDataCanLoad) {
+    if (scrollBottom < 10) {
+      if (apiLoadingStatus.value === apiStatus.loadingFinish) {
+        insertLoadedData(preloadList.value as T[]);
+      } else if (apiLoadingStatus.value === apiStatus.preDataLoading) {
+        const stopWatch = watch(apiLoadingStatus, (newVal) => {
+          if (newVal === apiStatus.loadingFinish) {
+            insertLoadedData(preloadList.value as T[]);
+            stopWatch();
+          }
+        });
+      }
+    }
+  }
+};
+
+const firstLoadData = async () => {
+  apiLoadingStatus.value = apiStatus.firstLoading;
+  let loadedData: T[] = await props.apiFunc(apiListPage.value, props.size);
+  await insertLoadedData(loadedData);
+};
+
+const insertLoadedData = async (loadedData: T[]) => {
+  emit("apiReturnData", loadedData);
+  await preloadData();
+};
+
+const preloadData = async () => {
+  apiLoadingStatus.value = apiStatus.preDataLoading;
+
+  let page: number = apiListPage.value + 1;
+  apiListPage.value = page;
+
+  let loadedData: T[] = await props.apiFunc(apiListPage.value, props.size);
+
+  if (loadedData.length != 0) {
+    preloadList.value = loadedData;
+    apiLoadingStatus.value = apiStatus.loadingFinish;
+  } else {
+    apiLoadingStatus.value = apiStatus.noDataCanLoad;
+  }
 };
 </script>
 
@@ -66,13 +115,5 @@ const handleScroll = () => {
   display: flex;
   justify-content: center;
   flex-grow: 1;
-}
-
-.postbody {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 650px;
 }
 </style>

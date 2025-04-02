@@ -6,6 +6,13 @@ import { RouterPath } from "@/router/router_path";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 
+export enum apiStatus {
+  firstLoading = "firstLoading",
+  preDataLoading = "preDataLoading",
+  loadingFinish = "loadingFinish",
+  noDataCanLoad = "noDataCanLoad",
+}
+
 export default class InfoBarViewModel {
   settingBarIsOpen = ref<boolean>(false);
   modalController = new ModalController();
