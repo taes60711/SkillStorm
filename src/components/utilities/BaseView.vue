@@ -57,18 +57,23 @@ const handleScroll = () => {
   const clientHeight = apiList.value?.clientHeight ?? 0;
   const scrollBottom = scrollHeight - scrollTop - clientHeight;
 
-  if (apiLoadingStatus.value !== apiStatus.noDataCanLoad) {
-    if (scrollBottom < 10) {
-      if (apiLoadingStatus.value === apiStatus.loadingFinish) {
+  if (apiLoadingStatus.value === apiStatus.noDataCanLoad) {
+    return;
+  }
+
+  if (scrollBottom < 10) {
+    switch (apiLoadingStatus.value) {
+      case apiStatus.loadingFinish:
         insertLoadedData(preloadList.value as T[]);
-      } else if (apiLoadingStatus.value === apiStatus.preDataLoading) {
+        break;
+      case apiStatus.preDataLoading:
         const stopWatch = watch(apiLoadingStatus, (newVal) => {
           if (newVal === apiStatus.loadingFinish) {
             insertLoadedData(preloadList.value as T[]);
             stopWatch();
           }
         });
-      }
+        break;
     }
   }
 };
