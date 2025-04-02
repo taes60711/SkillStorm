@@ -63,9 +63,13 @@ const handleScroll = () => {
 
   if (scrollBottom < 10) {
     switch (apiLoadingStatus.value) {
+      ///　預加載的資料已經Load完的情況
+      /// 回傳資料
       case apiStatus.loadingFinish:
         insertLoadedData(preloadList.value as T[]);
         break;
+      ///　還在Loading預加載的資料的情況
+      /// 等preload的api執行完才執行資料回傳
       case apiStatus.preDataLoading:
         const stopWatch = watch(apiLoadingStatus, (newVal) => {
           if (newVal === apiStatus.loadingFinish) {
@@ -78,17 +82,19 @@ const handleScroll = () => {
   }
 };
 
+/// 初次Loading
 const firstLoadData = async () => {
   apiLoadingStatus.value = apiStatus.firstLoading;
   let loadedData: T[] = await props.apiFunc(apiListPage.value, props.size);
   await insertLoadedData(loadedData);
 };
-
+/// 將要顯示的資料回傳, 並執行預加載
 const insertLoadedData = async (loadedData: T[]) => {
   emit("apiReturnData", loadedData);
   await preloadData();
 };
 
+/// 預加載資料Loading
 const preloadData = async () => {
   apiLoadingStatus.value = apiStatus.preDataLoading;
 
@@ -98,9 +104,12 @@ const preloadData = async () => {
   let loadedData: T[] = await props.apiFunc(apiListPage.value, props.size);
 
   if (loadedData.length != 0) {
+    /// 加載的資料放進預加載資料
     preloadList.value = loadedData;
     apiLoadingStatus.value = apiStatus.loadingFinish;
   } else {
+    /// api全部資料加載完
+    preloadList.value = [];
     apiLoadingStatus.value = apiStatus.noDataCanLoad;
   }
 };
