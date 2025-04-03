@@ -1,6 +1,6 @@
 import type { Ref } from "vue";
 import { ref } from "vue";
-import type { PostBoard } from "@/models/reponse/post_board_reponse_data";
+import type { PostBoard } from "@/models/reponse/post/post_board_reponse_data";
 import { GlobalData } from "@/global/global_data";
 import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
 import PostService from "@/services/post_service";

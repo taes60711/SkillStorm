@@ -1,6 +1,6 @@
 <template>
   <BaseView>
-    <template #midbody>
+    <template #midBody>
       <div>SuggestUsers Home</div>
     </template>
   </BaseView>

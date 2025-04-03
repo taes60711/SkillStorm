@@ -1,9 +1,10 @@
-import type { PostBoard } from "@/models/reponse/post_board_reponse_data";
+import type { PostBoard } from "@/models/reponse/post/post_board_reponse_data";
 import { API_CONFIG } from "./api.config";
 import APIClient from "./api_client";
 import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
 import { userDataStore } from "@/global/user_data";
 import { APIHttpController } from "@/global/api_http_controller";
+import type { Post } from "@/models/reponse/post/post_reponse_data";
 
 ///  文章相關API
 export default class PostService extends APIClient {
@@ -11,6 +12,30 @@ export default class PostService extends APIClient {
     super(
       `${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/posts`
     );
+  }
+
+  async getPostByViewer(
+    page: number,
+    size: number,
+    userId: string
+  ): Promise<Post[]> {
+    const param = {
+      page: page,
+      size: size,
+      uid: userId,
+    };
+
+    const reponseData: Post[] | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.POST.GET_ALL}`,
+      param
+    );
+    console.log("reponseData", reponseData);
+
+    if (typeof reponseData === "string") {
+      return [];
+    } else {
+      return reponseData;
+    }
   }
 
   /**

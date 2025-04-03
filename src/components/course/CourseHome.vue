@@ -1,6 +1,6 @@
 <template>
   <BaseView>
-    <template #midbody>
+    <template #midBody>
       Course Home
       <button @click="goToEdit">發文</button>
     </template>

@@ -1,6 +1,6 @@
 <template>
   <BaseView>
-    <template #midbody>
+    <template #midBody>
       <img :src="AppImage.logo" alt="SkillStorm" class="logo" />
 
       <div v-if="viewModel.stepIndex.value === 0">

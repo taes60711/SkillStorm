@@ -1,52 +1,51 @@
 <template>
-  <BaseView :apiFunc="getNumbers" @apiReturnData="handleApiReturnData">
-    <template #midbody>
-      <div class="postbody">
-        <div class="postTab">
-          <button
-            @click="() => viewModel.changeHomePage('new')"
-            :class="{
-              choicePostTabBtn: viewModel.nowHomePage.value === 'new',
-              postTabBtn: viewModel.nowHomePage.value !== 'new',
-            }"
-          >
-            最新
-          </button>
-          <button
-            @click="() => viewModel.changeHomePage('popular')"
-            :class="{
-              choicePostTabBtn: viewModel.nowHomePage.value === 'popular',
-              postTabBtn: viewModel.nowHomePage.value !== 'popular',
-            }"
-          >
-            人氣
-          </button>
-        </div>
+  <BaseView :apiListFunc="getPostList" @apiReturnData="handleApiReturnData">
+    <template #apiListHeader>
+      <div class="postTab">
+        <button
+          @click="() => viewModel.changeHomePage('new')"
+          :class="{
+            choicePostTabBtn: viewModel.nowHomePage.value === 'new',
+            postTabBtn: viewModel.nowHomePage.value !== 'new',
+          }"
+        >
+          最新
+        </button>
+        <button
+          @click="() => viewModel.changeHomePage('popular')"
+          :class="{
+            choicePostTabBtn: viewModel.nowHomePage.value === 'popular',
+            postTabBtn: viewModel.nowHomePage.value !== 'popular',
+          }"
+        >
+          人氣
+        </button>
+      </div>
 
-        <div class="postCreateContainer">
-          <Avatar
-            :imgurl="userDataStore.userData.value.image"
-            size="40px"
-            borderRadius="50px"
-          />
-          <MainButton
-            :onPress="() => viewModel.createEditPage()"
-            text="發佈新文章"
-            class="postCreateBtn"
-          ></MainButton>
-        </div>
-
-        <div v-for="(item, index) in numbers">
-          <p class="sssw">
-            {{ item }}
-            <PostFile :fileMessage="fileMsg"></PostFile>
-            {{ item }}
-          </p>
-        </div>
+      <div class="postCreateContainer">
+        <Avatar
+          :imgurl="userDataStore.userData.value.image"
+          size="40px"
+          borderRadius="50px"
+        />
+        <MainButton
+          :onPress="() => viewModel.createEditPage()"
+          text="發佈新文章"
+          class="postCreateBtn"
+        ></MainButton>
       </div>
     </template>
 
-    <template #rightbody>
+    <template #apiListBody>
+      <div class="sssw" v-for="(item, index) in postData" v-bind:key="index">
+        <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
+        {{ item.user.name }}
+        {{ item.mainMessage }}
+        <PostFile :fileMessage="item.fileMessage"></PostFile>
+      </div>
+    </template>
+
+    <template #rightBody>
       <PostHomeBoard></PostHomeBoard>
     </template>
   </BaseView>
@@ -61,52 +60,32 @@ import PostFile from "./PostFile.vue";
 import { ref } from "vue";
 import PostHomeViewModel from "@/view_models/post/post_home_view_model";
 import BaseView from "@/components/utilities/BaseView.vue";
+import PostService from "@/services/post_service";
+import type { Post } from "@/models/reponse/post/post_reponse_data";
 
 const viewModel = new PostHomeViewModel();
 
-const fileMsg = ref<string[]>([
-  "https://secretms.com/library/img/mob/_8190003.png",
-  "http://$ip:$port/images/f01162b0-ee6a-11ef-b180-c10e9d08d6f6",
-  "https://www.youtube.com/embed/nyq_S7N7Ygo",
-  "https://stickershop.line-scdn.net/stickershop/v1/product/12679691/LINEStorePC/main.png",
-  "https://www.youtube.com/embed/XiwY-syjwm4",
-]);
+const postData = ref<Post[]>([]);
 
-const numbers = ref<number[]>([]);
-
-function handleApiReturnData(data: number[]) {
-  numbers.value.push(...data);
+function handleApiReturnData(data: Post[]) {
+  postData.value.push(...data);
 }
 
-async function getNumbers(
-  page: number = 0,
-  size: number = 5
-): Promise<number[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const numbers: number[] = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-  ];
-
-  const start = page * size;
-  const end = start + size;
-
-  return numbers.slice(start, end);
-}
+const getPostList: (page: number, size: number) => Promise<Post[]> = (
+  page,
+  size
+) => {
+  return new PostService().getPostByViewer(
+    page,
+    size,
+    userDataStore.userData.value.uid
+  );
+};
 </script>
 
 <style scoped>
-.postbody {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 650px;
-}
-
 .postTab {
   width: 90%;
-  height: 50px;
   border: 1px solid rgba(255, 255, 255, 0.156);
   border-radius: 25px;
   margin: 15px 0px;
@@ -115,7 +94,7 @@ async function getNumbers(
 .postTabBtn,
 .choicePostTabBtn {
   width: 50%;
-  height: 100%;
+  height: 50px;
   border-radius: 25px;
 }
 
@@ -136,8 +115,8 @@ async function getNumbers(
 }
 
 .sssw {
-  width: 300px;
-  background-color: rgb(47, 140, 140);
+  width: 100%;
+  background-color: rgb(54, 53, 53);
   margin-top: 10px;
 }
 

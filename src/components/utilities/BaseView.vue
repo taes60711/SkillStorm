@@ -1,10 +1,25 @@
 <template>
   <div ref="apiList" class="apiList">
     <div class="mainBody">
-      <slot name="midbody"></slot>
+      <!-- #1 api list  -->
+      <div
+        v-if="props.apiListFunc != null"
+        class="postbody"
+        :style="{ maxWidth: '650px' }"
+      >
+        <!-- api list header -->
+        <slot name="apiListHeader"></slot>
+        <div v-if="apiLoadingStatus === apiStatus.firstLoading">loading...</div>
+        <!-- api list body -->
+        <slot v-else name="apiListBody"></slot>
+      </div>
+      <!-- #2 no api  -->
+      <div v-else class="postbody" :style="{ maxWidth: '650px' }">
+        <slot name="midBody"></slot>
+      </div>
     </div>
 
-    <slot name="rightbody"></slot>
+    <slot name="rightBody"></slot>
   </div>
 </template>
 
@@ -21,7 +36,7 @@ const preloadList = ref<T[]>([]);
 const apiLoadingStatus = ref<apiStatus>(apiStatus.loadingFinish);
 
 const props = defineProps({
-  apiFunc: {
+  apiListFunc: {
     type: Function,
   },
   page: {
@@ -35,13 +50,15 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: "apiReturnData", data: {}): number[];
+  (event: "apiReturnData", data: {}): T[];
 }>();
 
 onMounted(async () => {
-  if (apiList.value) {
-    apiList.value.addEventListener("scroll", handleScroll);
-    await firstLoadData();
+  if (props.apiListFunc != null) {
+    if (apiList.value) {
+      apiList.value.addEventListener("scroll", handleScroll);
+      await firstLoadData();
+    }
   }
 });
 
@@ -85,7 +102,7 @@ const handleScroll = () => {
 /// 初次Loading
 const firstLoadData = async () => {
   apiLoadingStatus.value = apiStatus.firstLoading;
-  let loadedData: T[] = await props.apiFunc(apiListPage.value, props.size);
+  let loadedData: T[] = await props.apiListFunc(apiListPage.value, props.size);
   await insertLoadedData(loadedData);
 };
 /// 將要顯示的資料回傳, 並執行預加載
@@ -101,7 +118,7 @@ const preloadData = async () => {
   let page: number = apiListPage.value + 1;
   apiListPage.value = page;
 
-  let loadedData: T[] = await props.apiFunc(apiListPage.value, props.size);
+  let loadedData: T[] = await props.apiListFunc(apiListPage.value, props.size);
 
   if (loadedData.length != 0) {
     /// 加載的資料放進預加載資料
@@ -129,5 +146,12 @@ const preloadData = async () => {
   display: flex;
   justify-content: center;
   flex-grow: 1;
+}
+
+.postbody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 </style>

@@ -1,4 +1,4 @@
-import type { PostBoard } from "@/models/reponse/post_board_reponse_data";
+import type { PostBoard } from "@/models/reponse/post/post_board_reponse_data";
 import type { SkillData } from "@/models/reponse/skill_reponse_data";
 import PostService from "@/services/post_service";
 import SkillService from "@/services/skill_service";
