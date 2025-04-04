@@ -76,12 +76,10 @@
             :src="`https://img.youtube.com/vi/${editTools.getYtvideoID(
               formatFileMsg[0].value
             )}/hqdefault.jpg`"
-            :onclick="() => openView(formatFileMsg, index)"
+            :onclick="() => openView(formatFileMsg, 0)"
           />
 
-          <div class="play-button" @click="openView(formatFileMsg, index)">
-            ▶
-          </div>
+          <div class="play-button" @click="openView(formatFileMsg, 0)">▶</div>
         </div>
       </div>
       <div class="twice-third-itemContianer">
@@ -89,7 +87,7 @@
           <div v-if="formatFileMsg[1].type == 'img'">
             <img
               :src="formatFileMsg[1].value"
-              :onclick="() => openView(formatFileMsg, index)"
+              :onclick="() => openView(formatFileMsg, 1)"
             />
           </div>
 
@@ -104,9 +102,7 @@
               :onclick="() => openView(formatFileMsg, 1)"
             />
 
-            <div class="play-button" @click="openView(formatFileMsg, index)">
-              ▶
-            </div>
+            <div class="play-button" @click="openView(formatFileMsg, 1)">▶</div>
           </div>
         </div>
         <div class="third-item">
@@ -125,12 +121,10 @@
               :src="`https://img.youtube.com/vi/${editTools.getYtvideoID(
                 formatFileMsg[2].value
               )}/hqdefault.jpg`"
-              :onclick="() => openView(formatFileMsg, index)"
+              :onclick="() => openView(formatFileMsg, 2)"
             />
 
-            <div class="play-button" @click="openView(formatFileMsg, index)">
-              ▶
-            </div>
+            <div class="play-button" @click="openView(formatFileMsg, 2)">▶</div>
           </div>
         </div>
       </div>
