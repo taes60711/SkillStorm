@@ -24,9 +24,11 @@
 
 <script setup lang="ts">
 import { AppImage } from "@/global/app_image";
+import { EditTools } from "@/global/edit_tools";
 import type { Ref } from "vue";
 import { ref } from "vue";
 
+const editTools: EditTools = new EditTools();
 const imageLoadError: Ref<boolean> = ref(false);
 
 const props = defineProps({
@@ -52,7 +54,8 @@ const avatarUrl = (): string => {
   if (imageLoadError.value) {
     return AppImage.defaultUserImg;
   }
-  return props.imgurl;
+
+  return editTools.getRealImgStr(props.imgurl);
 };
 </script>
 

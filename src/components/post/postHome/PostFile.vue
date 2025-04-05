@@ -209,19 +209,13 @@ const formatFileMessages = () => {
   formatFileMsg.value = [];
 
   for (let index = 0; index < fileMessage.value.length; index++) {
-    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
-
     const element = fileMessage.value[index];
-    const fileExtension = element.split(".").pop()?.toLowerCase();
 
-    if (
-      imageExtensions.includes(fileExtension) ||
-      fileExtension.includes("images")
-    ) {
+    if (element.includes("youtube")) {
+      formatFileMsg.value.push({ type: "ytvideo", value: element });
+    } else {
       const imgstr: string = editTools.getRealImgStr(element);
       formatFileMsg.value.push({ type: "img", value: imgstr });
-    } else {
-      formatFileMsg.value.push({ type: "ytvideo", value: element });
     }
   }
 

@@ -57,18 +57,11 @@ const onChangePage = (changeType: string) => {
 };
 
 const getFormatFileMsg = () => {
-  const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
-
   const element = props.modalProps.fileMsg[nowIndex.value];
-  const fileExtension = element.split(".").pop()?.toLowerCase();
-
-  if (
-    imageExtensions.includes(fileExtension) ||
-    fileExtension.includes("images")
-  ) {
-    formatFileMsg.value = { type: "img", value: element };
-  } else {
+  if (element.includes("youtube")) {
     formatFileMsg.value = { type: "ytvideo", value: element };
+  } else {
+    formatFileMsg.value = { type: "img", value: element };
   }
 };
 </script>
