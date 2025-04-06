@@ -37,11 +37,52 @@
     </template>
 
     <template #apiListBody>
-      <div class="sssw" v-for="(item, index) in postData" v-bind:key="index">
-        <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
-        {{ item.user.name }}
+      <div
+        class="postItemContainer"
+        v-for="(item, index) in postData"
+        v-bind:key="index"
+      >
+        <div class="topBar">
+          <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
+          {{ item.user.name }}
+
+          {{ dateTimeFormat.format(item.postTime) }}
+          <i class="fa-solid fa-ellipsis"></i>
+        </div>
+
         {{ item.mainMessage }}
-        <PostFile :fileMessage="item.fileMessage"></PostFile>
+        <PostFile
+          :fileMessage="item.fileMessage"
+          :style="{ padding: '10px 0 10px 0' }"
+        ></PostFile>
+
+        <div class="bottomBar">
+          <IconText
+            :icon="item.type.iconData"
+            :text="item.type.chineseName"
+          ></IconText>
+
+          <IconText
+            v-if="item.userIsGood"
+            icon="fa-regular fa-heart"
+            :text="`${item.good}`"
+          ></IconText>
+          <IconText
+            v-else
+            icon="fa-solid fa-heart"
+            :text="`${item.good}`"
+          ></IconText>
+
+          <IconText
+            icon="fa-regular fa-comment"
+            :text="`${item.count}`"
+          ></IconText>
+
+          <IconText
+            icon="fa-solid fa-arrow-up-right-from-square"
+            text="分享"
+          ></IconText>
+        </div>
       </div>
     </template>
 
@@ -62,10 +103,12 @@ import PostHomeViewModel from "@/view_models/post/post_home_view_model";
 import BaseView from "@/components/utilities/BaseView.vue";
 import PostService from "@/services/post_service";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
+import { DateFormatUtilities } from "@/global/date_time_format";
+import IconText from "@/components/utilities/IconText.vue";
 
 const viewModel = new PostHomeViewModel();
-
 const postData = ref<Post[]>([]);
+const dateTimeFormat = new DateFormatUtilities();
 
 function handleApiReturnData(data: Post[]) {
   postData.value.push(...data);
@@ -114,10 +157,22 @@ const getPostList: (page: number, size: number) => Promise<Post[]> = (
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.156);
 }
 
-.sssw {
+.postItemContainer {
   width: 100%;
-  background-color: rgb(54, 53, 53);
-  margin-top: 10px;
+  border-bottom: solid rgb(54, 53, 53) 1px;
+  overflow-wrap: anywhere;
+  padding: 10px 0 10px 0;
+}
+
+.postItemContainer .topBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.postItemContainer .bottomBar {
+  display: flex;
+  flex-direction: row;
 }
 
 .postCreateBtn {

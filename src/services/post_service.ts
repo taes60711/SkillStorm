@@ -5,6 +5,7 @@ import type { CreatePostRequestData } from "@/models/request/post/create_post_re
 import { userDataStore } from "@/global/user_data";
 import { APIHttpController } from "@/global/api_http_controller";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
+import { GlobalData } from "@/global/global_data";
 
 ///  文章相關API
 export default class PostService extends APIClient {
@@ -29,12 +30,21 @@ export default class PostService extends APIClient {
       `${API_CONFIG.ENDPOINTS.POST.GET_ALL}`,
       param
     );
-    console.log("reponseData", reponseData);
 
     if (typeof reponseData === "string") {
       return [];
     } else {
-      return reponseData;
+      const returnData: Post[] = reponseData.map((data) => {
+        const postBoardType =
+          GlobalData.postBoard.find((e) => e.type === data.type) ??
+          GlobalData.postBoard[0];
+        return {
+          ...data,
+          type: postBoardType,
+        };
+      });
+
+      return returnData;
     }
   }
 

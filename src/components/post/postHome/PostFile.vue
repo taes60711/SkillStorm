@@ -1,5 +1,5 @@
 <template>
-  <div class="itemContainer">
+  <div v-if="formatFileMsg.length > 0" class="itemContainer">
     <!-- 一個項目時顯示的 -->
     <div v-if="formatFileMsg.length === 1" class="postFileOneItemContainer">
       <img
@@ -211,11 +211,13 @@ const formatFileMessages = () => {
   for (let index = 0; index < fileMessage.value.length; index++) {
     const element = fileMessage.value[index];
 
-    if (element.includes("youtube")) {
-      formatFileMsg.value.push({ type: "ytvideo", value: element });
-    } else {
-      const imgstr: string = editTools.getRealImgStr(element);
-      formatFileMsg.value.push({ type: "img", value: imgstr });
+    if (element !== "") {
+      if (element.includes("youtube")) {
+        formatFileMsg.value.push({ type: "ytvideo", value: element });
+      } else {
+        const imgstr: string = editTools.getRealImgStr(element);
+        formatFileMsg.value.push({ type: "img", value: imgstr });
+      }
     }
   }
 
