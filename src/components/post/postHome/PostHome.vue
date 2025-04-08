@@ -42,47 +42,49 @@
         v-for="(item, index) in postData"
         v-bind:key="index"
       >
-        <div class="topBar">
-          <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
-          {{ item.user.name }}
+        <MainButton :needOpacity="false" :onPress="() => ss(item)">
+          <div class="topBar">
+            <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
+            {{ item.user.name }}
 
-          {{ dateTimeFormat.format(item.postTime) }}
-          <i class="fa-solid fa-ellipsis"></i>
-        </div>
+            {{ dateTimeFormat.format(item.postTime) }}
+            <i class="fa-solid fa-ellipsis"></i>
+          </div>
 
-        {{ item.mainMessage }}
-        <PostFile
-          :fileMessage="item.fileMessage"
-          :style="{ padding: '10px 0 10px 0' }"
-        ></PostFile>
+          {{ item.mainMessage }}
+          <PostFile
+            :fileMessage="item.fileMessage"
+            :style="{ padding: '10px 0 10px 0' }"
+          ></PostFile>
 
-        <div class="bottomBar">
-          <IconText
-            :icon="item.type.iconData"
-            :text="item.type.chineseName"
-          ></IconText>
+          <div class="bottomBar">
+            <IconText
+              :icon="item.type.iconData"
+              :text="item.type.chineseName"
+            ></IconText>
 
-          <IconText
-            v-if="item.userIsGood"
-            icon="fa-regular fa-heart"
-            :text="`${item.good}`"
-          ></IconText>
-          <IconText
-            v-else
-            icon="fa-solid fa-heart"
-            :text="`${item.good}`"
-          ></IconText>
+            <IconText
+              v-if="item.userIsGood"
+              icon="fa-regular fa-heart"
+              :text="`${item.good}`"
+            ></IconText>
+            <IconText
+              v-else
+              icon="fa-solid fa-heart"
+              :text="`${item.good}`"
+            ></IconText>
 
-          <IconText
-            icon="fa-regular fa-comment"
-            :text="`${item.count}`"
-          ></IconText>
+            <IconText
+              icon="fa-regular fa-comment"
+              :text="`${item.count}`"
+            ></IconText>
 
-          <IconText
-            icon="fa-solid fa-arrow-up-right-from-square"
-            text="分享"
-          ></IconText>
-        </div>
+            <IconText
+              icon="fa-solid fa-arrow-up-right-from-square"
+              text="分享"
+            ></IconText>
+          </div>
+        </MainButton>
       </div>
     </template>
 
@@ -106,9 +108,13 @@ import type { Post } from "@/models/reponse/post/post_reponse_data";
 import { DateFormatUtilities } from "@/global/date_time_format";
 import IconText from "@/components/utilities/IconText.vue";
 
+const dateTimeFormat = new DateFormatUtilities();
 const viewModel = new PostHomeViewModel();
 const postData = ref<Post[]>([]);
-const dateTimeFormat = new DateFormatUtilities();
+
+function ss(data: Post) {
+  console.log(data);
+}
 
 function handleApiReturnData(data: Post[]) {
   postData.value.push(...data);
@@ -161,7 +167,7 @@ const getPostList: (page: number, size: number) => Promise<Post[]> = (
   width: 100%;
   border-bottom: solid rgb(54, 53, 53) 1px;
   overflow-wrap: anywhere;
-  padding: 10px 0 10px 0;
+  padding: 20px 0;
 }
 
 .postItemContainer .topBar {

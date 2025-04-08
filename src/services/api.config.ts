@@ -21,6 +21,7 @@ export const API_CONFIG = {
     },
     COURSE: {
       CREATE_COURSE: "/createCourse",
+      GET_ALL: "/getAllCourses",
     },
   },
 };

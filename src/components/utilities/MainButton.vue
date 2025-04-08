@@ -46,6 +46,7 @@ const hasSlot = slots.default != null;
   border-radius: 10px;
   display: flex;
   align-items: center;
+  color: white;
 }
 
 .mainBtnContainer:hover {
