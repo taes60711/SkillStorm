@@ -2,7 +2,12 @@
   <button
     v-if="!hasSlot && props.text != null"
     class="mainBtnContainer"
-    @click="props.onPress"
+    @click="
+      (e) => {
+        e.stopPropagation();
+        props.onPress();
+      }
+    "
   >
     {{ props.text }}
   </button>
@@ -12,7 +17,12 @@
       slotContainer: needOpacity,
       noOpacitySlotContainer: !needOpacity,
     }"
-    @click="props.onPress"
+    @click="
+      (e) => {
+        e.stopPropagation();
+        props.onPress();
+      }
+    "
   >
     <slot></slot>
   </div>
