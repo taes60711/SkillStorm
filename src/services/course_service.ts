@@ -57,6 +57,8 @@ export default class CourseService extends APIClient {
       param
     );
 
+    console.log(reponseData);
+
     if (typeof reponseData === "string") {
       return [];
     } else {

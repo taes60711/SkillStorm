@@ -12,9 +12,9 @@ export interface Course {
   content: string;
   beforeNeed: string;
   prStory: string;
-  chapterList: CourseChapter[];
+  courseChapters: CourseChapter[];
   courseLearningSkills: string[];
-  postTime: string;
+  createdTime: string;
   type: string;
   isPublic: boolean;
   signUpStatus: string;

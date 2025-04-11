@@ -42,13 +42,31 @@
         v-for="(item, index) in postData"
         v-bind:key="index"
       >
-        <MainButton :needOpacity="false" :onPress="() => ss(item)">
+        <MainButton
+          :needOpacity="false"
+          :onPress="() => topBarItemOnchange(item)"
+        >
           <div class="topBar">
-            <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
-            {{ item.user.name }}
+            <div class="topUserBar">
+              <Avatar
+                :imgurl="item.user.image"
+                size="40px"
+                borderRadius="50px"
+              />
+              <p :style="{ paddingLeft: '10px' }">{{ item.user.name }}</p>
+              <p :style="{ color: 'rgb(132, 131, 131)' }">
+                •{{ dateTimeFormat.format(item.postTime) }}
+              </p>
+            </div>
 
-            {{ dateTimeFormat.format(item.postTime) }}
-            <i class="fa-solid fa-ellipsis"></i>
+            <MainButton :onPress="() => onChangePage('back')"> </MainButton>
+
+            <MainButton
+              :onPress="() => openItemSetting()"
+              :style="{ paddingRight: '16px' }"
+            >
+              <i class="fa-solid fa-ellipsis"></i>
+            </MainButton>
           </div>
 
           {{ item.mainMessage }}
@@ -61,27 +79,32 @@
             <IconText
               :icon="item.type.iconData"
               :text="item.type.chineseName"
+              class="bottombarItem"
             ></IconText>
 
             <IconText
               v-if="item.userIsGood"
               icon="fa-regular fa-heart"
               :text="`${item.good}`"
+              class="bottombarItem"
             ></IconText>
             <IconText
               v-else
               icon="fa-solid fa-heart"
               :text="`${item.good}`"
+              class="bottombarItem"
             ></IconText>
 
             <IconText
               icon="fa-regular fa-comment"
               :text="`${item.count}`"
+              class="bottombarItem"
             ></IconText>
 
             <IconText
               icon="fa-solid fa-arrow-up-right-from-square"
               text="分享"
+              class="bottombarItem"
             ></IconText>
           </div>
         </MainButton>
@@ -112,7 +135,11 @@ const dateTimeFormat = new DateFormatUtilities();
 const viewModel = new PostHomeViewModel();
 const postData = ref<Post[]>([]);
 
-function ss(data: Post) {
+function openItemSetting() {
+  console.log("www");
+}
+
+function topBarItemOnchange(data: Post) {
   console.log(data);
 }
 
@@ -167,18 +194,31 @@ const getPostList: (page: number, size: number) => Promise<Post[]> = (
   width: 100%;
   border-bottom: solid rgb(54, 53, 53) 1px;
   overflow-wrap: anywhere;
-  padding: 20px 0;
+  padding: 15px 0px;
 }
 
 .postItemContainer .topBar {
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-bottom: 10px;
+}
+
+.postItemContainer .topUserBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
 }
 
 .postItemContainer .bottomBar {
   display: flex;
   flex-direction: row;
+  padding-top: 10px;
+}
+
+.bottombarItem {
+  padding-right: 13px;
 }
 
 .postCreateBtn {

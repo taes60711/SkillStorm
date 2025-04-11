@@ -10,16 +10,43 @@
         v-bind:key="index"
       >
         <div class="courseItemTopbar">
-          <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
-          {{ item.user.name }}
+          <div class="topUserBar">
+            <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
+            <p :style="{ paddingLeft: '10px' }">{{ item.user.name }}</p>
+              <p :style="{ color: 'rgb(132, 131, 131)' }">
+                •{{ dateTimeFormat.format(item.createdTime) }}
+              </p>
+          </div>
 
-          {{ dateTimeFormat.format(item.postTime) }}
-          <i class="fa-solid fa-ellipsis"></i>
+          <MainButton 
+            :onPress="()=>openItemSetting()"    
+            :style="{ paddingRight: '16px' }">           
+            <i class="fa-solid fa-ellipsis"></i>
+          </MainButton>
         </div>
-        {{ item.title }}
-        {{ item.content }}
+        <p>{{ item.title }}</p>
+        <p>{{ item.beforeNeed }}</p>
+        <p>{{ item.content }}</p>
+        <p>{{ item.needLevel }}</p>
 
-        <div v-html="richTextEditor.formatToViewStr(item.prStory)"></div>
+        <div class="typebar">
+          <i class="fa-solid fa-tag" :style="{paddingRight:'5px'}"></i>
+          <p>{{ new skilltype().getTypeName(item.type) }}</p>
+        </div>
+
+      
+     
+        <p v-for="(skills, index) in item.courseLearningkillList" >
+          {{ skills }}
+        </p>
+
+        <p v-for="(courseChapterItem, index) in item.courseChapters">
+          <p>{{ courseChapterItem.chapterName }}</p>
+          <div v-for="(chapterContent, index) in courseChapterItem.content">
+            <span v-html="chapterContent"></span>
+          </div>
+        </p>
+
       </div>
     </template>
   </BaseView>
@@ -36,9 +63,15 @@ import { ref } from "vue";
 import Avatar from "@/components/utilities/Avatar.vue";
 import RichTextEditorViewModel from "@/view_models/rich_text_ediotor_view_model";
 import { DateFormatUtilities } from "@/global/date_time_format";
+import MainButton from "../utilities/MainButton.vue";
+import { skilltype } from "@/models/skill_type";
 
 const richTextEditor: RichTextEditorViewModel = new RichTextEditorViewModel();
 const dateTimeFormat = new DateFormatUtilities();
+
+function openItemSetting() {
+  console.log(new skilltype().getTypeName(0));
+}
 
 ///跳至文章編集頁面
 const goToEdit = () => {
@@ -72,6 +105,20 @@ const getCourseList: (page: number, size: number) => Promise<Course[]> = (
 }
 
 .courseItemContainer .courseItemTopbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.courseItemTopbar .topUserBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+}
+
+
+.typebar{
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -1,4 +1,4 @@
-import { SkillType, type SkillTypeModel } from "@/models/skill_type";
+import { ProgramSkillType, type SkillTypeModel } from "@/models/skill_type";
 import { ref } from "vue";
 import RichTextEditorViewModel from "../rich_text_ediotor_view_model";
 import type { SkillData } from "@/models/reponse/skill_reponse_data";
@@ -15,7 +15,10 @@ export default class CourseEditViewModel {
   outlineController = ref<string>("");
   beforeNeedController = ref<string>("");
   selectedLevel = ref<string>("1");
-  selectedType = ref<SkillTypeModel>({ id: SkillType.frontend, name: "前端" });
+  selectedType = ref<SkillTypeModel>({
+    id: ProgramSkillType.frontend,
+    name: "前端",
+  });
   isPublic = ref<boolean>(true);
   htmlString = ref<string>("");
 
@@ -117,7 +120,7 @@ export default class CourseEditViewModel {
     this.outlineController.value = "";
     this.beforeNeedController.value = "";
     this.selectedLevel.value = "1";
-    this.selectedType.value = { id: SkillType.frontend, name: "前端" };
+    this.selectedType.value = { id: ProgramSkillType.frontend, name: "前端" };
     this.isPublic.value = true;
     this.htmlString.value = "";
     this.selectedSkill.value = [];
