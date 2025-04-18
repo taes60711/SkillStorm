@@ -1,14 +1,25 @@
 <template>
   <BaseView :apiListFunc="getCourseList" @apiReturnData="handleApiReturnData">
     <template #apiListHeader>
-      <button @click="goToEdit">發文</button>
+      <MainButton 
+        :onPress="goToEdit"    
+
+        class="createButton"
+        >
+        <i class="fa-solid fa-pen" :style="{'fontSize':'20px'}"></i>
+      </MainButton>     
     </template>
+
     <template #apiListBody>
       <div
         class="courseItemContainer"
         v-for="(item, index) in courseData"
         v-bind:key="index"
       >
+
+      <MainButton 
+      :needOpacity="false"
+      :onPress="() => toDetailPage(item)" >
         <div class="courseItemTopbar">
           <div class="topUserBar">
             <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
@@ -31,14 +42,17 @@
 
         <div class="typebar">
           <i class="fa-solid fa-tag" :style="{paddingRight:'5px'}"></i>
-          <p>{{ new skilltype().getTypeName(item.type) }}</p>
+          <p>{{ new SkillType().getTypeName(item.type) }}</p>
         </div>
 
-      
+        <div class="skillbar">
+          <SkillTag :skillName='skills' v-for="(skills, index) in item.courseLearningkillList"></SkillTag>
+        </div>
+
      
-        <p v-for="(skills, index) in item.courseLearningkillList" >
-          {{ skills }}
-        </p>
+      <p :style="{ color: 'rgb(132, 131, 131)' }">
+          最終更新日{{ dateTimeFormat.format(item.createdTime) }}
+      </p>
 
         <p v-for="(courseChapterItem, index) in item.courseChapters">
           <p>{{ courseChapterItem.chapterName }}</p>
@@ -46,6 +60,8 @@
             <span v-html="chapterContent"></span>
           </div>
         </p>
+      </MainButton>
+ 
 
       </div>
     </template>
@@ -64,13 +80,19 @@ import Avatar from "@/components/utilities/Avatar.vue";
 import RichTextEditorViewModel from "@/view_models/rich_text_ediotor_view_model";
 import { DateFormatUtilities } from "@/global/date_time_format";
 import MainButton from "../utilities/MainButton.vue";
-import { skilltype } from "@/models/skill_type";
+import { SkillType } from "@/models/skill_type";
+import SkillTag from "@/components/utilities/SkillTag.vue";
 
 const richTextEditor: RichTextEditorViewModel = new RichTextEditorViewModel();
 const dateTimeFormat = new DateFormatUtilities();
 
+
+function toDetailPage(data: Course) {
+  console.log(data);
+}
+
 function openItemSetting() {
-  console.log(new skilltype().getTypeName(0));
+  console.log(new SkillType().getTypeName(0));
 }
 
 ///跳至文章編集頁面
@@ -102,6 +124,7 @@ const getCourseList: (page: number, size: number) => Promise<Course[]> = (
   border-bottom: solid rgb(54, 53, 53) 1px;
   overflow-wrap: anywhere;
   padding: 10px 0 10px 0;
+  margin-bottom: 10px;
 }
 
 .courseItemContainer .courseItemTopbar {
@@ -117,10 +140,22 @@ const getCourseList: (page: number, size: number) => Promise<Course[]> = (
   flex-grow: 1;
 }
 
-
 .typebar{
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.createButton{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  background-color: rgb(80, 82, 82);
 }
 </style>

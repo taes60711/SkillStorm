@@ -1,5 +1,8 @@
 <template>
-  <BaseView :apiListFunc="getPostList" @apiReturnData="handleApiReturnData">
+  <BaseView
+    :apiListFunc="viewModel.getNewPostList"
+    @apiReturnData="handleApiReturnData"
+  >
     <template #apiListHeader>
       <div class="postTab">
         <button
@@ -69,7 +72,10 @@
             </MainButton>
           </div>
 
-          {{ item.mainMessage }}
+          <p class="MainMsg">
+            {{ item.mainMessage }}
+          </p>
+
           <PostFile
             :fileMessage="item.fileMessage"
             :style="{ padding: '10px 0 10px 0' }"
@@ -146,17 +152,6 @@ function topBarItemOnchange(data: Post) {
 function handleApiReturnData(data: Post[]) {
   postData.value.push(...data);
 }
-
-const getPostList: (page: number, size: number) => Promise<Post[]> = (
-  page,
-  size
-) => {
-  return new PostService().getPostByViewer(
-    page,
-    size,
-    userDataStore.userData.value.uid
-  );
-};
 </script>
 
 <style scoped>
@@ -215,6 +210,13 @@ const getPostList: (page: number, size: number) => Promise<Post[]> = (
   display: flex;
   flex-direction: row;
   padding-top: 10px;
+}
+
+.postItemContainer .MainMsg {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .bottombarItem {

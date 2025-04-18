@@ -2,7 +2,7 @@
 import CourseEditViewModel from "@/view_models/course/course_edit_view_model";
 import Dropdown from "primevue/dropdown";
 import RichTextEditor from "../utilities/RichTextEditor.vue";
-import { skilltype } from "@/models/skill_type";
+import { SkillType } from "@/models/skill_type";
 import { MultiSelect } from "primevue";
 import { GlobalData } from "@/global/global_data";
 import CourseChapterEdit from "./CourseChapterEdit.vue";
@@ -46,7 +46,7 @@ const levelItems: string[] = ["1", "2", "3", "4", "5"];
     <Dropdown
       v-model="viewModel.selectedType.value"
       :panelStyle="{ backgroundColor: '#FF6347' }"
-      :options="new skilltype().types"
+      :options="new SkillType().types"
       optionLabel="name"
       placeholder="類別"
     />

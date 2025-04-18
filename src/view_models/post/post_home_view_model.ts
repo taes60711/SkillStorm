@@ -1,6 +1,9 @@
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import PostEditor from "@/components/post/PostEditor.vue";
 import { ref } from "vue";
+import PostService from "@/services/post_service";
+import { userDataStore } from "@/global/user_data";
+import type { Post } from "@/models/reponse/post/post_reponse_data";
 
 export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();
@@ -16,6 +19,28 @@ export default class PostHomeViewModel {
       false,
       "rgba(0, 0, 0, 0.4)",
       "postedit"
+    );
+  };
+
+  getNewPostList: (page: number, size: number) => Promise<Post[]> = (
+    page,
+    size
+  ) => {
+    return new PostService().getPostBytime(
+      page,
+      size,
+      userDataStore.userData.value.uid
+    );
+  };
+
+  getViewerPostList: (page: number, size: number) => Promise<Post[]> = (
+    page,
+    size
+  ) => {
+    return new PostService().getPostByViewer(
+      page,
+      size,
+      userDataStore.userData.value.uid
     );
   };
 

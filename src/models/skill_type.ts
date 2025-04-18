@@ -40,7 +40,6 @@ const programLanguageType: string[] = [
   "PHP",
   "Node.js",
   "Python",
-  "Swift",
   "Matlab",
   "Shell Script",
 ];
@@ -61,7 +60,7 @@ export interface SkillTypeModel {
   name: string;
 }
 
-export class skilltype {
+export class SkillType {
   types: SkillTypeModel[] = [
     { id: ProgramSkillType.frontend, name: "前端" },
     { id: ProgramSkillType.backend, name: "後端" },

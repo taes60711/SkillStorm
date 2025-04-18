@@ -18,6 +18,7 @@ export const API_CONFIG = {
       GET_ALL_POST_BOARD: "/getAllPostBoard",
       CREATE_POST: "/createPost",
       GET_ALL: "/getAll",
+      GET_NEW: "/getNewPosts",
     },
     COURSE: {
       CREATE_COURSE: "/createCourse",
