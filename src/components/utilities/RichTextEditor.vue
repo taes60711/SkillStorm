@@ -111,7 +111,7 @@ const addCustomButton = () => {
 const insertCustomImage = (imgUrl: string) => {
   console.log(imgUrl);
   const editor: Quill = editorRef.value?.quill;
-  const cursorPos: number = editor.getSelection()?.index || 0;
+  const cursorPos: number = editor.getSelection()?.index || value.value.length;
   const inputed: string = `<img src="${imgUrl}">`;
   editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
   value.value = editor.root.innerHTML;
@@ -120,7 +120,7 @@ const insertCustomImage = (imgUrl: string) => {
 
 const insertCustomVideo = (videoUrl: string) => {
   const editor: Quill = editorRef.value?.quill;
-  const cursorPos: number = editor.getSelection()?.index || 0;
+  const cursorPos: number = editor.getSelection()?.index || value.value.length;
   const ytId: string = editTools.getYtvideoID(videoUrl);
   const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
 
@@ -132,7 +132,7 @@ const insertCustomVideo = (videoUrl: string) => {
 
 const insertCustomLink = (link: string, linkText: string) => {
   const editor: Quill = editorRef.value?.quill;
-  const cursorPos: number = editor.getSelection()?.index || 0;
+  const cursorPos: number = editor.getSelection()?.index || value.value.length;
   const inputed: string = `<p><a href=${link} rel="noopener noreferrer" target="_blank">${linkText}</a><br></p>`;
   editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
   value.value = editor.root.innerHTML;
