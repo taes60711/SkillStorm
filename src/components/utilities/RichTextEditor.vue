@@ -19,6 +19,7 @@ const youtubeController = ref<string>("");
 const showLinkModal = ref(false);
 const LinkTextController = ref<string>("");
 const LinkController = ref<string>("");
+const lastCursorIndex = ref<number>(0);
 
 const COLORS = [
   "#000000",
@@ -65,8 +66,30 @@ const editorModules = {
 onMounted(async () => {
   setTimeout(() => {
     addCustomButton();
+    registerSelectionChange();
   }, 100);
 });
+
+/// 監聽光標最後位置
+const registerSelectionChange = () => {
+  const quill = editorRef.value?.quill;
+  if (!quill) return;
+
+  quill.on("selection-change", (range: any) => {
+    if (range) {
+      lastCursorIndex.value = range.index;
+      console.log("光標位置變化:", lastCursorIndex.value);
+    }
+  });
+
+  quill.on("text-change", () => {
+    const selection = quill.getSelection();
+    if (selection) {
+      lastCursorIndex.value = selection.index;
+      console.log("[text-change] 光標位置更新:", lastCursorIndex.value);
+    }
+  });
+};
 
 const addCustomButton = () => {
   const quill = editorRef.value?.quill;
@@ -111,7 +134,7 @@ const addCustomButton = () => {
 const insertCustomImage = (imgUrl: string) => {
   console.log(imgUrl);
   const editor: Quill = editorRef.value?.quill;
-  const cursorPos: number = editor.getSelection()?.index || value.value.length;
+  const cursorPos: number = lastCursorIndex.value;
   const inputed: string = `<img src="${imgUrl}">`;
   editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
   value.value = editor.root.innerHTML;
@@ -120,7 +143,7 @@ const insertCustomImage = (imgUrl: string) => {
 
 const insertCustomVideo = (videoUrl: string) => {
   const editor: Quill = editorRef.value?.quill;
-  const cursorPos: number = editor.getSelection()?.index || value.value.length;
+  const cursorPos: number = lastCursorIndex.value;
   const ytId: string = editTools.getYtvideoID(videoUrl);
   const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
 
@@ -132,7 +155,7 @@ const insertCustomVideo = (videoUrl: string) => {
 
 const insertCustomLink = (link: string, linkText: string) => {
   const editor: Quill = editorRef.value?.quill;
-  const cursorPos: number = editor.getSelection()?.index || value.value.length;
+  const cursorPos: number = lastCursorIndex.value;
   const inputed: string = `<p><a href=${link} rel="noopener noreferrer" target="_blank">${linkText}</a><br></p>`;
   editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
   value.value = editor.root.innerHTML;
