@@ -4,11 +4,11 @@ import { ref } from "vue";
 import PostService from "@/services/post_service";
 import { userDataStore } from "@/global/user_data";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
+import router from "@/router/router_manager";
+import { RouterPath } from "@/router/router_path";
 
 export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();
-
-  nowHomePage = ref<string>("new");
 
   ///開啟文章發佈頁面
   createEditPage = () => {
@@ -59,6 +59,11 @@ export default class PostHomeViewModel {
 
   changeHomePage = (homePageType: string) => {
     console.log(homePageType);
-    this.nowHomePage.value = homePageType;
+
+    if (homePageType === "new") {
+      router.push(RouterPath.HOME.POST.HOME.path);
+    } else {
+      router.push(RouterPath.HOME.POST.POPULAR.path);
+    }
   };
 }

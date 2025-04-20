@@ -7,7 +7,6 @@ import { ModalController } from "./components/utilities/Modal/ModalController";
 import phoneHintModal from "./components/utilities/Modal/phoneHintModal.vue";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { RouterPath } from "./router/router_path";
 
 const isInit = ref<boolean>(false);
 
@@ -65,9 +64,7 @@ const showPhoneDownloadHint = (windowWidth: number) => {
 
 // 讓 router-view 強制重建
 const needReloadView = computed(() => {
-  return route.name === RouterPath.HOME.POST.BOARD.name
-    ? route.fullPath
-    : "static";
+  return route.name === "postBoard" ? route.fullPath : "static";
 });
 </script>
 

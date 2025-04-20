@@ -1,19 +1,19 @@
 <template>
   <BaseView
-    :apiListFunc="viewModel.getNewPostList"
+    :apiListFunc="viewModel.getViewerPostList"
     @apiReturnData="handleApiReturnData"
   >
     <template #apiListHeader>
       <div class="postTab">
         <button
           @click="() => viewModel.changeHomePage('new')"
-          class="choicePostTabBtn"
+          class="postTabBtn"
         >
           最新
         </button>
         <button
           @click="() => viewModel.changeHomePage('popular')"
-          class="postTabBtn"
+          class="choicePostTabBtn"
         >
           人氣
         </button>

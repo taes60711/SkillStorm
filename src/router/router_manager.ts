@@ -9,6 +9,7 @@ const router = createRouter({
     RouterPath.AUTH.REGISTER,
     RouterPath.AUTH.PWDFORGOT,
     RouterPath.HOME.POST.HOME,
+    RouterPath.HOME.POST.POPULAR,
     RouterPath.HOME.POST.BOARD,
     RouterPath.HOME.COURSE.HOME,
     RouterPath.HOME.SUGGESTUSERS.HOME,

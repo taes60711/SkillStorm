@@ -9,6 +9,7 @@ import InfoBar from "@/components/utilities/InfoBar/InfoBar.vue";
 import CourseHome from "@/components/course/CourseHome.vue";
 import SuggestUsersHome from "@/components/suggestusers/SuggestUsersHome.vue";
 import PostByBoard from "@/components/post/PostByBoard.vue";
+import PostPopular from "@/components/post/postHome/PostPopular.vue";
 
 export const RouterPath = {
   HOME: {
@@ -21,6 +22,14 @@ export const RouterPath = {
           aside: InfoBar,
         },
         name: "Home",
+      },
+      POPULAR: {
+        path: "/popular",
+        components: {
+          default: PostPopular,
+          aside: InfoBar,
+        },
+        name: "Popular",
       },
       BOARD: {
         path: "/post/board/:boardtype",
