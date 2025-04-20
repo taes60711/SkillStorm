@@ -18,7 +18,7 @@ export class GlobalData {
       GlobalData.instance = new GlobalData();
     }
 
-    APIHttpController.getInstance().init(DevType.release);
+    APIHttpController.getInstance().init(DevType.debug);
 
     await this.getPostBoardData();
     await this.getSkillData();

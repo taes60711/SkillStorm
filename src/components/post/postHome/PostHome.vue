@@ -132,7 +132,6 @@ import PostFile from "./PostFile.vue";
 import { ref } from "vue";
 import PostHomeViewModel from "@/view_models/post/post_home_view_model";
 import BaseView from "@/components/utilities/BaseView.vue";
-import PostService from "@/services/post_service";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
 import { DateFormatUtilities } from "@/global/date_time_format";
 import IconText from "@/components/utilities/IconText.vue";
@@ -214,8 +213,9 @@ function handleApiReturnData(data: Post[]) {
 
 .postItemContainer .MainMsg {
   display: -webkit-box;
-  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   overflow: hidden;
 }
 

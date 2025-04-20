@@ -44,6 +44,19 @@ export default class PostHomeViewModel {
     );
   };
 
+  getBoardPostList(
+    type: number
+  ): (page: number, size: number) => Promise<Post[]> {
+    return (page: number, size: number): Promise<Post[]> => {
+      return new PostService().getPostByType(
+        page,
+        size,
+        userDataStore.userData.value.uid,
+        type
+      );
+    };
+  }
+
   changeHomePage = (homePageType: string) => {
     console.log(homePageType);
     this.nowHomePage.value = homePageType;

@@ -5,6 +5,9 @@ import { GlobalData } from "./global/global_data";
 import { ref } from "vue";
 import { ModalController } from "./components/utilities/Modal/ModalController";
 import phoneHintModal from "./components/utilities/Modal/phoneHintModal.vue";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { RouterPath } from "./router/router_path";
 
 const isInit = ref<boolean>(false);
 
@@ -12,6 +15,8 @@ const phoneWidth: number = 600; // 預設手機視窗寬度
 
 const isShowModal = ref<boolean>(false);
 const modalController = new ModalController();
+
+const route = useRoute();
 
 onMounted(async () => {
   // 從 localStorage 初始化用戶資料
@@ -57,11 +62,18 @@ const showPhoneDownloadHint = (windowWidth: number) => {
     }
   }
 };
+
+// 讓 router-view 強制重建
+const needReloadView = computed(() => {
+  return route.name === RouterPath.HOME.POST.BOARD.name
+    ? route.fullPath
+    : "static";
+});
 </script>
 
 <template>
   <router-view v-if="isInit" name="aside"></router-view>
-  <router-view v-if="isInit"></router-view>
+  <router-view v-if="isInit" :key="needReloadView"></router-view>
 </template>
 
 <style>

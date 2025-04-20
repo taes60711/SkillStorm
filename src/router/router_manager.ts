@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, useRoute } from "vue-router";
 import { RouterPath } from "./router_path";
 import { userDataStore } from "@/global/user_data"; // 引入全局用戶資料管理
 
