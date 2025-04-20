@@ -29,7 +29,7 @@ const props = defineProps({
   padding: 3px 8px;
   border-radius: 12px;
   align-items: center;
-  margin-right: 10px;
+  margin-left: 5px;
 }
 
 .skillContainer .levelContaier {
@@ -40,6 +40,6 @@ const props = defineProps({
   align-items: center;
   justify-content: center;
   border-radius: 50px;
-  margin-right: 5px;
+  margin-left: 5px;
 }
 </style>

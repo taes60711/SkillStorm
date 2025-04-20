@@ -1,13 +1,9 @@
 <template>
   <BaseView :apiListFunc="getCourseList" @apiReturnData="handleApiReturnData">
     <template #apiListHeader>
-      <MainButton 
-        :onPress="goToEdit"    
-
-        class="createButton"
-        >
-        <i class="fa-solid fa-pen" :style="{'fontSize':'20px'}"></i>
-      </MainButton>     
+      <MainButton :onPress="goToEdit" class="createButton">
+        <i class="fa-solid fa-pen" :style="{ fontSize: '20px' }"></i>
+      </MainButton>
     </template>
 
     <template #apiListBody>
@@ -16,53 +12,47 @@
         v-for="(item, index) in courseData"
         v-bind:key="index"
       >
-
-      <MainButton 
-      :needOpacity="false"
-      :onPress="() => toDetailPage(item)" >
-        <div class="courseItemTopbar">
-          <div class="topUserBar">
-            <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
-            <p :style="{ paddingLeft: '10px' }">{{ item.user.name }}</p>
+        <MainButton :needOpacity="false" :onPress="() => toDetailPage(item)">
+          <div class="courseItemTopbar">
+            <div class="topUserBar">
+              <Avatar
+                :imgurl="item.user.image"
+                size="40px"
+                borderRadius="50px"
+              />
+              <p :style="{ paddingLeft: '10px' }">{{ item.user.name }}</p>
               <p :style="{ color: 'rgb(132, 131, 131)' }">
                 •{{ dateTimeFormat.format(item.createdTime) }}
               </p>
+            </div>
+
+            <MainButton
+              :onPress="() => openItemSetting()"
+              :style="{ paddingRight: '16px' }"
+            >
+              <i class="fa-solid fa-ellipsis"></i>
+            </MainButton>
+          </div>
+          <p>{{ item.title }}</p>
+
+          <div class="typebar">
+            <i class="fa-solid fa-tag" :style="{ paddingRight: '5px' }"></i>
+            <p>{{ new SkillType().getTypeName(item.type) }}</p>
+
+            <SkillTag
+              :skillName="skills"
+              v-for="(skills, index) in item.courseLearningkillList"
+            ></SkillTag>
           </div>
 
-          <MainButton 
-            :onPress="()=>openItemSetting()"    
-            :style="{ paddingRight: '16px' }">           
-            <i class="fa-solid fa-ellipsis"></i>
-          </MainButton>
-        </div>
-        <p>{{ item.title }}</p>
-        <p>{{ item.beforeNeed }}</p>
-        <p>{{ item.content }}</p>
-        <p>{{ item.needLevel }}</p>
+          <p>{{ item.beforeNeed }}</p>
+          <p>程度{{ item.needLevel }}</p>
+          <p>{{ item.content }}</p>
 
-        <div class="typebar">
-          <i class="fa-solid fa-tag" :style="{paddingRight:'5px'}"></i>
-          <p>{{ new SkillType().getTypeName(item.type) }}</p>
-        </div>
-
-        <div class="skillbar">
-          <SkillTag :skillName='skills' v-for="(skills, index) in item.courseLearningkillList"></SkillTag>
-        </div>
-
-     
-      <p :style="{ color: 'rgb(132, 131, 131)' }">
-          最終更新日{{ dateTimeFormat.format(item.createdTime) }}
-      </p>
-
-        <p v-for="(courseChapterItem, index) in item.courseChapters">
-          <p>{{ courseChapterItem.chapterName }}</p>
-          <div v-for="(chapterContent, index) in courseChapterItem.content">
-            <span v-html="chapterContent"></span>
-          </div>
-        </p>
-      </MainButton>
- 
-
+          <p :style="{ color: 'rgb(132, 131, 131)' }">
+            最終更新日{{ dateTimeFormat.format(item.createdTime) }}
+          </p>
+        </MainButton>
       </div>
     </template>
   </BaseView>
@@ -77,18 +67,27 @@ import { userDataStore } from "@/global/user_data";
 import type { Course } from "@/models/reponse/course/course_reponse_data";
 import { ref } from "vue";
 import Avatar from "@/components/utilities/Avatar.vue";
-import RichTextEditorViewModel from "@/view_models/rich_text_ediotor_view_model";
 import { DateFormatUtilities } from "@/global/date_time_format";
 import MainButton from "../utilities/MainButton.vue";
 import { SkillType } from "@/models/skill_type";
 import SkillTag from "@/components/utilities/SkillTag.vue";
+import { ModalController } from "../utilities/Modal/ModalController";
+import CourseDetail from "@/components/course/CourseDetail.vue";
 
-const richTextEditor: RichTextEditorViewModel = new RichTextEditorViewModel();
+const modalController: ModalController = new ModalController();
 const dateTimeFormat = new DateFormatUtilities();
-
 
 function toDetailPage(data: Course) {
   console.log(data);
+
+  modalController.show(
+    CourseDetail,
+    { courseData: data },
+    true,
+    false,
+    "rgba(0, 0, 0, 0.4)",
+    "CourseDetail"
+  );
 }
 
 function openItemSetting() {
@@ -140,13 +139,13 @@ const getCourseList: (page: number, size: number) => Promise<Course[]> = (
   flex-grow: 1;
 }
 
-.typebar{
+.typebar {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.createButton{
+.createButton {
   position: fixed;
   display: flex;
   align-items: center;
