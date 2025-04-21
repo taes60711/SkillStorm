@@ -33,11 +33,14 @@
               <i class="fa-solid fa-ellipsis"></i>
             </MainButton>
           </div>
-          <p>{{ item.title }}</p>
+          <p class="title">{{ item.title }}</p>
 
           <div class="typebar">
-            <i class="fa-solid fa-tag" :style="{ paddingRight: '5px' }"></i>
-            <p>{{ new SkillType().getTypeName(item.type) }}</p>
+            <IconText
+              icon="fa-solid fa-tag"
+              :text="new SkillType().getTypeName(item.type)"
+              :style="{ paddingRight: '5px' }"
+            ></IconText>
 
             <SkillTag
               :skillName="skills"
@@ -45,13 +48,20 @@
             ></SkillTag>
           </div>
 
-          <p>{{ item.beforeNeed }}</p>
-          <p>程度{{ item.needLevel }}</p>
-          <p>{{ item.content }}</p>
-
-          <p :style="{ color: 'rgb(132, 131, 131)' }">
-            最終更新日{{ dateTimeFormat.format(item.createdTime) }}
+          <div class="introductionContainer">
+            {{ item.beforeNeed }}
+          </div>
+          <p>
+            程度
+            <i
+              v-for="(skills, index) in item.needLevel"
+              class="fa-solid fa-splotch"
+            ></i>
           </p>
+
+          <div class="introductionContainer">
+            {{ item.content }}
+          </div>
         </MainButton>
       </div>
     </template>
@@ -73,6 +83,7 @@ import { SkillType } from "@/models/skill_type";
 import SkillTag from "@/components/utilities/SkillTag.vue";
 import { ModalController } from "../utilities/Modal/ModalController";
 import CourseDetail from "@/components/course/CourseDetail.vue";
+import IconText from "@/components/utilities/IconText.vue";
 
 const modalController: ModalController = new ModalController();
 const dateTimeFormat = new DateFormatUtilities();
@@ -84,7 +95,7 @@ function toDetailPage(data: Course) {
     CourseDetail,
     { courseData: data },
     true,
-    false,
+    true,
     "rgba(0, 0, 0, 0.4)",
     "CourseDetail"
   );
@@ -132,11 +143,24 @@ const getCourseList: (page: number, size: number) => Promise<Course[]> = (
   align-items: center;
 }
 
+.courseItemContainer .title {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 5px 0px;
+}
+
 .courseItemTopbar .topUserBar {
   display: flex;
   flex-direction: row;
   align-items: center;
   flex-grow: 1;
+}
+
+.courseItemContainer .introductionContainer {
+  background-color: rgb(74, 73, 72);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0px;
 }
 
 .typebar {
