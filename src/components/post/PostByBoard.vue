@@ -26,7 +26,7 @@
       >
         <MainButton
           :needOpacity="false"
-          :onPress="() => topBarItemOnchange(item)"
+          :onPress="() => viewModel.toDetailPage(item)"
         >
           <div class="topBar">
             <div class="topUserBar">

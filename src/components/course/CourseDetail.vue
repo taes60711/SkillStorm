@@ -64,7 +64,6 @@ import SkillTag from "@/components/utilities/SkillTag.vue";
 import RichTextEditorViewModel from "@/view_models/rich_text_ediotor_view_model";
 import IconText from "@/components/utilities/IconText.vue";
 import { DateFormatUtilities } from "@/global/date_time_format";
-import { onMounted } from "vue";
 
 const dateTimeFormat = new DateFormatUtilities();
 

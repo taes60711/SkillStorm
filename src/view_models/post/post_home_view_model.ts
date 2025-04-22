@@ -1,6 +1,6 @@
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import PostEditor from "@/components/post/PostEditor.vue";
-import { ref } from "vue";
+import PostDetail from "@/components/post/PostDetail.vue";
 import PostService from "@/services/post_service";
 import { userDataStore } from "@/global/user_data";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
@@ -19,6 +19,20 @@ export default class PostHomeViewModel {
       false,
       "rgba(0, 0, 0, 0.4)",
       "postedit"
+    );
+  };
+
+  ///開啟文章詳細頁
+  toDetailPage = (data: Post) => {
+    console.log(data);
+
+    this.modalController.show(
+      PostDetail,
+      { postData: data },
+      true,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "postDetail"
     );
   };
 

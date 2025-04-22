@@ -41,7 +41,7 @@
       >
         <MainButton
           :needOpacity="false"
-          :onPress="() => topBarItemOnchange(item)"
+          :onPress="() => viewModel.toDetailPage(item)"
         >
           <div class="topBar">
             <div class="topUserBar">
@@ -136,10 +136,6 @@ const postData = ref<Post[]>([]);
 
 function openItemSetting() {
   console.log("www");
-}
-
-function topBarItemOnchange(data: Post) {
-  console.log(data);
 }
 
 function handleApiReturnData(data: Post[]) {

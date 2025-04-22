@@ -89,8 +89,6 @@ const modalController: ModalController = new ModalController();
 const dateTimeFormat = new DateFormatUtilities();
 
 function toDetailPage(data: Course) {
-  console.log(data);
-
   modalController.show(
     CourseDetail,
     { courseData: data },
