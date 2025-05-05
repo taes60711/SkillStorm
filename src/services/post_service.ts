@@ -6,6 +6,7 @@ import { userDataStore } from "@/global/user_data";
 import { APIHttpController } from "@/global/api_http_controller";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
 import { GlobalData } from "@/global/global_data";
+import type { PostComment } from "@/models/reponse/post/post_comment_reponse_data";
 
 ///  文章相關API
 export default class PostService extends APIClient {
@@ -188,6 +189,35 @@ export default class PostService extends APIClient {
 
     if (typeof reponseData === "string") {
       throw new Error(`Failed`);
+    }
+  }
+
+  /**
+   * 文章留言
+   * @param page 從第幾頁開始
+   * @param size 一次拿多少的資料
+   * @param postId  文章的uid
+   * @returns
+   */
+  async getPostComment(
+    page: number,
+    size: number,
+    postId: number
+  ): Promise<PostComment[]> {
+    const param = {
+      page: page,
+      size: size,
+    };
+
+    const reponseData: PostComment[] | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.POST.GET_POST_COMMENT}/${postId}`,
+      param
+    );
+
+    if (typeof reponseData === "string") {
+      return [];
+    } else {
+      return reponseData;
     }
   }
 

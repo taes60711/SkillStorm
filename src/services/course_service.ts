@@ -42,6 +42,13 @@ export default class CourseService extends APIClient {
     }
   }
 
+  /**
+   * 所有課程
+   * @param page 從第幾頁開始
+   * @param size 一次拿多少的資料
+   * @param userId  使用者的uid
+   * @returns
+   */
   async getAllCourse(
     page: number,
     size: number,

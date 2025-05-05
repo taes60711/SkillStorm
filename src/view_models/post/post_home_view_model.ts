@@ -6,6 +6,7 @@ import { userDataStore } from "@/global/user_data";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
+import type { PostComment } from "@/models/reponse/post/post_comment_reponse_data";
 
 export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();
@@ -36,6 +37,16 @@ export default class PostHomeViewModel {
     );
   };
 
+  ///文章詳細頁面的留言
+  getPostComment(
+    postId: number
+  ): (page: number, size: number) => Promise<PostComment[]> {
+    return (page: number, size: number): Promise<PostComment[]> => {
+      return new PostService().getPostComment(page, size, postId);
+    };
+  }
+
+  ///“最新”文章
   getNewPostList: (page: number, size: number) => Promise<Post[]> = (
     page,
     size
@@ -47,6 +58,7 @@ export default class PostHomeViewModel {
     );
   };
 
+  ///“人氣”文章
   getViewerPostList: (page: number, size: number) => Promise<Post[]> = (
     page,
     size
@@ -58,6 +70,7 @@ export default class PostHomeViewModel {
     );
   };
 
+  ///“看板”文章
   getBoardPostList(
     type: number
   ): (page: number, size: number) => Promise<Post[]> {
