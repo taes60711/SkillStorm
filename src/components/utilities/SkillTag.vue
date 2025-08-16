@@ -8,16 +8,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-
 const props = defineProps({
   skillName: {
     type: String,
-    required: true,
+    required: true
   },
   level: {
-    type: Number,
-  },
+    type: Number
+  }
 });
 </script>
 

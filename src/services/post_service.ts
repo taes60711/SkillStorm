@@ -188,10 +188,33 @@ export default class PostService extends APIClient {
     );
 
     console.log(`createPost : ${reponseData}`);
+  }
 
-    if (typeof reponseData === "string") {
-      throw new Error(`Failed`);
-    }
+  /**
+   * MARK: 更新文章
+   * @param postData 更新文章的Data
+   */
+  async updatePost(
+    postId: number,
+    postData: CreatePostRequestData
+  ): Promise<void> {
+    let fileMessageStr: string = "[]";
+
+    fileMessageStr = this.listToListStr(postData.fileMessage);
+
+    const body = {
+      createdBy: userDataStore.userData.value.uid, // 創文章者
+      title: "", // 標題（畫面上已移除）
+      mainMessage: postData.content, // 內文
+      fileMessage: fileMessageStr, // 圖片/影片
+      type: postData.type // 看板
+    };
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.UPDATE_POST}/${postId}`,
+      body
+    );
+
+    console.log(`updatePost : ${reponseData}`);
   }
 
   /**
@@ -211,10 +234,6 @@ export default class PostService extends APIClient {
       body
     );
     console.log(`createPostComment : ${reponseData}`);
-
-    if (typeof reponseData === "string") {
-      throw new Error(`Failed`);
-    }
 
     return Number(reponseData);
   }

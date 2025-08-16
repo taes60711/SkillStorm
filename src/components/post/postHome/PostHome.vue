@@ -59,7 +59,7 @@
             <MainButton :onPress="() => onChangePage('back')"> </MainButton>
 
             <MainButton
-              :onPress="() => openItemSetting()"
+              :onPress="() => openItemSetting(item)"
               :style="{ paddingRight: '16px' }"
             >
               <i class="fa-solid fa-ellipsis"></i>
@@ -134,8 +134,8 @@ const dateTimeFormat = new DateFormatUtilities();
 const viewModel = new PostHomeViewModel();
 const postData = ref<Post[]>([]);
 
-function openItemSetting() {
-  console.log("www");
+function openItemSetting(data: Post) {
+  viewModel.editPage(postData.value, data);
 }
 
 function handleApiReturnData(data: Post[]) {

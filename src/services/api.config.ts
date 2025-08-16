@@ -18,6 +18,7 @@ export const API_CONFIG = {
       GET_ALL_POST_BOARD: "/getAllPostBoard",
       GET_POST_COMMENT: "/getPostComment",
       CREATE_POST: "/createPost",
+      UPDATE_POST: "/update",
       CREATE_POST_COMMENT: "/createPostComment",
       DELETE_POST_COMMENT: "/deletePostComment",
       UPDATE_POST_COMMENT: "/updatePostComment",

@@ -6,6 +6,9 @@ import { userDataStore } from "@/global/user_data";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
+import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
+import { ref } from "vue";
+import type { Ref } from "vue";
 
 export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();
@@ -15,6 +18,24 @@ export default class PostHomeViewModel {
     this.modalController.show(
       PostEditor,
       {},
+      true,
+      false,
+      "rgba(0, 0, 0, 0.4)",
+      "postedit"
+    );
+  };
+
+  ///開啟文章發佈頁面
+  editPage = (listData: Post[], data: Post) => {
+    const editPageData: CreatePostRequestData = {
+      postId: data.id,
+      type: data.type,
+      content: data.mainMessage,
+      fileMessage: data.fileMessage
+    };
+    this.modalController.show(
+      PostEditor,
+      { postData: editPageData, listPostData: listData },
       true,
       false,
       "rgba(0, 0, 0, 0.4)",

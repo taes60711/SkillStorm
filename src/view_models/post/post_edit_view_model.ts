@@ -7,6 +7,8 @@ import PostService from "@/services/post_service";
 import { EditTools } from "@/global/edit_tools";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import confimModal from "@/components/utilities/Modal/confirmModal.vue";
+import type { Post } from "@/models/reponse/post/post_reponse_data";
+
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
   editTools: EditTools = new EditTools();
@@ -22,6 +24,16 @@ export default class PostEditViewModel {
 
   modalController = new ModalController();
 
+  postId: number = -1;
+  listPostData: Post[] = [];
+
+  editInit = (postData: CreatePostRequestData, listData: Post[]): void => {
+    this.selectedBoard.value = postData.type as PostBoard;
+    this.mainMessageController.value = postData.content;
+    this.fileMessageController.value = [...postData.fileMessage];
+    this.postId = postData.postId ?? -1;
+    this.listPostData = listData;
+  };
   /**
    * MARK: 送出按鈕
    */
@@ -33,12 +45,25 @@ export default class PostEditViewModel {
     const postData: CreatePostRequestData = {
       type: this.selectedBoard.value.id,
       content: this.mainMessageController.value,
-      fileMessage: this.fileMessageController.value,
+      fileMessage: this.fileMessageController.value
     };
 
     if (this.sendBeforCheck()) {
-      await new PostService().createPost(postData);
-      this.modalController.show(confimModal);
+      if (this.postId !== -1) {
+        const idx: number = this.listPostData.findIndex(
+          (e) => e.id === this.postId
+        );
+
+        if (idx !== -1) {
+          await new PostService().updatePost(this.postId, postData);
+
+          this.listPostData[idx].mainMessage = postData.content;
+          this.listPostData[idx].fileMessage = postData.fileMessage;
+        }
+      } else {
+        await new PostService().createPost(postData);
+        this.modalController.show(confimModal);
+      }
     }
   };
 

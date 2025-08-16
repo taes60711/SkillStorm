@@ -18,8 +18,8 @@
       placeholder="請輸入內文"
       rows="4"
       cols="50"
+      >{{ viewModel.mainMessageController }}</textarea
     >
-    </textarea>
 
     <br />
 
@@ -35,7 +35,23 @@
 import { GlobalData } from "@/global/global_data";
 import PostEditViewModel from "@/view_models/post/post_edit_view_model";
 import PostFileEditor from "./PostFileEditor.vue";
+import { onBeforeMount } from "@vue/runtime-core";
+
 const viewModel = new PostEditViewModel();
+
+const props = defineProps<{
+  modalProps: object;
+}>();
+
+onBeforeMount(() => {
+  if (Object.keys(props.modalProps).length !== 0) {
+    /// 導入文章
+    viewModel.editInit(
+      props.modalProps.postData,
+      props.modalProps.listPostData
+    );
+  }
+});
 </script>
 
 <style scoped>

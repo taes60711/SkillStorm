@@ -27,7 +27,7 @@ export default class CourseService extends APIClient {
       courseChapters: courseData.courseChapters, // 章節
       learningkillList: courseData.learningkillList, // 學習的技能
       type: courseData.type, // 類別的id（前端, 後端, 雲端...）
-      isPublic: courseData.isPublic, // 是否公開
+      isPublic: courseData.isPublic // 是否公開
     };
 
     const reponseData: string = await this.apiPush(
@@ -36,10 +36,6 @@ export default class CourseService extends APIClient {
     );
 
     console.log(`createCourse : ${reponseData}`);
-
-    if (typeof reponseData === "string") {
-      throw new Error(`Failed`);
-    }
   }
 
   /**
@@ -56,7 +52,7 @@ export default class CourseService extends APIClient {
   ): Promise<Course[]> {
     const param = {
       page: page,
-      size: size,
+      size: size
     };
 
     const reponseData: Course[] | string = await this.apiGet(
