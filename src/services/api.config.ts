@@ -6,25 +6,28 @@ export const API_CONFIG = {
       SIGN_UP: "/signUp",
       UPDATE_PASSWORD: "/updateUserPwdByEmail",
       UPDATE_LOGIN_TIME: "/updateLoginTime",
-      UPDATE: "/update",
+      UPDATE: "/update"
     },
     EMAIL: {
-      SEND_CAPTCHA: "/sendCaptchaMail",
+      SEND_CAPTCHA: "/sendCaptchaMail"
     },
     SKILL: {
-      GET_ALL_SKILL: "/getList",
+      GET_ALL_SKILL: "/getList"
     },
     POST: {
       GET_ALL_POST_BOARD: "/getAllPostBoard",
       GET_POST_COMMENT: "/getPostComment",
       CREATE_POST: "/createPost",
+      CREATE_POST_COMMENT: "/createPostComment",
+      DELETE_POST_COMMENT: "/deletePostComment",
+      UPDATE_POST_COMMENT: "/updatePostComment",
       GET_ALL: "/getAll",
       GET_NEW: "/getNewPosts",
-      GET_TYPE: "/getPostsByType",
+      GET_TYPE: "/getPostsByType"
     },
     COURSE: {
       CREATE_COURSE: "/createCourse",
-      GET_ALL: "/getAllCourses",
-    },
-  },
+      GET_ALL: "/getAllCourses"
+    }
+  }
 };

@@ -1,7 +1,7 @@
 <template>
   <BaseView
-    :apiListFunc="viewModel.getPostComment(props.modalProps.postData.id)"
-    @apiReturnData="handleApiReturnData"
+    :apiListFunc="viewModel.getPostComment()"
+    @apiReturnData="viewModel.handleApiCommentReturnData"
     class="postDeatilContianer"
   >
     <template #apiListHeader>
@@ -66,23 +66,34 @@
 
         <div class="postCommentBar">
           <Avatar
-          :imgurl="userDataStore.userData.value.image"
-          size="40px"
-          borderRadius="50px"
+            :imgurl="userDataStore.userData.value.image"
+            size="40px"
+            borderRadius="50px"
           />
-          <input type="text" placeholder="輸入文字..." class="postComment"/>
-            <MainButton
-              :onPress="() => {}"
-              :style="{ paddingRight: '16px' }"
-            >
-              <i  class="fa-solid fa-paper-plane postCommentSendBtn"></i>
-            </MainButton>
+          <input type="text" placeholder="輸入文字..." v-model="viewModel.commentInput.value" class="postComment" />
+          <MainButton
+            :onPress="() => {
+              if(viewModel.commentIsEdit.value) {
+                viewModel.editPostCommentSend();
+              } else {
+                viewModel.createPostComment()
+              }
+             
+            }"
+            :style="{ paddingRight: '16px' }"
+          >
+            <i class="fa-solid fa-paper-plane postCommentSendBtn"></i>
+          </MainButton>
         </div>
       </div>
     </template>
 
     <template #apiListBody>
-      <div class="postCommentContainer" v-for="(item, index) in postCommentData" v-bind:key="index">
+      <div
+        class="postCommentContainer"
+        v-for="(item, index) in viewModel.postCommentData.value"
+        v-bind:key="index"
+      >
         <div class="topUserBar">
           <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
           <p :style="{ paddingLeft: '10px' }">
@@ -91,9 +102,27 @@
               {{ item.user.name }}
               •{{ dateTimeFormat.format(item.postTime) }}
             </p>  
-            {{ item.message }}
-           
+
+     
+            <div class="commentMessge">
+              {{ item.message }}
+            </div>
           </p>
+
+          <MainButton
+            :onPress="() => viewModel.editPostCommentStart(item.id, item.message)"
+            :style="{ paddingRight: '16px' }"
+            text="編集"
+            v-if="!viewModel.commentIsEdit.value" 
+          ></MainButton>
+          
+          <MainButton
+            :onPress="() => viewModel.deletePostComment(item.id)"
+            :style="{ paddingRight: '16px' }"
+            text="刪除"
+            v-if="!viewModel.commentIsEdit.value" 
+          ></MainButton>
+
         </div>
       </div>
     </template>
@@ -101,27 +130,29 @@
 </template>
 
 <script setup lang="ts">
+import MainButton from "@/components/utilities/MainButton.vue";
 import { DateFormatUtilities } from "@/global/date_time_format";
 import Avatar from "@/components/utilities/Avatar.vue";
 import PostFile from "@/components/post/postHome/PostFile.vue";
 import IconText from "@/components/utilities/IconText.vue";
-import type { PostComment } from "@/models/reponse/post/post_comment_reponse_data";
-import { ref } from "vue";
 import { userDataStore } from "@/global/user_data";
-import PostHomeViewModel from "@/view_models/post/post_home_view_model";
 import BaseView from "@/components/utilities/BaseView.vue";
+import postDetailViewModel from "@/view_models/post/post_detail_view_models";
+import { onBeforeMount } from "@vue/runtime-core";
+
 
 const dateTimeFormat = new DateFormatUtilities();
-const postCommentData = ref<PostComment[]>([]);
-const viewModel = new PostHomeViewModel();
-
+const viewModel = new postDetailViewModel();
 const props = defineProps<{
   modalProps: object;
 }>();
 
-function handleApiReturnData(data: PostComment[]) {
-  postCommentData.value.push(...data);
-}
+onBeforeMount(() => {
+  /// 導入文章Id
+  viewModel.init(props.modalProps.postData.id);
+});
+
+
 </script>
 
 <style scoped>
@@ -139,7 +170,10 @@ function handleApiReturnData(data: PostComment[]) {
 }
 
 .postItemContianer {
-  padding: 20px 0px;
+  margin: 20px 0px;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .postDeatilContianer .topBar {
@@ -166,27 +200,26 @@ function handleApiReturnData(data: PostComment[]) {
   padding-top: 10px;
 }
 
-.postDeatilContianer .postCommentBar{
+.postDeatilContianer .postCommentBar {
   width: 100%;
   align-items: center;
   display: flex;
   margin: 15px 0px;
 }
 
-.postDeatilContianer .postItemContianer .postCommentBar  .postComment{
+.postDeatilContianer .postItemContianer .postCommentBar .postComment {
   display: flex;
   flex-grow: 1;
   padding: 6px 0px;
   margin: 0px 10px;
   background-color: rgba(255, 255, 255, 0);
   color: white !important;
-  caret-color: white ;
-  border: none;      
-  outline: none;         
+  caret-color: white;
+  border: none;
+  outline: none;
 }
 
-
-.postDeatilContianer .postCommentSendBtn{
+.postDeatilContianer .postCommentSendBtn {
   background-color: rgb(63, 64, 64);
   padding: 10px 20px;
   border-radius: 10px;
@@ -196,5 +229,4 @@ function handleApiReturnData(data: PostComment[]) {
   width: 100%;
   padding-bottom: 15px;
 }
-
 </style>

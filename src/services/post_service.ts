@@ -7,6 +7,7 @@ import { APIHttpController } from "@/global/api_http_controller";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
 import { GlobalData } from "@/global/global_data";
 import type { PostComment } from "@/models/reponse/post/post_comment_reponse_data";
+import type { CreatePostCommentRequestData } from "@/models/request/post/create_post_comment_request_data";
 
 ///  文章相關API
 export default class PostService extends APIClient {
@@ -31,7 +32,7 @@ export default class PostService extends APIClient {
     const param = {
       page: page,
       size: size,
-      uid: userId,
+      uid: userId
     };
 
     const reponseData: Post[] | string = await this.apiGet(
@@ -48,7 +49,7 @@ export default class PostService extends APIClient {
           GlobalData.postBoard[0];
         return {
           ...data,
-          type: postBoardType,
+          type: postBoardType
         };
       });
       return returnData;
@@ -70,7 +71,7 @@ export default class PostService extends APIClient {
     const param = {
       page: page,
       size: size,
-      uid: userId,
+      uid: userId
     };
 
     const reponseData: Post[] | string = await this.apiGet(
@@ -87,7 +88,7 @@ export default class PostService extends APIClient {
           GlobalData.postBoard[0];
         return {
           ...data,
-          type: postBoardType,
+          type: postBoardType
         };
       });
       return returnData;
@@ -110,7 +111,7 @@ export default class PostService extends APIClient {
     const param = {
       page: page,
       size: size,
-      uid: userId,
+      uid: userId
     };
 
     const reponseData: Post[] | string = await this.apiGet(
@@ -127,7 +128,7 @@ export default class PostService extends APIClient {
           GlobalData.postBoard[0];
         return {
           ...data,
-          type: postBoardType,
+          type: postBoardType
         };
       });
       return returnData;
@@ -147,7 +148,7 @@ export default class PostService extends APIClient {
       "fa-solid fa-code",
       "fa-solid fa-globe",
       "fa-solid fa-microchip",
-      "fa-solid fa-head-side-virus",
+      "fa-solid fa-head-side-virus"
     ];
 
     if (Array.isArray(reponseData)) {
@@ -167,6 +168,7 @@ export default class PostService extends APIClient {
 
   /**
    * MARK: 創建文章
+   * @param postData 創建文章的Data
    */
   async createPost(postData: CreatePostRequestData): Promise<void> {
     let fileMessageStr: string = "[]";
@@ -174,11 +176,11 @@ export default class PostService extends APIClient {
     fileMessageStr = this.listToListStr(postData.fileMessage);
 
     const body = {
-      createdBy: userDataStore.userData.value?.uid, // 創文章者
-      title: "", // 標題
+      createdBy: userDataStore.userData.value.uid, // 創文章者
+      title: "", // 標題（畫面上已移除）
       mainMessage: postData.content, // 內文
       fileMessage: fileMessageStr, // 圖片/影片
-      type: postData.type, // 看板
+      type: postData.type // 看板
     };
     const reponseData: string = await this.apiPush(
       `${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`,
@@ -193,7 +195,67 @@ export default class PostService extends APIClient {
   }
 
   /**
-   * 文章留言
+   * MARK: 創建文章留言
+   * @param postCommentData 創建文章留言的Data
+   */
+  async createPostComment(
+    postCommentData: CreatePostCommentRequestData
+  ): Promise<number> {
+    const body = {
+      userUid: userDataStore.userData.value.uid, // 創留言者
+      postId: postCommentData.postUID, // 文章ID
+      message: postCommentData.message // 留言內容
+    };
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.CREATE_POST_COMMENT}`,
+      body
+    );
+    console.log(`createPostComment : ${reponseData}`);
+
+    if (typeof reponseData === "string") {
+      throw new Error(`Failed`);
+    }
+
+    return Number(reponseData);
+  }
+
+  /**
+   * MARK: 刪除文章留言
+   * @param postId 文章的uid
+   */
+  async deletePostComment(postId: number): Promise<Boolean> {
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.DELETE_POST_COMMENT}/${postId}`
+    );
+
+    console.log(`deletePostComment : ${reponseData}`);
+
+    return reponseData != "null" ? true : false;
+  }
+
+  /**
+   * MARK: 更新文章留言
+   * @param postId 文章的uid
+   * @param message 留言訊息
+   */
+  async uploadPostComment(postId: number, message: string): Promise<Boolean> {
+    const body = {
+      id: postId, // 文章的uid
+      message: message // 留言訊息
+    };
+
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.UPDATE_POST_COMMENT}/${postId}`,
+      body
+    );
+
+    console.log(`uploadPostComment : ${reponseData}`);
+
+    return reponseData != "null" ? true : false;
+  }
+
+  /**
+   * 取得文章留言
    * @param page 從第幾頁開始
    * @param size 一次拿多少的資料
    * @param postId  文章的uid
@@ -206,7 +268,7 @@ export default class PostService extends APIClient {
   ): Promise<PostComment[]> {
     const param = {
       page: page,
-      size: size,
+      size: size
     };
 
     const reponseData: PostComment[] | string = await this.apiGet(
