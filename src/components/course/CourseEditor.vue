@@ -1,20 +1,33 @@
 <script setup lang="ts">
 import CourseEditViewModel from "@/view_models/course/course_edit_view_model";
-import Dropdown from "primevue/dropdown";
 import RichTextEditor from "../utilities/RichTextEditor.vue";
 import { SkillType } from "@/models/skill_type";
-import { MultiSelect } from "primevue";
 import { GlobalData } from "@/global/global_data";
 import CourseChapterEdit from "./CourseChapterEdit.vue";
 import Modal from "../utilities/Modal.vue";
+import { onBeforeMount } from "@vue/runtime-core";
 
 const viewModel = new CourseEditViewModel();
 
 const levelItems: string[] = ["1", "2", "3", "4", "5"];
+
+const props = defineProps<{
+  modalProps: object;
+}>();
+
+onBeforeMount(() => {
+  if (Object.keys(props.modalProps).length !== 0) {
+    /// 導入文章
+    viewModel.editInit(
+      props.modalProps.courseData,
+      props.modalProps.listCourseData
+    );
+  }
+});
 </script>
 
 <template>
-  <div>
+  <div class="courseContianer">
     <p>標題</p>
     <input type="text" v-model="viewModel.titleController.value" />
 
@@ -35,23 +48,49 @@ const levelItems: string[] = ["1", "2", "3", "4", "5"];
     ></textarea>
 
     <p>程度</p>
-    <Dropdown
+    <select
       v-model="viewModel.selectedLevel.value"
-      :panelStyle="{ backgroundColor: '#FF6347' }"
-      :options="levelItems"
-      placeholder="程度"
-    />
+      style="background-color: #f0f8ff; color: #333"
+    >
+      <option value="" disabled selected>選擇一個程度</option>
+      <option
+        v-for="(item, index) in levelItems"
+        v-bind:key="item"
+        :value="item"
+      >
+        {{ item }}
+      </option>
+    </select>
 
     <p>類別</p>
-    <Dropdown
-      v-model="viewModel.selectedType.value"
-      :panelStyle="{ backgroundColor: '#FF6347' }"
-      :options="new SkillType().types"
-      optionLabel="name"
-      placeholder="類別"
-    />
+    <select
+      v-model="viewModel.selectedType.value.id"
+      style="background-color: #f0f8ff; color: #333"
+    >
+      <option value="" disabled selected>選擇一個類別</option>
+      <option
+        v-for="(item, index) in new SkillType().types"
+        v-bind:key="item.id"
+        :value="item.id"
+      >
+        {{ item.name }}
+      </option>
+    </select>
 
     <p>技能</p>
+    <select
+      v-model="viewModel.selectedSkill.value"
+      multiple
+      style="background-color: #ff6347; color: white; height: 120px"
+    >
+      <option v-for="skill in GlobalData.skillData" :key="skill" :value="skill">
+        {{ skill.name }}
+      </option>
+    </select>
+
+    <p>已選技能： {{ viewModel.selectedSkill.value }}</p>
+
+    <!-- <p>技能</p>
     <MultiSelect
       v-model="viewModel.selectedSkill.value"
       :panelStyle="{ backgroundColor: '#FF6347' }"
@@ -59,7 +98,7 @@ const levelItems: string[] = ["1", "2", "3", "4", "5"];
       optionLabel="name"
       filter
       placeholder="Select Skill"
-    />
+    /> -->
 
     <p>公開</p>
     <input type="checkbox" v-model="viewModel.isPublic.value" />
@@ -103,10 +142,19 @@ const levelItems: string[] = ["1", "2", "3", "4", "5"];
 </template>
 
 <style scoped>
-p {
-  color: #ffffff;
+.courseContianer {
+  background-color: rgb(49, 49, 50);
+  width: 90vw;
+  height: 96vh;
+  max-width: 850px;
+  padding: 10px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  border-radius: 10px;
+  color: white;
+  border: 1px solid rgb(75, 75, 76);
 }
-
 button {
   background-color: rgb(0, 0, 0);
   margin: 0 10px 0 0;

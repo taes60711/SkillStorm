@@ -7,8 +7,6 @@ import type { Post } from "@/models/reponse/post/post_reponse_data";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
 import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
-import { ref } from "vue";
-import type { Ref } from "vue";
 
 export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();

@@ -27,7 +27,7 @@
             </div>
 
             <MainButton
-              :onPress="() => openItemSetting()"
+              :onPress="() => openItemSetting(item)"
               :style="{ paddingRight: '16px' }"
             >
               <i class="fa-solid fa-ellipsis"></i>
@@ -69,8 +69,6 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router/router_manager";
-import { RouterPath } from "@/router/router_path";
 import BaseView from "@/components/utilities/BaseView.vue";
 import CourseService from "@/services/course_service";
 import { userDataStore } from "@/global/user_data";
@@ -83,10 +81,13 @@ import { SkillType } from "@/models/skill_type";
 import SkillTag from "@/components/utilities/SkillTag.vue";
 import { ModalController } from "../utilities/Modal/ModalController";
 import CourseDetail from "@/components/course/CourseDetail.vue";
+import CourseEditor from "@/components/course/CourseEditor.vue";
 import IconText from "@/components/utilities/IconText.vue";
 
 const modalController: ModalController = new ModalController();
 const dateTimeFormat = new DateFormatUtilities();
+
+const modalEditController: ModalController = new ModalController();
 
 function toDetailPage(data: Course) {
   modalController.show(
@@ -99,13 +100,28 @@ function toDetailPage(data: Course) {
   );
 }
 
-function openItemSetting() {
-  console.log(new SkillType().getTypeName(0));
+function openItemSetting(data: Course) {
+  modalEditController.show(
+    CourseEditor,
+    { courseData: data, listCourseData: courseData },
+    true,
+    false,
+    "rgba(0, 0, 0, 0.4)",
+    "courseEdit"
+  );
+  // console.log(new SkillType().getTypeName(0));
 }
 
 ///跳至文章編集頁面
 const goToEdit = () => {
-  router.push(RouterPath.HOME.COURSE.EDIT);
+  modalEditController.show(
+    CourseEditor,
+    {},
+    true,
+    false,
+    "rgba(0, 0, 0, 0.4)",
+    "courseEdit"
+  );
 };
 
 const courseData = ref<Course[]>([]);

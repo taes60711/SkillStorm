@@ -77,7 +77,7 @@ const props = defineProps<{
   background-color: rgb(49, 49, 50);
   width: 90vw;
   height: 96vh;
-  max-width: 1100px;
+  max-width: 900px;
   overflow-y: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;

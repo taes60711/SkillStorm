@@ -56,11 +56,11 @@ const COLORS = [
   "#666600",
   "#003700",
   "#002966",
-  "#3d1466",
+  "#3d1466"
 ];
 
 const editorModules = {
-  toolbar: [["image"], [{ color: COLORS }]],
+  toolbar: [["image"], [{ color: COLORS }]]
 };
 
 onMounted(async () => {
@@ -102,22 +102,22 @@ const addCustomButton = () => {
       text: "影",
       action: () => {
         showVideoModal.value = !showVideoModal.value;
-      },
+      }
     },
     {
       id: "custom-button-2",
       text: "圖",
       action: () => {
         showModal.value = !showModal.value;
-      },
+      }
     },
     {
       id: "custom-button-3",
       text: "鏈",
       action: () => {
         showLinkModal.value = !showLinkModal.value;
-      },
-    },
+      }
+    }
   ];
 
   buttons.forEach((button) => {
@@ -204,7 +204,7 @@ const insertCustomLink = (link: string, linkText: string) => {
 
 <style scoped>
 ::v-deep(.p-editor) {
-  width: 800px;
+  width: 100%;
   border: 2px solid #45a049;
 }
 

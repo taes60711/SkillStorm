@@ -15,7 +15,7 @@
       :src="AppImage.noTextLogo"
       :style="{
         width: logoSize,
-        height: logoSize,
+        height: logoSize
       }"
     />
 
@@ -208,6 +208,7 @@ const turOnOffSettingBar = () => {
   background-color: rgb(34, 34, 34);
   padding: 16px 16px;
   position: absolute;
+  left: 30px;
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -278,6 +279,11 @@ const turOnOffSettingBar = () => {
     padding: 12px;
     display: flex;
     justify-content: center;
+  }
+
+  .InforBar_SettingBar {
+    width: 100px;
+    left: 5px;
   }
 }
 </style>

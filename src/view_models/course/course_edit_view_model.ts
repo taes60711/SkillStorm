@@ -5,9 +5,10 @@ import type { SkillData } from "@/models/reponse/skill_reponse_data";
 import type { ChapterEditModel } from "./chapter_edit_model";
 import type {
   ChapterData,
-  CreateCourseRequestData,
+  CreateCourseRequestData
 } from "@/models/request/course/create_course_request_data";
 import CourseService from "@/services/course_service";
+import type { Course } from "@/models/reponse/course/course_reponse_data";
 
 /// 課程編輯ViewModel
 export default class CourseEditViewModel {
@@ -17,7 +18,7 @@ export default class CourseEditViewModel {
   selectedLevel = ref<string>("1");
   selectedType = ref<SkillTypeModel>({
     id: ProgramSkillType.frontend,
-    name: "前端",
+    name: "前端"
   });
   isPublic = ref<boolean>(true);
   htmlString = ref<string>("");
@@ -27,6 +28,20 @@ export default class CourseEditViewModel {
 
   /// 發文成功的Modal顯示
   showCourseSuccessModalController = ref<boolean>(false);
+
+  editInit = (courseData: Course, listData: ChapterData[]): void => {
+    console.log(courseData);
+    this.titleController.value = courseData.title;
+    this.outlineController.value = courseData.content;
+    this.beforeNeedController.value = courseData.beforeNeed;
+    this.selectedLevel.value = courseData.needLevel.toString();
+    this.isPublic.value = courseData.isPublic;
+    this.htmlString.value = courseData.prStory;
+    this.chapters.value = courseData.courseChapters.map((e) => ({
+      title: e.chapterName,
+      content: e.content[0]
+    }));
+  };
 
   /**
    * MARK: 送出按鈕
@@ -48,7 +63,7 @@ export default class CourseEditViewModel {
       formattedApiChapter.push({
         chapter: i + 1,
         chapterName: chapterData.title,
-        content: [formattedChapterStr],
+        content: [formattedChapterStr]
       });
     }
 
@@ -61,7 +76,7 @@ export default class CourseEditViewModel {
       courseChapters: formattedApiChapter,
       learningkillList: this.selectedSkill.value.map((e) => e.name),
       type: this.selectedType.value.id.toString(),
-      isPublic: this.isPublic.value,
+      isPublic: this.isPublic.value
     };
 
     if (this.sendBeforCheck()) {
