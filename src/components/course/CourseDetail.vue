@@ -35,6 +35,8 @@
       {{ props.modalProps.courseData.beforeNeed }}
     </div>
 
+    <div v-html="props.modalProps.courseData.prStory"></div>
+
     <p :style="{ color: 'rgb(132, 131, 131)' }">
       最終更新日
       {{ dateTimeFormat.format(props.modalProps.courseData.createdTime) }}

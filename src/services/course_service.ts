@@ -39,6 +39,34 @@ export default class CourseService extends APIClient {
   }
 
   /**
+   * MARK: 更新課程
+   */
+  async updateCourse(
+    courseData: CreateCourseRequestData,
+    courseId: number
+  ): Promise<void> {
+    const body = {
+      createdBy: userDataStore.userData.value?.uid, // 創文章者
+      title: courseData.title, // 標題
+      needLevel: courseData.needLevel,
+      content: courseData.outline, // 大綱
+      beforeNeed: courseData.beforeNeed, // 前置
+      prStory: courseData.prStory, // 詳細內容
+      courseChapters: courseData.courseChapters, // 章節
+      learningkillList: courseData.learningkillList, // 學習的技能
+      type: courseData.type, // 類別的id（前端, 後端, 雲端...）
+      isPublic: courseData.isPublic // 是否公開
+    };
+
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.COURSE.UPDATE_COURSE}/${courseId}`,
+      body
+    );
+
+    console.log(`updateCourse : ${reponseData}`);
+  }
+
+  /**
    * 所有課程
    * @param page 從第幾頁開始
    * @param size 一次拿多少的資料

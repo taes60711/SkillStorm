@@ -9,6 +9,7 @@ import type {
 } from "@/models/request/course/create_course_request_data";
 import CourseService from "@/services/course_service";
 import type { Course } from "@/models/reponse/course/course_reponse_data";
+import { GlobalData } from "@/global/global_data";
 
 /// 課程編輯ViewModel
 export default class CourseEditViewModel {
@@ -24,13 +25,16 @@ export default class CourseEditViewModel {
   htmlString = ref<string>("");
 
   selectedSkill = ref<SkillData[]>([]);
+
   chapters = ref<ChapterEditModel[]>([]);
+
+  coursetId: number = -1;
+  listCourseData: Course[] = [];
 
   /// 發文成功的Modal顯示
   showCourseSuccessModalController = ref<boolean>(false);
 
-  editInit = (courseData: Course, listData: ChapterData[]): void => {
-    console.log(courseData);
+  editInit = (courseData: Course, listData: Course[]): void => {
     this.titleController.value = courseData.title;
     this.outlineController.value = courseData.content;
     this.beforeNeedController.value = courseData.beforeNeed;
@@ -41,6 +45,17 @@ export default class CourseEditViewModel {
       title: e.chapterName,
       content: e.content[0]
     }));
+
+    this.selectedSkill.value = courseData.courseLearningkillList.map((e) => {
+      const skill = GlobalData.skillData.find((s) => s.name === e);
+      return {
+        id: skill ? skill.id : 0,
+        name: e
+      };
+    });
+
+    this.coursetId = courseData.id;
+    this.listCourseData = listData;
   };
 
   /**
@@ -80,10 +95,29 @@ export default class CourseEditViewModel {
     };
 
     if (this.sendBeforCheck()) {
-      await new CourseService().createCourse(data);
+      if (this.coursetId !== -1) {
+        const idx: number = this.listCourseData.findIndex(
+          (e) => e.id === this.coursetId
+        );
 
-      this.resetAllEditData();
-      this.showCourseSuccessModalController.value = true;
+        if (idx !== -1) {
+          await new CourseService().updateCourse(data, this.coursetId);
+          this.listCourseData[idx].title = data.title;
+          this.listCourseData[idx].needLevel = data.needLevel;
+          this.listCourseData[idx].content = data.outline;
+          this.listCourseData[idx].beforeNeed = data.beforeNeed;
+          this.listCourseData[idx].prStory = data.prStory;
+          this.listCourseData[idx].courseChapters = data.courseChapters;
+          this.listCourseData[idx].courseLearningkillList =
+            data.learningkillList;
+          this.listCourseData[idx].type = data.type;
+          this.listCourseData[idx].isPublic = data.isPublic;
+        }
+      } else {
+        await new CourseService().createCourse(data);
+        this.resetAllEditData();
+        this.showCourseSuccessModalController.value = true;
+      }
     }
   };
 

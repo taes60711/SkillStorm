@@ -28,6 +28,7 @@ export const API_CONFIG = {
     },
     COURSE: {
       CREATE_COURSE: "/createCourse",
+      UPDATE_COURSE: "/updateCourse",
       GET_ALL: "/getAllCourses"
     }
   }

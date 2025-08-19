@@ -103,13 +103,12 @@ function toDetailPage(data: Course) {
 function openItemSetting(data: Course) {
   modalEditController.show(
     CourseEditor,
-    { courseData: data, listCourseData: courseData },
+    { courseData: data, listCourseData: courseData.value },
     true,
     false,
     "rgba(0, 0, 0, 0.4)",
     "courseEdit"
   );
-  // console.log(new SkillType().getTypeName(0));
 }
 
 ///跳至文章編集頁面

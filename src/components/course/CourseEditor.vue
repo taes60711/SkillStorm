@@ -6,6 +6,8 @@ import { GlobalData } from "@/global/global_data";
 import CourseChapterEdit from "./CourseChapterEdit.vue";
 import Modal from "../utilities/Modal.vue";
 import { onBeforeMount } from "@vue/runtime-core";
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css";
 
 const viewModel = new CourseEditViewModel();
 
@@ -78,27 +80,16 @@ onBeforeMount(() => {
     </select>
 
     <p>技能</p>
-    <select
+    <multiselect
       v-model="viewModel.selectedSkill.value"
-      multiple
-      style="background-color: #ff6347; color: white; height: 120px"
-    >
-      <option v-for="skill in GlobalData.skillData" :key="skill" :value="skill">
-        {{ skill.name }}
-      </option>
-    </select>
-
-    <p>已選技能： {{ viewModel.selectedSkill.value }}</p>
-
-    <!-- <p>技能</p>
-    <MultiSelect
-      v-model="viewModel.selectedSkill.value"
-      :panelStyle="{ backgroundColor: '#FF6347' }"
       :options="GlobalData.skillData"
-      optionLabel="name"
-      filter
-      placeholder="Select Skill"
-    /> -->
+      :multiple="true"
+      label="name"
+      track-by="id"
+      placeholder="搜尋或選擇技能..."
+      :max="4"
+      style="width: 300px"
+    ></multiselect>
 
     <p>公開</p>
     <input type="checkbox" v-model="viewModel.isPublic.value" />

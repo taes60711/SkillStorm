@@ -13,7 +13,7 @@ export interface Course {
   beforeNeed: string;
   prStory: string;
   courseChapters: CourseChapter[];
-  courseLearningSkills: string[];
+  courseLearningkillList: string[];
   createdTime: string;
   type: string;
   isPublic: boolean;
