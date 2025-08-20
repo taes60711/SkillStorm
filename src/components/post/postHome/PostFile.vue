@@ -5,7 +5,12 @@
       <img
         v-if="formatFileMsg[0].type == 'img'"
         :src="formatFileMsg[0].value"
-        :onclick="() => openView(formatFileMsg, 0)"
+        @click="
+          (e) => {
+            e.stopPropagation();
+            openView(formatFileMsg, 0);
+          }
+        "
       />
       <iframe
         v-else-if="formatFileMsg[0].type == 'ytvideo'"
@@ -30,10 +35,15 @@
         <div v-if="item.type == 'img'">
           <img
             :src="item.value"
-            :onclick="() => openView(formatFileMsg, index)"
+            @click="
+              (e) => {
+                e.stopPropagation();
+                openView(formatFileMsg, index);
+              }
+            "
             :class="{
               'first-item': index === 0,
-              'last-item': index === formatFileMsg.length - 1,
+              'last-item': index === formatFileMsg.length - 1
             }"
           />
         </div>
@@ -45,11 +55,24 @@
             )}/hqdefault.jpg`"
             :class="{
               'first-item': index === 0,
-              'last-item': index === formatFileMsg.length - 1,
+              'last-item': index === formatFileMsg.length - 1
             }"
-            :onclick="() => openView(formatFileMsg, index)"
+            @click="
+              (e) => {
+                e.stopPropagation();
+                openView(formatFileMsg, index);
+              }
+            "
           />
-          <div class="play-button" @click="openView(formatFileMsg, index)">
+          <div
+            class="play-button"
+            @click="
+              (e) => {
+                e.stopPropagation();
+                openView(formatFileMsg, index);
+              }
+            "
+          >
             ▶
           </div>
         </div>
@@ -64,7 +87,12 @@
         <div v-if="formatFileMsg[0].type == 'img'">
           <img
             :src="formatFileMsg[0].value"
-            :onclick="() => openView(formatFileMsg, 0)"
+            @click="
+              (e) => {
+                e.stopPropagation();
+                openView(formatFileMsg, 0);
+              }
+            "
           />
         </div>
 
@@ -76,10 +104,25 @@
             :src="`https://img.youtube.com/vi/${editTools.getYtvideoID(
               formatFileMsg[0].value
             )}/hqdefault.jpg`"
-            :onclick="() => openView(formatFileMsg, 0)"
+            @click="
+              (e) => {
+                e.stopPropagation();
+                openView(formatFileMsg, 0);
+              }
+            "
           />
 
-          <div class="play-button" @click="openView(formatFileMsg, 0)">▶</div>
+          <div
+            class="play-button"
+            @click="
+              (e) => {
+                e.stopPropagation();
+                openView(formatFileMsg, 0);
+              }
+            "
+          >
+            ▶
+          </div>
         </div>
       </div>
       <div class="twice-third-itemContianer">
@@ -87,7 +130,12 @@
           <div v-if="formatFileMsg[1].type == 'img'">
             <img
               :src="formatFileMsg[1].value"
-              :onclick="() => openView(formatFileMsg, 1)"
+              @click="
+                (e) => {
+                  e.stopPropagation();
+                  openView(formatFileMsg, 1);
+                }
+              "
             />
           </div>
 
@@ -99,17 +147,37 @@
               :src="`https://img.youtube.com/vi/${editTools.getYtvideoID(
                 formatFileMsg[1].value
               )}/hqdefault.jpg`"
-              :onclick="() => openView(formatFileMsg, 1)"
+              @click="
+                (e) => {
+                  e.stopPropagation();
+                  openView(formatFileMsg, 1);
+                }
+              "
             />
 
-            <div class="play-button" @click="openView(formatFileMsg, 1)">▶</div>
+            <div
+              class="play-button"
+              @click="
+                (e) => {
+                  e.stopPropagation();
+                  openView(formatFileMsg, 1);
+                }
+              "
+            >
+              ▶
+            </div>
           </div>
         </div>
         <div class="third-item">
           <div v-if="formatFileMsg[2].type == 'img'">
             <img
               :src="formatFileMsg[2].value"
-              :onclick="() => openView(formatFileMsg, 2)"
+              @click="
+                (e) => {
+                  e.stopPropagation();
+                  openView(formatFileMsg, 2);
+                }
+              "
             />
           </div>
 
@@ -121,10 +189,25 @@
               :src="`https://img.youtube.com/vi/${editTools.getYtvideoID(
                 formatFileMsg[2].value
               )}/hqdefault.jpg`"
-              :onclick="() => openView(formatFileMsg, 2)"
+              @click="
+                (e) => {
+                  e.stopPropagation();
+                  openView(formatFileMsg, 2);
+                }
+              "
             />
 
-            <div class="play-button" @click="openView(formatFileMsg, 2)">▶</div>
+            <div
+              class="play-button"
+              @click="
+                (e) => {
+                  e.stopPropagation();
+                  openView(formatFileMsg, 2);
+                }
+              "
+            >
+              ▶
+            </div>
           </div>
         </div>
       </div>
@@ -140,7 +223,12 @@
       <img
         v-if="choicedFile.type == 'img'"
         :src="choicedFile.value"
-        :onclick="() => openView(formatFileMsg, nowIndex)"
+        @click="
+          (e) => {
+            e.stopPropagation();
+            openView(formatFileMsg, nowIndex);
+          }
+        "
       />
       <iframe
         v-else-if="choicedFile.type == 'ytvideo'"
@@ -166,7 +254,7 @@
           ><div
             :class="{
               postFileDot: index !== nowIndex,
-              choicedPostFileDot: index === nowIndex,
+              choicedPostFileDot: index === nowIndex
             }"
           ></div
         ></MainButton>

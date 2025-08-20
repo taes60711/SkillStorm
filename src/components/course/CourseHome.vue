@@ -187,7 +187,7 @@ const getCourseList: (page: number, size: number) => Promise<Course[]> = (
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 20px;
+  right: 40px;
   bottom: 20px;
   width: 60px;
   height: 60px;

@@ -1,6 +1,12 @@
 <template>
-  <div class="mark" :style="{ backgroundColor: props.markColor }">
-    <div ref="baseModalMark" class="baseModalContainer">
+  <!-- 背景，點擊背景觸發 markClose -->
+  <div
+    class="mark"
+    :style="{ backgroundColor: props.markColor }"
+    @click="markClose"
+  >
+    <!-- Modal 主體，阻止冒泡，不會觸發背景的 markClose -->
+    <div ref="baseModalMark" class="baseModalContainer" @click.stop>
       <component :is="modalContent" :modalProps="modalProps" />
 
       <i
@@ -13,49 +19,32 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount } from "@vue/runtime-core";
-import { ref, onMounted } from "vue";
-
-const baseModalMark = ref<HTMLDivElement | null>(null);
-// 接收 Vue 组件作为 prop
 const props = defineProps({
   modalContent: {
     type: Object,
-    required: true,
+    required: true
   },
   modalProps: {
     type: Object,
-    required: true,
+    required: true
   },
   needModalClose: {
     type: Boolean,
-    required: true,
+    required: true
   },
   needCloseBtn: {
     type: Boolean,
-    required: true,
+    required: true
   },
   closePage: {
     type: Function,
-    required: true,
+    required: true
   },
   markColor: {
     type: String,
-    required: true,
-  },
-});
-
-onMounted(async () => {
-  document.addEventListener("click", handleClickOutside);
-});
-
-function handleClickOutside(event: MouseEvent) {
-  const target = event.target as Node;
-  if (baseModalMark.value && !baseModalMark.value.contains(target)) {
-    console.log("Clicked outside the modal!");
-    markClose();
+    required: true
   }
-}
+});
 
 const markClose = (): void => {
   if (props.needModalClose) {
@@ -64,7 +53,6 @@ const markClose = (): void => {
 };
 
 const closeModal = () => {
-  document.removeEventListener("click", handleClickOutside);
   props.closePage();
 };
 </script>
@@ -91,10 +79,11 @@ const closeModal = () => {
 
 .baseModalCloseBtn {
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 0px;
+  right: 15px;
   color: white;
   padding: 20px;
   font-size: 20px;
+  cursor: pointer;
 }
 </style>

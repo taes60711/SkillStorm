@@ -1,8 +1,34 @@
 <template>
   <!-- 圖片或Yt影片顯示 -->
-  <div v-for="(fileUrl, index) in fileUrls" v-bind:key="fileUrl">
-    <p>{{ `index ${index} : ${fileUrl}` }}</p>
-    <button @click="deleteEditingFile(index)">刪除</button>
+
+  <div class="postFileEditorContainer">
+    <div v-for="(fileUrl, index) in fileUrls" v-bind:key="fileUrl">
+      <div class="container">
+        <MainButton :onPress="() => deleteEditingFile(index)">
+          <i class="fa-solid fa-x fileDeleteBtn"></i>
+        </MainButton>
+        <iframe
+          v-if="fileUrl.includes(`youtube`)"
+          class="fileContainer"
+          :src="
+            'https://www.youtube.com/embed/' + editTools.getYtvideoID(fileUrl)
+          "
+          allowfullscreen
+        >
+        </iframe>
+
+        <div v-else class="fileContainer">
+          <img
+            :src="editTools.getRealImgStr(fileUrl)"
+            @click="
+              (e) => {
+                e.stopPropagation();
+              }
+            "
+          />
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 隱藏的檔案輸入框 -->
@@ -63,7 +89,7 @@
 import Modal from "../utilities/Modal.vue";
 import { EditTools } from "@/global/edit_tools";
 import { ref } from "vue";
-import PostFile from "./postHome/PostFile.vue";
+import MainButton from "@/components/utilities/MainButton.vue";
 
 const fileUrls = defineModel("fileUrls");
 const editTools = new EditTools();
@@ -92,8 +118,46 @@ const handleUrlImg = (imgUrl: string) => {
 };
 
 const deleteEditingFile = (index: number) => {
-  fileUrls.value.splice(index, index + 1);
+  fileUrls.value.splice(index, 1);
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.postFileEditorContainer {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 100, 100, 1) rgba(0, 0, 0, 0);
+  padding-bottom: 5px;
+}
+
+.postFileEditorContainer .container {
+  position: relative;
+  margin-right: 10px;
+}
+
+.fileContainer {
+  width: 300px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #706f6f;
+  border-radius: 10px;
+}
+
+.fileDeleteBtn {
+  color: white;
+  cursor: pointer;
+  padding: 4px 6px 4px 6px;
+  background-color: #706f6f;
+  border-radius: 50%;
+  right: 18px;
+  top: 6px;
+  position: absolute;
+}
+</style>

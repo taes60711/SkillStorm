@@ -10,6 +10,8 @@ import type {
 import CourseService from "@/services/course_service";
 import type { Course } from "@/models/reponse/course/course_reponse_data";
 import { GlobalData } from "@/global/global_data";
+import { ModalController } from "@/components/utilities/Modal/ModalController";
+import confimModal from "@/components/utilities/Modal/confirmModal.vue";
 
 /// 課程編輯ViewModel
 export default class CourseEditViewModel {
@@ -32,7 +34,8 @@ export default class CourseEditViewModel {
   listCourseData: Course[] = [];
 
   /// 發文成功的Modal顯示
-  showCourseSuccessModalController = ref<boolean>(false);
+
+  modalController = new ModalController();
 
   editInit = (courseData: Course, listData: Course[]): void => {
     this.titleController.value = courseData.title;
@@ -112,11 +115,11 @@ export default class CourseEditViewModel {
             data.learningkillList;
           this.listCourseData[idx].type = data.type;
           this.listCourseData[idx].isPublic = data.isPublic;
+          this.modalController.show(confimModal);
         }
       } else {
         await new CourseService().createCourse(data);
-        this.resetAllEditData();
-        this.showCourseSuccessModalController.value = true;
+        this.modalController.show(confimModal);
       }
     }
   };

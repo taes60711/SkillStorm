@@ -59,5 +59,6 @@ onBeforeMount(() => {
   background-color: rgb(51, 50, 51);
   padding: 20px 15px;
   border-radius: 10px;
+  width: 550px;
 }
 </style>

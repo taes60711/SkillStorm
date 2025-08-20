@@ -4,7 +4,6 @@ import RichTextEditor from "../utilities/RichTextEditor.vue";
 import { SkillType } from "@/models/skill_type";
 import { GlobalData } from "@/global/global_data";
 import CourseChapterEdit from "./CourseChapterEdit.vue";
-import Modal from "../utilities/Modal.vue";
 import { onBeforeMount } from "@vue/runtime-core";
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
@@ -120,15 +119,6 @@ onBeforeMount(() => {
 
     <br />
     <button @click="viewModel.send">送出</button>
-
-    <Modal
-      :visible="viewModel.showCourseSuccessModalController.value"
-      @update:visible="
-        viewModel.showCourseSuccessModalController.value = $event
-      "
-    >
-      <h2>發布成功</h2>
-    </Modal>
   </div>
 </template>
 

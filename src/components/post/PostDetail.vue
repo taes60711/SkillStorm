@@ -109,21 +109,25 @@
             </div>
           </p>
 
-          <MainButton
+         
+
+        </div>
+
+        <div class="editContainer" v-if="item.user.uid == userDataStore.userData.value.uid">
+         <MainButton
             :onPress="() => viewModel.editPostCommentStart(item.id, item.message)"
-            :style="{ paddingRight: '16px' }"
+            :style="{ marginLeft: '10px' }"
             text="編集"
             v-if="!viewModel.commentIsEdit.value" 
           ></MainButton>
           
           <MainButton
             :onPress="() => viewModel.deletePostComment(item.id)"
-            :style="{ paddingRight: '16px' }"
             text="刪除"
             v-if="!viewModel.commentIsEdit.value" 
           ></MainButton>
-
         </div>
+
       </div>
     </template>
   </BaseView>
@@ -228,5 +232,10 @@ onBeforeMount(() => {
 .postDeatilContianer .postCommentContainer {
   width: 100%;
   padding-bottom: 15px;
+}
+
+.postCommentContainer .editContainer{
+  display: flex;
+  flex-direction: row;
 }
 </style>
