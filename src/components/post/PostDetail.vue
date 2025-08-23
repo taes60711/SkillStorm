@@ -80,7 +80,7 @@
               }
              
             }"
-            :style="{ paddingRight: '16px' }"
+          
           >
             <i class="fa-solid fa-paper-plane postCommentSendBtn"></i>
           </MainButton>
@@ -108,9 +108,6 @@
               {{ item.message }}
             </div>
           </p>
-
-         
-
         </div>
 
         <div class="editContainer" v-if="item.user.uid == userDataStore.userData.value.uid">
@@ -209,6 +206,9 @@ onBeforeMount(() => {
   align-items: center;
   display: flex;
   margin: 15px 0px;
+  padding: 6px 15px;
+  border-radius: 8px;
+  background-color: rgb(39, 39, 39);
 }
 
 .postDeatilContianer .postItemContianer .postCommentBar .postComment {

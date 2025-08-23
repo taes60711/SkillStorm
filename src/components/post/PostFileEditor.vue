@@ -7,8 +7,9 @@
         <MainButton :onPress="() => deleteEditingFile(index)">
           <i class="fa-solid fa-x fileDeleteBtn"></i>
         </MainButton>
+        <div v-if="fileUrl == ''"></div>
         <iframe
-          v-if="fileUrl.includes(`youtube`)"
+          v-else-if="fileUrl.includes(`youtube`)"
           class="fileContainer"
           :src="
             'https://www.youtube.com/embed/' + editTools.getYtvideoID(fileUrl)
@@ -31,44 +32,46 @@
     </div>
   </div>
 
-  <!-- 隱藏的檔案輸入框 -->
-  <input
-    type="file"
-    ref="fileInput"
-    accept="image/jpeg, image/png, image/gif"
-    @change="handlelocalImg"
-    class="hidden"
-  />
+  <div class="editBottomBar">
+    <!-- 隱藏的檔案輸入框 -->
+    <input
+      type="file"
+      ref="fileInput"
+      accept="image/jpeg, image/png, image/gif"
+      @change="handlelocalImg"
+      class="hidden"
+    />
+    <!-- 自定義上傳按鈕 -->
+    <MainButton
+      :onPress="
+        () => {
+          editTools.triggerFileInput();
+        }
+      "
+    >
+      <i class="fa-solid fa-image editIcon"></i>
+    </MainButton>
 
-  <!-- 自定義上傳按鈕 -->
-  <button
-    @click="editTools.triggerFileInput"
-    class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
-  >
-    選擇圖片
-  </button>
+    <MainButton
+      :onPress="
+        () => {
+          showModal = !showModal;
+        }
+      "
+    >
+      <i class="fa-solid fa-link editIcon"></i>
+    </MainButton>
 
-  <button
-    @click="
-      () => {
-        showModal = !showModal;
-      }
-    "
-    class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
-  >
-    圖片Url
-  </button>
-
-  <button
-    @click="
-      () => {
-        showVideoModal = !showVideoModal;
-      }
-    "
-    class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
-  >
-    Yt影片Url
-  </button>
+    <MainButton
+      :onPress="
+        () => {
+          showVideoModal = !showVideoModal;
+        }
+      "
+    >
+      <i class="fa-solid fa-film editIcon"></i>
+    </MainButton>
+  </div>
 
   <!-- youtubeVideo Insert -->
   <Modal :visible="showVideoModal" @update:visible="showVideoModal = $event">
@@ -90,6 +93,7 @@ import Modal from "../utilities/Modal.vue";
 import { EditTools } from "@/global/edit_tools";
 import { ref } from "vue";
 import MainButton from "@/components/utilities/MainButton.vue";
+import { onMounted } from "vue";
 
 const fileUrls = defineModel("fileUrls");
 const editTools = new EditTools();
@@ -99,6 +103,10 @@ const urlImgController = ref<string>("");
 
 const showVideoModal = ref(false);
 const youtubeController = ref<string>("");
+
+onMounted(() => {
+  console.log(fileUrls.value[0] == "");
+});
 
 const handlelocalImg = async (event: Event) => {
   const base64Img: string = await editTools.handleLocalImgChange(event);
@@ -129,8 +137,6 @@ const deleteEditingFile = (index: number) => {
   overflow-x: auto;
   overflow-y: hidden;
   width: 100%;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(100, 100, 100, 1) rgba(0, 0, 0, 0);
   padding-bottom: 5px;
 }
 
@@ -159,5 +165,17 @@ const deleteEditingFile = (index: number) => {
   right: 18px;
   top: 6px;
   position: absolute;
+}
+
+.editBottomBar {
+  display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+}
+
+.editBottomBar .editIcon {
+  margin-right: 14px;
+  color: white;
+  font-size: 18px;
 }
 </style>

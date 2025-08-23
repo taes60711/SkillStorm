@@ -99,21 +99,21 @@ const addCustomButton = () => {
   const buttons = [
     {
       id: "custom-button-1",
-      text: "影",
+      text: '<i class="fa-solid fa-film"></i>',
       action: () => {
         showVideoModal.value = !showVideoModal.value;
       }
     },
     {
       id: "custom-button-2",
-      text: "圖",
+      text: '<i class="fa-solid fa-image"></i>',
       action: () => {
         showModal.value = !showModal.value;
       }
     },
     {
       id: "custom-button-3",
-      text: "鏈",
+      text: '<i class="fa-solid fa-link"></i>',
       action: () => {
         showLinkModal.value = !showLinkModal.value;
       }
@@ -168,7 +168,7 @@ const insertCustomLink = (link: string, linkText: string) => {
     <Editor
       ref="editorRef"
       v-model="value"
-      editorStyle="height: 320px;"
+      editorStyle="height: 220px;"
       placeholder="請輸入文字"
       :modules="editorModules"
     >
@@ -205,7 +205,9 @@ const insertCustomLink = (link: string, linkText: string) => {
 <style scoped>
 ::v-deep(.p-editor) {
   width: 100%;
-  border: 2px solid #45a049;
+  border: 1px solid #525252;
+  border-radius: 8px;
+  padding: 5px;
 }
 
 ::v-deep(.p-editor-toolbar) {
@@ -219,17 +221,8 @@ const insertCustomLink = (link: string, linkText: string) => {
   padding: 0;
 }
 
-button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
+::v-deep(.p-editor .ql-editor.ql-blank::before) {
+  color: #c4c0c0;
+  font-style: normal;
 }
 </style>

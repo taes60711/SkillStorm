@@ -15,7 +15,7 @@
     v-else-if="hasSlot"
     :class="{
       slotContainer: needOpacity,
-      noOpacitySlotContainer: !needOpacity,
+      noOpacitySlotContainer: !needOpacity
     }"
     @click="
       (e) => {
@@ -34,15 +34,15 @@ import { useSlots } from "@vue/runtime-core";
 const props = defineProps({
   onPress: {
     type: Function,
-    required: true,
+    required: true
   },
   text: {
-    type: String,
+    type: String
   },
   needOpacity: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+  }
 });
 
 const slots = useSlots();
@@ -51,7 +51,7 @@ const hasSlot = slots.default != null;
 
 <style scoped>
 .mainBtnContainer {
-  background-color: rgb(49, 48, 48);
+  background-color: rgb(39, 39, 39);
   padding: 5px 15px;
   border-radius: 10px;
   display: flex;

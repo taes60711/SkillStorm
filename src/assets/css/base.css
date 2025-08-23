@@ -20,3 +20,45 @@ textarea {
 img {
   -webkit-user-drag: none;
 }
+
+textarea {
+  background-color: transparent;
+  color: #ffffff !important;
+  resize: none !important;
+  min-height: 100px;
+  border-bottom: 1px solid #686666;
+  padding-top: 5px !important;
+}
+
+textarea:focus {
+  outline: none !important;
+}
+
+.textInput {
+  font-size: 16px;
+  color: #ffffff !important;
+  background-color: transparent;
+  border-bottom: 1px solid #686666;
+  padding-bottom: 5px;
+
+  outline: none;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent !important;
+  color: #ffffff !important;
+  padding: 5px 8px !important;
+  border-radius: 6px;
+}
+
+select:focus {
+  outline: none !important;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 100, 100, 1) rgba(0, 0, 0, 0);
+}

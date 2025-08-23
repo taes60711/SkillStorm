@@ -7,7 +7,7 @@
     <div class="typebar">
       <IconText
         icon="fa-solid fa-tag"
-        :text="`類別：${new SkillType().getTypeName(
+        :text="`${new SkillType().getTypeName(
           props.modalProps.courseData.type
         )}`"
         :style="{ paddingRight: '5px' }"

@@ -1,17 +1,22 @@
 <template>
   <div class="postEditor_Container">
-    <select v-model="viewModel.selectedBoard.value">
-      <option value="" disabled selected>選擇一個看板</option>
-      <option
-        v-for="(item, index) in GlobalData.postBoard"
-        v-bind:key="item"
-        :value="item"
-      >
-        {{ item.chineseName }}
-      </option>
-    </select>
-
-    <p>內文</p>
+    <div class="boardContainer">
+      <div class="typeContainer">
+        <i class="fa fa-tag" :style="{ color: 'white', fontSize: '18px' }"></i>
+        <select v-model="viewModel.selectedBoard.value">
+          <option
+            v-for="(item, index) in GlobalData.postBoard"
+            v-bind:key="item"
+            :value="item"
+          >
+            {{ item.chineseName }}
+          </option>
+        </select>
+        <i class="fa-solid fa-angle-down" style="color: white"></i>
+      </div>
+      <MainButton :onPress="viewModel.send" text="送出" class="createButton">
+      </MainButton>
+    </div>
 
     <textarea
       v-model="viewModel.mainMessageController.value"
@@ -21,13 +26,7 @@
       >{{ viewModel.mainMessageController }}</textarea
     >
 
-    <br />
-
     <PostFileEditor v-model:fileUrls="viewModel.fileMessageController.value" />
-
-    <br />
-
-    <button @click="viewModel.send">送出</button>
   </div>
 </template>
 
@@ -36,6 +35,7 @@ import { GlobalData } from "@/global/global_data";
 import PostEditViewModel from "@/view_models/post/post_edit_view_model";
 import PostFileEditor from "./PostFileEditor.vue";
 import { onBeforeMount } from "@vue/runtime-core";
+import MainButton from "@/components/utilities/MainButton.vue";
 
 const viewModel = new PostEditViewModel();
 
@@ -60,5 +60,24 @@ onBeforeMount(() => {
   padding: 20px 15px;
   border-radius: 10px;
   width: 550px;
+  display: flex;
+  flex-direction: column;
+}
+
+.boardContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.boardContainer .createButton {
+  background-color: rgb(32, 33, 33);
+}
+.typeContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 </style>
