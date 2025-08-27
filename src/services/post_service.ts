@@ -136,6 +136,45 @@ export default class PostService extends APIClient {
   }
 
   /**
+   * 人氣文章
+   * @param page 從第幾頁開始
+   * @param size 一次拿多少的資料
+   * @param userId  使用者的uid
+   * @returns
+   */
+  async getPostByMy(
+    page: number,
+    size: number,
+    myUserId: string
+  ): Promise<Post[]> {
+    const param = {
+      page: page,
+      size: size
+    };
+
+    const reponseData: Post[] | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.POST.GET_MY_POST}/${myUserId}`,
+      param
+    );
+
+    if (typeof reponseData === "string") {
+      return [];
+    } else {
+      const returnData: Post[] = reponseData.map((data) => {
+        const postBoardType =
+          GlobalData.postBoard.find((e) => e.type === data.type) ??
+          GlobalData.postBoard[0];
+        return {
+          ...data,
+          type: postBoardType
+        };
+      });
+
+      return returnData;
+    }
+  }
+
+  /**
    * MARK: 取得所有看板項目
    */
   async getAllPostBoard(): Promise<PostBoard[]> {

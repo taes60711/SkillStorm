@@ -13,14 +13,18 @@ export default class PostHomeViewModel {
 
   ///開啟文章發佈頁面
   createEditPage = () => {
-    this.modalController.show(
-      PostEditor,
-      {},
-      true,
-      false,
-      "rgba(0, 0, 0, 0.4)",
-      "postedit"
-    );
+    if (userDataStore.isLogin()) {
+      this.modalController.show(
+        PostEditor,
+        {},
+        true,
+        false,
+        "rgba(0, 0, 0, 0.4)",
+        "postedit"
+      );
+    } else {
+      console.log("請登入");
+    }
   };
 
   ///開啟文章發佈頁面
@@ -92,6 +96,18 @@ export default class PostHomeViewModel {
       );
     };
   }
+
+  ///“我的”文章
+  getMyPostList: (page: number, size: number) => Promise<Post[]> = (
+    page,
+    size
+  ) => {
+    return new PostService().getPostByMy(
+      page,
+      size,
+      userDataStore.userData.value.uid
+    );
+  };
 
   changeHomePage = (homePageType: string) => {
     console.log(homePageType);

@@ -1,7 +1,11 @@
 <template>
   <BaseView :apiListFunc="getCourseList" @apiReturnData="handleApiReturnData">
     <template #apiListHeader>
-      <MainButton :onPress="goToEdit" class="createButton">
+      <MainButton
+        v-if="userDataStore.isLogin()"
+        :onPress="goToEdit"
+        class="createButton"
+      >
         <i class="fa-solid fa-pen" :style="{ fontSize: '20px' }"></i>
       </MainButton>
     </template>

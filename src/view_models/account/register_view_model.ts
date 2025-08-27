@@ -6,6 +6,9 @@ import { RouterPath } from "../../router/router_path";
 import router from "@/router/router_manager";
 import { EditTools } from "@/global/edit_tools";
 import { GlobalData } from "@/global/global_data";
+import { firebaseController } from "@/global/firebase_controller";
+import type { UserCredential } from "firebase/auth";
+import type { LoginRequestData } from "@/models/request/auth/login_request_data";
 
 export default class RegisterViewModel {
   stepIndex = ref<number>(0);
@@ -86,7 +89,25 @@ export default class RegisterViewModel {
   /**
    * 處理 Google 註冊
    */
-  googleSignIn = async () => {};
+  googleSignIn = async () => {
+    const userCredential: UserCredential | undefined =
+      await firebaseController.loginWithGoogle();
+
+    if (!userCredential) {
+      return;
+    }
+
+    const signUpData: SignUpRequestData = {
+      email: userCredential?.user.email ? userCredential?.user.email : "",
+      password: userCredential?.user.uid ? userCredential?.user.uid : "",
+      name: userCredential?.user.uid ? userCredential?.user.uid : ""
+    };
+
+    GlobalData.openLoadingModal();
+    // Google註冊提交
+    await this.userService.signUp(this.captchaController.value, signUpData);
+    GlobalData.closeLoadingModal();
+  };
 
   /**
    * 檢查是否有輸入錯誤

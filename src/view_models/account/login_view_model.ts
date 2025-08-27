@@ -7,6 +7,8 @@ import { userDataStore } from "@/global/user_data";
 import router from "@/router/router_manager";
 import { EditTools } from "@/global/edit_tools";
 import { GlobalData } from "@/global/global_data";
+import { firebaseController } from "@/global/firebase_controller";
+import type { UserCredential } from "firebase/auth";
 
 export default class LoginViewModel {
   private userService = new UserService();
@@ -47,6 +49,55 @@ export default class LoginViewModel {
       loginData,
       "normalSign"
     );
+
+    if (!userData) {
+      GlobalData.closeLoadingModal();
+      return;
+    }
+
+    if (userData) {
+      // 更新最後登入時間
+      await this.userService.updateUserLoginLastTime(userData.uid);
+
+      // 獲取完整用戶資料
+      const completeUserData: ProfileData =
+        await this.userService.getUserDataByUID(userData.uid);
+
+      // 更新全局狀態與 localStorage
+      userDataStore.setUser(completeUserData);
+
+      GlobalData.closeLoadingModal();
+      router.push(RouterPath.HOME.POST.HOME.path);
+    }
+  };
+
+  /**
+   * 處理 Google 登入
+   */
+  handleGoogleSignIn = async () => {
+    const userCredential: UserCredential | undefined =
+      await firebaseController.loginWithGoogle();
+
+    if (!userCredential) {
+      return;
+    }
+
+    const loginData: LoginRequestData = {
+      email: userCredential?.user.email ? userCredential?.user.email : "",
+      password: userCredential?.user.uid ? userCredential?.user.uid : ""
+    };
+
+    GlobalData.openLoadingModal();
+    const userData: ProfileData = await this.userService.getUserDataByEmail(
+      loginData,
+      "googleSign"
+    );
+
+    if (!userData) {
+      GlobalData.closeLoadingModal();
+      return;
+    }
+
     if (userData) {
       // 更新最後登入時間
       await this.userService.updateUserLoginLastTime(userData.uid);
@@ -105,9 +156,4 @@ export default class LoginViewModel {
   toRegisterPage = () => {
     router.push(RouterPath.AUTH.REGISTER.path);
   };
-
-  /**
-   * 處理 Google 登入
-   */
-  handleGoogleSignIn = async () => {};
 }

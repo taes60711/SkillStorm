@@ -36,6 +36,12 @@
       ></MainButton>
 
       <MainButton
+        :onPress="viewModel.handleGoogleSignIn"
+        text="Google登入"
+        class="marginB"
+      ></MainButton>
+
+      <MainButton
         :onPress="viewModel.toRegisterPage"
         text="建立新帳號"
         class="marginB"

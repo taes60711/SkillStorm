@@ -15,21 +15,29 @@ const router = createRouter({
     RouterPath.HOME.SUGGESTUSERS.HOME,
     {
       ...RouterPath.HOME.PROFILE.INDEX,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true }
+    },
+    {
+      ...RouterPath.HOME.POST.MY,
+      meta: { requiresAuth: true }
+    },
+    {
+      ...RouterPath.HOME.COURSE.MY,
+      meta: { requiresAuth: true }
     },
     {
       ...RouterPath.HOME.PROFILE.EDIT,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true }
     },
     {
       ...RouterPath.HOME.COURSE.EDIT,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true }
     },
     {
       path: "/:catchAll(.*)", // 攔截除了上方定義的其餘路由
-      redirect: "/", // 導向首頁
-    },
-  ],
+      redirect: "/" // 導向首頁
+    }
+  ]
 });
 
 router.beforeEach((to, from, next) => {

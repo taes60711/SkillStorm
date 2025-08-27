@@ -10,7 +10,7 @@ export enum apiStatus {
   firstLoading = "firstLoading",
   preDataLoading = "preDataLoading",
   loadingFinish = "loadingFinish",
-  noDataCanLoad = "noDataCanLoad",
+  noDataCanLoad = "noDataCanLoad"
 }
 
 export default class InfoBarViewModel {
@@ -23,23 +23,23 @@ export default class InfoBarViewModel {
     {
       icon: "fa-solid fa-house",
       text: "主頁",
-      path: RouterPath.HOME.POST.HOME.path,
+      path: RouterPath.HOME.POST.HOME.path
     },
     {
       icon: "fa-solid fa-handshake-angle",
       text: "技能交換",
-      path: "noPath", //RouterPath.HOME.SUGGESTUSERS.HOME.path,
+      path: "noPath" //RouterPath.HOME.SUGGESTUSERS.HOME.path,
     },
     {
       icon: "fa-solid fa-book-open-reader",
       text: "技術分享",
-      path: RouterPath.HOME.COURSE.HOME.path,
+      path: RouterPath.HOME.COURSE.HOME.path
     },
     {
       icon: "fa-solid fa-comments",
       text: "訊息",
-      path: "noPath",
-    },
+      path: "noPath"
+    }
   ];
 
   init = () => {
@@ -78,6 +78,10 @@ export default class InfoBarViewModel {
   ///跳至個人資料編輯頁面
   goToLoginIn = () => {
     router.push(RouterPath.AUTH.LOGIN);
+  };
+
+  goToMyPost = () => {
+    router.push(RouterPath.HOME.POST.MY.path);
   };
 
   ///跳至訊息

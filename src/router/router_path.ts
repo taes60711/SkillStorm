@@ -10,6 +10,8 @@ import CourseHome from "@/components/course/CourseHome.vue";
 import SuggestUsersHome from "@/components/suggestusers/SuggestUsersHome.vue";
 import PostByBoard from "@/components/post/PostByBoard.vue";
 import PostPopular from "@/components/post/postHome/PostPopular.vue";
+import MyPost from "@/components/post/MyPost.vue";
+import MyCourse from "@/components/course/MyCourse.vue";
 
 export const RouterPath = {
   HOME: {
@@ -38,6 +40,14 @@ export const RouterPath = {
           aside: InfoBar
         },
         name: "postBoard"
+      },
+      MY: {
+        path: "/My",
+        components: {
+          default: MyPost,
+          aside: InfoBar
+        },
+        name: "mypost"
       }
     },
     /// MARK: 個人資料
@@ -76,6 +86,14 @@ export const RouterPath = {
           aside: InfoBar
         },
         name: "courseHome"
+      },
+      MY: {
+        path: "/My",
+        components: {
+          default: MyCourse,
+          aside: InfoBar
+        },
+        name: "mycourse"
       },
       EDIT: {
         path: "/course/edit",

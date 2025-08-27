@@ -15,6 +15,11 @@
       text="開始註冊"
       class="marginB"
     ></MainButton>
+    <MainButton
+      :onPress="viewModel.googleSignIn"
+      text="Google註冊"
+      class="marginB"
+    ></MainButton>
     <MainButton :onPress="viewModel.toLoginPage" text="返回"></MainButton>
   </div>
 </template>

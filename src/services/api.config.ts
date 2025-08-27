@@ -2,7 +2,7 @@ export const API_CONFIG = {
   ENDPOINTS: {
     AUTH: {
       LOGIN: "/login",
-      GOOGLE_SIGN_IN: "/googleSignUpUser",
+      GOOGLE_SIGN_IN: "/webGoogleSignUpUser",
       SIGN_UP: "/signUp",
       UPDATE_PASSWORD: "/updateUserPwdByEmail",
       UPDATE_LOGIN_TIME: "/updateLoginTime",
@@ -24,7 +24,8 @@ export const API_CONFIG = {
       UPDATE_POST_COMMENT: "/updatePostComment",
       GET_ALL: "/getAll",
       GET_NEW: "/getNewPosts",
-      GET_TYPE: "/getPostsByType"
+      GET_TYPE: "/getPostsByType",
+      GET_MY_POST: "/getPostsByUser"
     },
     COURSE: {
       CREATE_COURSE: "/createCourse",

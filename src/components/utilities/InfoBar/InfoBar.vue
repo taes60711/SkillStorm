@@ -107,35 +107,67 @@
       id="InforBar_SettingBar"
       class="InforBar_SettingBar"
     >
-      <MainButton
-        :textLeft="true"
-        :noBackground="true"
-        :onPress="() => {}"
-        text="我的文章"
-      ></MainButton>
-      <MainButton
-        :textLeft="true"
-        :noBackground="true"
-        :onPress="() => {}"
-        text="技術分享"
-      ></MainButton>
-      <MainButton
-        :textLeft="true"
-        :noBackground="true"
-        :onPress="() => {}"
-        text="一般 / 設定"
-      ></MainButton>
-      <MainButton
-        v-if="userDataStore.isLogin()"
-        :textLeft="true"
-        :noBackground="true"
-        :onPress="
-          () => {
-            viewModel.logout();
-          }
-        "
-        text="登出"
-      ></MainButton>
+      <MainButton :onPress="viewModel.goToMyPost">
+        <IconText
+          v-if="viewModel.isShowText.value"
+          icon="fa-solid fa-newspaper"
+          text="我的文章"
+          class="InfoBarSettingItem"
+        ></IconText>
+        <i
+          v-else-if="!viewModel.isShowText.value"
+          class="fa-solid fa-newspaper InfoBarSettingItem InfoBarSettingIcon"
+        ></i>
+      </MainButton>
+      <MainButton :onPress="() => {}">
+        <IconText
+          v-if="viewModel.isShowText.value"
+          icon="fa-solid fa-book-open-reader"
+          text="技術分享"
+          class="InfoBarSettingItem"
+        ></IconText>
+        <i
+          v-else-if="!viewModel.isShowText.value"
+          class="fa-solid fa-book-open-reader InfoBarSettingItem InfoBarSettingIcon"
+        ></i>
+      </MainButton>
+      <MainButton :onPress="() => {}">
+        <IconText
+          v-if="viewModel.isShowText.value"
+          icon="fa-solid fa-gear"
+          text="一般 / 設定"
+          class="InfoBarSettingItem"
+        ></IconText>
+        <i
+          v-else-if="!viewModel.isShowText.value"
+          class="fa-solid fa-gear InfoBarSettingItem InfoBarSettingIcon"
+        ></i>
+      </MainButton>
+
+      <MainButton v-if="userDataStore.isLogin()" :onPress="viewModel.logout">
+        <IconText
+          v-if="viewModel.isShowText.value"
+          icon="fa-solid fa-right-from-bracket"
+          text="登出"
+          class="InfoBarSettingItem"
+        ></IconText>
+        <i
+          v-else-if="!viewModel.isShowText.value"
+          class="fa-solid fa-right-from-bracket InfoBarSettingItem InfoBarSettingIcon"
+        ></i>
+      </MainButton>
+      <MainButton v-else :onPress="viewModel.goToLoginIn">
+        <IconText
+          v-if="viewModel.isShowText.value"
+          icon="fa-solid fa-right-to-bracket"
+          text="登入"
+          class="InfoBarSettingItem"
+        ></IconText>
+        <i
+          v-else-if="!viewModel.isShowText.value"
+          class="fa-solid fa-right-to-bracket InfoBarSettingItem InfoBarSettingIcon"
+        ></i>
+      </MainButton>
     </div>
   </div>
 </template>
@@ -279,6 +311,7 @@ const turOnOffSettingBar = () => {
   margin-top: 10px;
   background-color: rgb(225, 147, 58);
 }
+
 .InfoBar_MyItemBtnChoiced {
   margin-top: 10px;
   background-color: rgb(48, 47, 47);
@@ -286,6 +319,16 @@ const turOnOffSettingBar = () => {
 
 .InfoBar_MyItemBtn:hover {
   background-color: rgb(233, 174, 144);
+}
+
+.InfoBarSettingItem {
+  padding: 8px 0px;
+}
+
+.InfoBarSettingIcon {
+  display: flex;
+  justify-self: center;
+  font-size: 24px;
 }
 
 @media screen and (max-width: 950px) {
@@ -312,6 +355,7 @@ const turOnOffSettingBar = () => {
   .InforBar_SettingBar {
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 100px;
     left: 5px;
   }
