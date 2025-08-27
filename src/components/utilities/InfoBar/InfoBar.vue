@@ -107,12 +107,35 @@
       id="InforBar_SettingBar"
       class="InforBar_SettingBar"
     >
-      <button v-if="userDataStore.isLogin()" @click="">我的文章</button>
-      <button v-if="userDataStore.isLogin()" @click="">技術分享</button>
-      <button @click="">一般</button>
-      <button v-if="userDataStore.isLogin()" @click="viewModel.logout">
-        登出
-      </button>
+      <MainButton
+        :textLeft="true"
+        :noBackground="true"
+        :onPress="() => {}"
+        text="我的文章"
+      ></MainButton>
+      <MainButton
+        :textLeft="true"
+        :noBackground="true"
+        :onPress="() => {}"
+        text="技術分享"
+      ></MainButton>
+      <MainButton
+        :textLeft="true"
+        :noBackground="true"
+        :onPress="() => {}"
+        text="一般 / 設定"
+      ></MainButton>
+      <MainButton
+        v-if="userDataStore.isLogin()"
+        :textLeft="true"
+        :noBackground="true"
+        :onPress="
+          () => {
+            viewModel.logout();
+          }
+        "
+        text="登出"
+      ></MainButton>
     </div>
   </div>
 </template>
@@ -126,6 +149,7 @@ import IconText from "@/components/utilities/IconText.vue";
 import { onMounted } from "vue";
 import { ref } from "vue";
 import { RouterPath } from "@/router/router_path";
+import MainButton from "@/components/utilities/MainButton.vue";
 
 const viewModel = new InfoBarViewModel();
 
@@ -214,6 +238,10 @@ const turOnOffSettingBar = () => {
   align-items: start;
 }
 
+.InforBar_SettingBar > * {
+  width: 100% !important;
+}
+
 .left {
   width: var(--width);
   height: 100%;
@@ -282,6 +310,8 @@ const turOnOffSettingBar = () => {
   }
 
   .InforBar_SettingBar {
+    display: flex;
+    align-items: center;
     width: 100px;
     left: 5px;
   }

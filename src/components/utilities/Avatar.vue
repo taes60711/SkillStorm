@@ -6,7 +6,7 @@
       width: size,
       height: size,
       borderRadius: borderRadius,
-      padding: `${parseFloat(size) * 0.2}px`,
+      padding: `${parseFloat(size) * 0.2}px`
     }"
   >
     <img :src="avatarUrl()" />
@@ -34,16 +34,16 @@ const imageLoadError: Ref<boolean> = ref(false);
 const props = defineProps({
   imgurl: {
     type: String,
-    required: true,
+    required: true
   },
   size: {
     type: String,
-    default: "100px",
+    default: "100px"
   },
   borderRadius: {
     type: String,
-    default: "100px",
-  },
+    default: "100px"
+  }
 });
 
 const handleImageError = (): void => {
@@ -51,7 +51,7 @@ const handleImageError = (): void => {
 };
 
 const avatarUrl = (): string => {
-  if (imageLoadError.value) {
+  if (imageLoadError.value || !props.imgurl) {
     return AppImage.defaultUserImg;
   }
 

@@ -1,36 +1,64 @@
 <template>
-    <label for="email">名稱</label>
-    <input type="text" v-model="viewModel.nameController.value">
-    
-    <label for="email">密碼</label>
-    <input type="text" v-model="viewModel.pwdController.value">
-    <div class="password-requirements">
-        <div class="requirement" :class="{ 'met': viewModel.passwordLength.value }">
-            <span class="x-mark">&#10005;</span>六碼以上
-        </div>
-        <div class="requirement" :class="{ 'met': viewModel.hasEnglish.value }">
-            <span class="x-mark">&#10005;</span>含有英文
-        </div>
-        <div class="requirement" :class="{ 'met': viewModel.hasNumber.value }">
-            <span class="x-mark">&#10005;</span>含有數字
-        </div>
+  <div class="loginInputContainer">
+    <div class="SignUpTitle">註冊</div>
+    <input
+      type="text"
+      placeholder="名稱"
+      class="textInput marginB"
+      v-model="viewModel.nameController.value"
+    />
+
+    <input
+      type="password"
+      placeholder="密碼"
+      class="textInput"
+      v-model="viewModel.pwdController.value"
+    />
+    <div class="password-requirements marginB">
+      <div class="requirement" :class="{ met: viewModel.passwordLength.value }">
+        <span class="x-mark">&#10005;</span>六碼以上
+      </div>
+      <div class="requirement" :class="{ met: viewModel.hasEnglish.value }">
+        <span class="x-mark">&#10005;</span>含有英文
+      </div>
+      <div class="requirement" :class="{ met: viewModel.hasNumber.value }">
+        <span class="x-mark">&#10005;</span>含有數字
+      </div>
     </div>
 
-    <label for="email">確認密碼</label>
-    <input type="text" v-model="viewModel.confirmPwdController.value">
+    <input
+      type="password"
+      placeholder="確認密碼"
+      class="textInput marginB"
+      v-model="viewModel.confirmPwdController.value"
+    />
     <p v-if="!viewModel.passwordsMatch.value">密碼不相同</p>
 
-    <label for="email">驗證碼</label>
-    <input type="text" v-model="viewModel.captchaController.value">
+    <input
+      type="text"
+      placeholder="驗證碼"
+      class="textInput marginB"
+      v-model="viewModel.captchaController.value"
+    />
 
-    <button @click="">註冊</button>
-    <button @click="viewModel.pageChange(0)">退回</button>
+    <MainButton :onPress="() => {}" text="註冊" class="marginB"></MainButton>
+
+    <MainButton
+      :onPress="
+        () => {
+          viewModel.pageChange(0);
+        }
+      "
+      text="退回"
+    ></MainButton>
+  </div>
 </template>
-  
+
 <script setup lang="ts">
- const viewModel = defineModel('RegisterViewModel');
+import MainButton from "@/components/utilities/MainButton.vue";
+const viewModel = defineModel("RegisterViewModel");
 </script>
-  
+
 <style scoped>
 .password-requirements,
 .password-match {
@@ -47,16 +75,32 @@
   gap: 4px;
 }
 .requirement.met {
-  color: #4A90E2;
+  color: #4a90e2;
 }
 
 .requirement.met .x-mark {
-  color: #4A90E2;
+  color: #4a90e2;
 }
 
 .x-mark {
   font-size: 10px;
   color: #666666;
 }
+
+.marginB {
+  margin-bottom: 13px;
+}
+
+.SignUpTitle {
+  font-weight: 800;
+  font-size: 30px;
+  padding-bottom: 30px;
+}
+
+.loginInputContainer {
+  width: 400px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+}
 </style>
-  

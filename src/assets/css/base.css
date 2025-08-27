@@ -34,14 +34,29 @@ textarea:focus {
   outline: none !important;
 }
 
-.textInput {
-  font-size: 16px;
+input.textInput,
+input.textInput:focus,
+input.textInput:valid,
+input.textInput:not(:placeholder-shown) {
+  font-size: 16px !important;
   color: #ffffff !important;
-  background-color: transparent;
-  border-bottom: 1px solid #686666;
-  padding-bottom: 5px;
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #686666 !important;
+  padding-bottom: 5px !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  letter-spacing: normal !important;
+  -webkit-text-security: auto !important;
+}
 
-  outline: none;
+input.textInput:-webkit-autofill {
+  font-size: 16px !important;
+  font-family: inherit !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 9999s ease-in-out 0s !important;
 }
 
 select {

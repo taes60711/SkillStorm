@@ -3,6 +3,8 @@ import type { SkillData } from "@/models/reponse/skill_reponse_data";
 import PostService from "@/services/post_service";
 import SkillService from "@/services/skill_service";
 import { APIHttpController, DevType } from "./api_http_controller";
+import { ModalController } from "@/components/utilities/Modal/ModalController";
+import Loading from "@/components/utilities/Loading.vue";
 
 export class GlobalData {
   private static instance: GlobalData;
@@ -12,6 +14,8 @@ export class GlobalData {
   static postBoard: PostBoard[] = [];
 
   static skillData: SkillData[] = [];
+
+  static modalController = new ModalController();
 
   public static async init(): Promise<GlobalData> {
     if (!GlobalData.instance) {
@@ -30,5 +34,20 @@ export class GlobalData {
   }
   private static async getSkillData() {
     this.skillData = await new SkillService().getSkillList();
+  }
+
+  static openLoadingModal() {
+    this.modalController.show(
+      Loading,
+      {},
+      false,
+      false,
+      "rgba(0, 0, 0, 0.4)",
+      "loading"
+    );
+  }
+
+  static closeLoadingModal() {
+    this.modalController.close();
   }
 }

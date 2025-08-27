@@ -27,6 +27,7 @@
         />
         <MainButton
           :onPress="() => viewModel.createEditPage()"
+          :textLeft="true"
           text="發佈新文章"
           class="postCreateBtn"
         ></MainButton>

@@ -32,7 +32,7 @@ export default class PostService extends APIClient {
     const param = {
       page: page,
       size: size,
-      uid: userId
+      uid: userId === "guest" ? "" : userId
     };
 
     const reponseData: Post[] | string = await this.apiGet(
@@ -71,7 +71,7 @@ export default class PostService extends APIClient {
     const param = {
       page: page,
       size: size,
-      uid: userId
+      uid: userId === "guest" ? "" : userId
     };
 
     const reponseData: Post[] | string = await this.apiGet(
@@ -111,7 +111,7 @@ export default class PostService extends APIClient {
     const param = {
       page: page,
       size: size,
-      uid: userId
+      uid: userId === "guest" ? "" : userId
     };
 
     const reponseData: Post[] | string = await this.apiGet(

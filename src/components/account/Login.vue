@@ -1,272 +1,94 @@
 <template>
-  <div class="login-container">
+  <div class="loginContainer">
     <img :src="AppImage.logo" alt="SkillStorm" class="logo" />
-    
-    <div class="login-form">
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input 
-          type="email" 
-          id="email" 
-          v-model="viewModel.emailController.value"
-        />
+    <div class="loginInputContainer">
+      <div class="loginTitle">登入</div>
+
+      <input
+        placeholder="email"
+        class="textInput marginB"
+        v-model="viewModel.emailController.value"
+      />
+
+      <input
+        type="password"
+        placeholder="password"
+        class="textInput marginB"
+        v-model="viewModel.pwdController.value"
+      />
+
+      <a
+        class="forgot-password marginB"
+        href="#"
+        @click.prevent="viewModel.toForgotPwdPage"
+        >忘記密碼？</a
+      >
+
+      <div v-if="viewModel.error.value != ''" class="errMessage marginB">
+        {{ viewModel.error.value }}
       </div>
 
-      <div class="form-group">
+      <MainButton
+        :onPress="viewModel.handleLogin"
+        text="登入"
+        class="marginB"
+      ></MainButton>
 
-        <label for="password">密碼</label>
-        <input 
-          :type="'password'"
-          id="password" 
-          v-model="viewModel.pwdController.value"
-        />
-
-        <div class="password-requirements">
-          <div class="requirement" :class="{ 'met': viewModel.passwordLength.value }">
-            <span class="x-mark">&#10005;</span>六碼以上
-          </div>
-          <div class="requirement" :class="{ 'met': viewModel.hasEnglish.value }">
-            <span class="x-mark">&#10005;</span>含有英文
-          </div>
-          <div class="requirement" :class="{ 'met': viewModel.hasNumber.value }">
-            <span class="x-mark">&#10005;</span>含有數字
-          </div>
-        </div>
-
-      </div>
-
-      <div class="forgot-password">
-        <a href="#" @click.prevent="viewModel.toForgotPwdPage">忘記密碼？</a>
-      </div>
-
-      <div 
-        v-if="viewModel.error.value != ''" 
-        class="error-message">{{ viewModel.error.value }}
-      </div>
-
-      <button type="button" class="login-button" @click="viewModel.handleLogin">
-        登入
-      </button>
-    
-
-      <button type="button" class="google-button" @click="">
-        <img :src="AppImage.googleLogo" alt="Google" class="google-icon" />
-        Google登入
-      </button>
-
-      <div class="register-link">
-        <button type="button" class="register-button" @click="viewModel.toRegisterPage">建立新帳號</button>
-      </div>
+      <MainButton
+        :onPress="viewModel.toRegisterPage"
+        text="建立新帳號"
+        class="marginB"
+      ></MainButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { AppImage } from '@/global/app_image';
-import LoginViewModel from '../../view_models/account/login_view_model'
+import { AppImage } from "@/global/app_image";
+import LoginViewModel from "../../view_models/account/login_view_model";
+import MainButton from "@/components/utilities/MainButton.vue";
 
-const viewModel = new LoginViewModel()
-
+const viewModel = new LoginViewModel();
 </script>
 
 <style scoped>
-.login-container {
-  min-height: 100vh;
-  background-color: #000000;
-  padding: 20px;
+.loginContainer {
+  height: 100vh;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
 }
 
-.logo {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 16px;
+.loginTitle {
+  font-weight: 800;
+  font-size: 30px;
+  padding-bottom: 30px;
 }
 
-.brand-name {
-  color: #FFFFFF;
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-}
-
-.login-form {
-  width: 100%;
-  max-width: 300px;
+.loginInputContainer {
+  width: 400px;
+  padding-right: 10px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.errMessage {
+  color: red;
 }
 
-label {
-  color: #FFFFFF;
-  font-size: 14px;
-}
-
-input {
-  background-color: transparent;
-  border: 1px solid #333333;
-  border-radius: 8px;
-  padding: 12px;
-  color: #FFFFFF;
-  font-size: 16px;
-}
-
-input:focus {
-  outline: none;
-  border-color: #E8A87C;
-}
-
-
-.password-requirements {
-  display: flex;
-  gap: 16px;
-  margin-top: 8px;
-}
-
-.requirement {
-  color: #666666;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.requirement.met {
-  color: #4A90E2;
-}
-
-.requirement.met .x-mark {
-  color: #4A90E2;
-}
-
-.x-mark {
-  font-size: 10px;
-  color: #666666;
+.marginB {
+  margin-bottom: 13px;
 }
 
 .forgot-password {
-  text-align: right;
-}
-
-.forgot-password a {
-  color: #FFFFFF;
-  text-decoration: none;
-  font-size: 12px;
-}
-
-button {
-  width: 100%;
-  padding: 15px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.login-button {
-  background-color: #333333;
-  color: #FFFFFF;
-}
-
-.login-button:disabled,
-.google-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.google-button {
-  background-color: #FFFFFF;
-  color: #000000;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.google-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.error-message {
-  color: #ff4d4f;
-  background-color: #fff2f0;
-  border: 1px solid #ffccc7;
-  padding: 8px 12px;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-input:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-}
-
-.register-link {
-  text-align: center;
-  margin-top: 20px;
-  color: #FFFFFF;
+  align-self: flex-end;
   font-size: 14px;
 }
-
-.register-button {
-  background: none;
-  border: none;
-  color: #4A90E2;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 4px;
-  text-decoration: underline;
-}
-
-.register-button:hover {
-  color: #357ABD;
-}
-
-@media screen and (max-width: 480px) {
-  .logo {
-    width: 64px;
-    height: 64px;
-  }
-
-  .brand-name {
-    font-size: 20px;
-  }
-
-  .password-requirements {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  input {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  button {
-    padding: 12px;
-    font-size: 14px;
-  }
-
-  .register-link {
-    font-size: 12px;
-  }
-
-  .register-button {
-    font-size: 12px;
-  }
+.forgot-password:hover {
+  color: rgb(118, 118, 118);
 }
 </style>

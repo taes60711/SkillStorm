@@ -1,7 +1,10 @@
 <template>
   <button
     v-if="!hasSlot && props.text != null"
-    class="mainBtnContainer"
+    :class="[
+      textLeft ? 'mainLeftBtnContainer' : 'mainBtnContainer',
+      noBackground ? 'noBackgroundBtn' : ''
+    ]"
     @click="
       (e) => {
         e.stopPropagation();
@@ -39,9 +42,17 @@ const props = defineProps({
   text: {
     type: String
   },
+  textLeft: {
+    type: Boolean,
+    default: false
+  },
   needOpacity: {
     type: Boolean,
     default: true
+  },
+  noBackground: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -51,7 +62,17 @@ const hasSlot = slots.default != null;
 
 <style scoped>
 .mainBtnContainer {
-  background-color: rgb(39, 39, 39);
+  background-color: rgb(44, 43, 43);
+  padding: 5px 15px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.mainLeftBtnContainer {
+  background-color: rgb(44, 43, 43);
   padding: 5px 15px;
   border-radius: 10px;
   display: flex;
@@ -59,7 +80,15 @@ const hasSlot = slots.default != null;
   color: white;
 }
 
+.noBackgroundBtn {
+  background-color: transparent !important;
+}
+
 .mainBtnContainer:hover {
+  opacity: 0.7;
+}
+
+.mainLeftBtnContainer:hover {
   opacity: 0.7;
 }
 

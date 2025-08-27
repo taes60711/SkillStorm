@@ -1,8 +1,8 @@
 import Register from "../components/account/register/Register.vue";
 import Login from "../components/account/Login.vue";
 import pwdForgot from "../components/account/PwdForgotView.vue";
-import Profile from "../components/profile/Index.vue";
-import EditProfile from "../components/profile/Edit.vue";
+import Profile from "../components/profile/ProfileHome.vue";
+import EditProfile from "../components/profile/ProfileEdit.vue";
 import CourseEditor from "@/components/course/CourseEditor.vue";
 import PostHome from "@/components/post/postHome/PostHome.vue";
 import InfoBar from "@/components/utilities/InfoBar/InfoBar.vue";
@@ -19,26 +19,26 @@ export const RouterPath = {
         path: "/",
         components: {
           default: PostHome,
-          aside: InfoBar,
+          aside: InfoBar
         },
-        name: "Home",
+        name: "Home"
       },
       POPULAR: {
         path: "/popular",
         components: {
           default: PostPopular,
-          aside: InfoBar,
+          aside: InfoBar
         },
-        name: "Popular",
+        name: "Popular"
       },
       BOARD: {
         path: "/post/board/:boardtype",
         components: {
           default: PostByBoard,
-          aside: InfoBar,
+          aside: InfoBar
         },
-        name: "postBoard",
-      },
+        name: "postBoard"
+      }
     },
     /// MARK: 個人資料
     PROFILE: {
@@ -46,15 +46,15 @@ export const RouterPath = {
         path: "/profile",
         components: {
           default: Profile,
-          aside: InfoBar,
+          aside: InfoBar
         },
-        name: "profile",
+        name: "profile"
       },
       EDIT: {
         path: "/profile/edit",
         component: EditProfile,
-        name: "profileEdit",
-      },
+        name: "profileEdit"
+      }
     },
     /// MARK: 推薦使用者
     SUGGESTUSERS: {
@@ -62,10 +62,10 @@ export const RouterPath = {
         path: "/suggestusers",
         components: {
           default: SuggestUsersHome,
-          aside: InfoBar,
+          aside: InfoBar
         },
-        name: "suggestusers",
-      },
+        name: "suggestusers"
+      }
     },
     /// MARK: 技術分享
     COURSE: {
@@ -73,35 +73,35 @@ export const RouterPath = {
         path: "/course",
         components: {
           default: CourseHome,
-          aside: InfoBar,
+          aside: InfoBar
         },
-        name: "courseHome",
+        name: "courseHome"
       },
       EDIT: {
         path: "/course/edit",
         component: CourseEditor,
-        name: "courseEdit",
-      },
-    },
+        name: "courseEdit"
+      }
+    }
   },
   AUTH: {
     /// MARK: 登入
     LOGIN: {
       path: "/login",
       component: Login,
-      name: "login",
+      name: "login"
     },
     /// MARK: 註冊
     REGISTER: {
       path: "/register",
       component: Register,
-      name: "register",
+      name: "register"
     },
     /// MARK: 忘記密碼
     PWDFORGOT: {
       path: "/forgotPassword",
       component: pwdForgot,
-      name: "forgotPassword",
-    },
-  },
+      name: "forgotPassword"
+    }
+  }
 };
