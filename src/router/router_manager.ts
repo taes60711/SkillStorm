@@ -29,10 +29,7 @@ const router = createRouter({
       ...RouterPath.HOME.PROFILE.EDIT,
       meta: { requiresAuth: true }
     },
-    {
-      ...RouterPath.HOME.COURSE.EDIT,
-      meta: { requiresAuth: true }
-    },
+
     {
       path: "/:catchAll(.*)", // 攔截除了上方定義的其餘路由
       redirect: "/" // 導向首頁

@@ -107,7 +107,13 @@
       id="InforBar_SettingBar"
       class="InforBar_SettingBar"
     >
-      <MainButton :onPress="viewModel.goToMyPost">
+      <MainButton
+        :onPress="
+          () => {
+            viewModel.changePage(RouterPath.HOME.POST.MY.path);
+          }
+        "
+      >
         <IconText
           v-if="viewModel.isShowText.value"
           icon="fa-solid fa-newspaper"
@@ -119,7 +125,13 @@
           class="fa-solid fa-newspaper InfoBarSettingItem InfoBarSettingIcon"
         ></i>
       </MainButton>
-      <MainButton :onPress="() => {}">
+      <MainButton
+        :onPress="
+          () => {
+            viewModel.changePage(RouterPath.HOME.COURSE.MY.path);
+          }
+        "
+      >
         <IconText
           v-if="viewModel.isShowText.value"
           icon="fa-solid fa-book-open-reader"

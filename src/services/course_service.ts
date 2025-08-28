@@ -96,4 +96,66 @@ export default class CourseService extends APIClient {
       return reponseData;
     }
   }
+
+  /**
+   * 自己創建的所有課程
+   * @param page 從第幾頁開始
+   * @param size 一次拿多少的資料
+   * @param userId  使用者的uid
+   * @returns
+   */
+  async getMyCreateCourse(
+    page: number,
+    size: number,
+    userId: string
+  ): Promise<Course[]> {
+    const param = {
+      page: page,
+      size: size
+    };
+
+    const reponseData: Course[] | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.COURSE.GET_MY_COURSE}/${userId}`,
+      param
+    );
+
+    console.log(reponseData);
+
+    if (typeof reponseData === "string") {
+      return [];
+    } else {
+      return reponseData;
+    }
+  }
+
+  /**
+   * 自己加入的所有課程
+   * @param page 從第幾頁開始
+   * @param size 一次拿多少的資料
+   * @param userId  使用者的uid
+   * @returns
+   */
+  async getMyAddedCourse(
+    page: number,
+    size: number,
+    userId: string
+  ): Promise<Course[]> {
+    const param = {
+      page: page,
+      size: size
+    };
+
+    const reponseData: Course[] | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.COURSE.GET_ADDED_COURSE}/${userId}`,
+      param
+    );
+
+    console.log(reponseData);
+
+    if (typeof reponseData === "string") {
+      return [];
+    } else {
+      return reponseData;
+    }
+  }
 }

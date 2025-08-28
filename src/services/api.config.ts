@@ -30,6 +30,8 @@ export const API_CONFIG = {
     COURSE: {
       CREATE_COURSE: "/createCourse",
       UPDATE_COURSE: "/updateCourse",
+      GET_MY_COURSE: "/getCoursesByUserId",
+      GET_ADDED_COURSE: "/getAddedCourses",
       GET_ALL: "/getAllCourses"
     }
   }

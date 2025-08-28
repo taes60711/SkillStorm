@@ -3,7 +3,6 @@ import Login from "../components/account/Login.vue";
 import pwdForgot from "../components/account/PwdForgotView.vue";
 import Profile from "../components/profile/ProfileHome.vue";
 import EditProfile from "../components/profile/ProfileEdit.vue";
-import CourseEditor from "@/components/course/CourseEditor.vue";
 import PostHome from "@/components/post/postHome/PostHome.vue";
 import InfoBar from "@/components/utilities/InfoBar/InfoBar.vue";
 import CourseHome from "@/components/course/CourseHome.vue";
@@ -11,7 +10,7 @@ import SuggestUsersHome from "@/components/suggestusers/SuggestUsersHome.vue";
 import PostByBoard from "@/components/post/PostByBoard.vue";
 import PostPopular from "@/components/post/postHome/PostPopular.vue";
 import MyPost from "@/components/post/MyPost.vue";
-import MyCourse from "@/components/course/MyCourse.vue";
+import MyCourse from "@/components/course/MyCourse/MyCourse.vue";
 
 export const RouterPath = {
   HOME: {
@@ -42,7 +41,7 @@ export const RouterPath = {
         name: "postBoard"
       },
       MY: {
-        path: "/My",
+        path: "/post/my",
         components: {
           default: MyPost,
           aside: InfoBar
@@ -87,18 +86,14 @@ export const RouterPath = {
         },
         name: "courseHome"
       },
+      /// MARK: 我的技術分享
       MY: {
-        path: "/My",
+        path: "/course/my",
         components: {
           default: MyCourse,
           aside: InfoBar
         },
         name: "mycourse"
-      },
-      EDIT: {
-        path: "/course/edit",
-        component: CourseEditor,
-        name: "courseEdit"
       }
     }
   },

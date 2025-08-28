@@ -80,10 +80,6 @@ export default class InfoBarViewModel {
     router.push(RouterPath.AUTH.LOGIN);
   };
 
-  goToMyPost = () => {
-    router.push(RouterPath.HOME.POST.MY.path);
-  };
-
   ///跳至訊息
   goToMessage = () => {
     this.modalController.show(
