@@ -38,7 +38,7 @@ export class ModalController {
         needCloseBtn: needCloseBtn,
         markColor: markColor,
         closePage: this.close,
-        needModalClose: needModalClose,
+        needModalClose: needModalClose
       });
 
       app.mount(modalElement);
@@ -53,6 +53,16 @@ export class ModalController {
     const modalElement = document.getElementById(this.modalId);
     if (modalElement) {
       // 移除該元素
+      modalElement.remove();
+    }
+  };
+
+  /**
+   * 關閉Modal
+   */
+  closeByHaveId = (modalId: string): void => {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
       modalElement.remove();
     }
   };

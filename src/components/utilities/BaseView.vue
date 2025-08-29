@@ -9,7 +9,17 @@
       >
         <!-- api list header -->
         <slot name="apiListHeader"></slot>
-        <div v-if="apiLoadingStatus === apiStatus.firstLoading">loading...</div>
+        <div v-if="apiLoadingStatus === apiStatus.firstLoading">
+          <div class="wrapper">
+            <div class="circleWraper">
+              <div class="circle"></div>
+              <div class="circle"></div>
+              <div class="circle"></div>
+            </div>
+            <span>Loading</span>
+          </div>
+        </div>
+
         <!-- api list body -->
         <slot v-else name="apiListBody"></slot>
       </div>
@@ -37,16 +47,16 @@ const apiLoadingStatus = ref<apiStatus>(apiStatus.loadingFinish);
 
 const props = defineProps({
   apiListFunc: {
-    type: Function,
+    type: Function
   },
   page: {
     type: Number,
-    default: 0,
+    default: 0
   },
   size: {
     type: Number,
-    default: 5,
-  },
+    default: 5
+  }
 });
 
 const emit = defineEmits<{
@@ -153,5 +163,55 @@ const preloadData = async () => {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  padding: 0px 16px;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.circleWraper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  margin: 0 5px; /* 調整球之間的間距 */
+  border-radius: 50%;
+  background-color: #fff;
+  animation: circle 0.5s alternate infinite ease;
+}
+
+@keyframes circle {
+  0% {
+    transform: translateY(30px) scaleX(1.7);
+    height: 5px;
+    border-radius: 50px 50px 25px 25px;
+  }
+  40% {
+    transform: translateY(0) scaleX(1);
+    height: 20px;
+    border-radius: 50%;
+  }
+  100% {
+    transform: translateY(-20px);
+  }
+}
+
+.circle:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.circle:nth-child(3) {
+  animation-delay: 0.3s;
 }
 </style>

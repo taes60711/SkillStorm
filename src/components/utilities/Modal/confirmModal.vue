@@ -1,13 +1,44 @@
 <template>
   <div class="confirmModal_Container">
-    <p>{{ `OK` }}</p>
+    <p class="textContianer">{{ props.modalProps.modalText }}</p>
+
+    <MainButton
+      :onPress="
+        () => {
+          props.modalProps.confirmFunc();
+        }
+      "
+      text="確認"
+      class="createButton"
+    >
+    </MainButton>
   </div>
 </template>
 
+<script setup lang="ts">
+import MainButton from "@/components/utilities/MainButton.vue";
+
+const props = defineProps<{
+  modalProps: object;
+}>();
+</script>
+
 <style scoped>
 .confirmModal_Container {
-  background-color: rgb(174, 64, 64);
-  width: 100px;
-  height: 100px;
+  background-color: rgb(56, 54, 54);
+  padding: 5px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+  border-radius: 10px;
+}
+
+.textContianer {
+  padding: 30px 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

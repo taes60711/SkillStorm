@@ -20,7 +20,13 @@
     </template>
 
     <template #apiListBody>
+      <div v-if="postData.length === 0" class="noDataContainer">
+        <i class="fa-solid fa-newspaper"></i>
+        <p>目前還沒有任何文章</p>
+      </div>
+
       <div
+        v-else
         class="postItemContainer"
         v-for="(item, index) in postData"
         v-bind:key="index"
@@ -47,8 +53,9 @@
             <MainButton
               :onPress="() => openItemSetting(item)"
               :style="{ paddingRight: '16px' }"
+              v-if="item.user.uid == userDataStore.userData.value.uid"
             >
-              <i class="fa-solid fa-ellipsis"></i>
+              <i class="fa-solid fa-pen-to-square"></i>
             </MainButton>
           </div>
 

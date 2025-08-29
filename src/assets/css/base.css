@@ -77,3 +77,19 @@ select:focus {
   scrollbar-width: thin;
   scrollbar-color: rgba(100, 100, 100, 1) rgba(0, 0, 0, 0);
 }
+
+.noDataContainer {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: white;
+}
+
+.noDataContainer p {
+  padding-top: 10px;
+  font-size: 16px;
+  color: white;
+}

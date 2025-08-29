@@ -96,9 +96,12 @@ export default class CourseEditViewModel {
       type: this.selectedType.value.id.toString(),
       isPublic: this.isPublic.value
     };
-
+    /// 送出前確認
     if (this.sendBeforCheck()) {
+      /// Open Loading
+      GlobalData.openLoadingModal();
       if (this.coursetId !== -1) {
+        ///　更新
         const idx: number = this.listCourseData.findIndex(
           (e) => e.id === this.coursetId
         );
@@ -115,11 +118,44 @@ export default class CourseEditViewModel {
             data.learningkillList;
           this.listCourseData[idx].type = data.type;
           this.listCourseData[idx].isPublic = data.isPublic;
-          this.modalController.show(confimModal);
+          /// Close Loading
+          GlobalData.closeLoadingModal();
+          /// 更新成功Hint
+          this.modalController.show(
+            confimModal,
+            {
+              modalText: "更新成功",
+              confirmFunc: () => {
+                this.modalController.close();
+                this.modalController.closeByHaveId("courseEdit");
+              }
+            },
+            false,
+            false,
+            "rgba(0, 0, 0, 0.4)",
+            "confirmModal"
+          );
         }
       } else {
+        ///　作成
         await new CourseService().createCourse(data);
-        this.modalController.show(confimModal);
+        /// Close Loading
+        GlobalData.closeLoadingModal();
+        /// 作成成功Hint
+        this.modalController.show(
+          confimModal,
+          {
+            modalText: "投稿成功",
+            confirmFunc: () => {
+              this.modalController.close();
+              this.modalController.closeByHaveId("courseEdit");
+            }
+          },
+          false,
+          false,
+          "rgba(0, 0, 0, 0.4)",
+          "confirmModal"
+        );
       }
     }
   };

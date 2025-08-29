@@ -28,7 +28,7 @@ export default class InfoBarViewModel {
     {
       icon: "fa-solid fa-handshake-angle",
       text: "技能交換",
-      path: "noPath" //RouterPath.HOME.SUGGESTUSERS.HOME.path,
+      path: "noPath"
     },
     {
       icon: "fa-solid fa-book-open-reader",

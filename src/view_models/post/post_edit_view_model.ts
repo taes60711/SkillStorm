@@ -8,6 +8,7 @@ import { EditTools } from "@/global/edit_tools";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import confimModal from "@/components/utilities/Modal/confirmModal.vue";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
+import HintModal from "@/components/utilities/Modal/HintModal.vue";
 
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
@@ -49,7 +50,10 @@ export default class PostEditViewModel {
     };
 
     if (this.sendBeforCheck()) {
+      GlobalData.openLoadingModal();
+
       if (this.postId !== -1) {
+        // 更新文章
         const idx: number = this.listPostData.findIndex(
           (e) => e.id === this.postId
         );
@@ -59,10 +63,42 @@ export default class PostEditViewModel {
 
           this.listPostData[idx].mainMessage = postData.content;
           this.listPostData[idx].fileMessage = postData.fileMessage;
+
+          GlobalData.closeLoadingModal();
+
+          this.modalController.show(
+            confimModal,
+            {
+              modalText: "更新成功",
+              confirmFunc: () => {
+                this.modalController.close();
+                this.modalController.closeByHaveId("postedit");
+              }
+            },
+            false,
+            false,
+            "rgba(0, 0, 0, 0.4)",
+            "confirmModal"
+          );
         }
       } else {
+        // 創建文章
         await new PostService().createPost(postData);
-        this.modalController.show(confimModal);
+        GlobalData.closeLoadingModal();
+        this.modalController.show(
+          confimModal,
+          {
+            modalText: "投稿成功",
+            confirmFunc: () => {
+              this.modalController.close();
+              this.modalController.closeByHaveId("postedit");
+            }
+          },
+          false,
+          false,
+          "rgba(0, 0, 0, 0.4)",
+          "confirmModal"
+        );
       }
     }
   };

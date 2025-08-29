@@ -22,6 +22,7 @@ export const API_CONFIG = {
       CREATE_POST_COMMENT: "/createPostComment",
       DELETE_POST_COMMENT: "/deletePostComment",
       UPDATE_POST_COMMENT: "/updatePostComment",
+      UPDATE_POST_GOOD: "/updatePostGood",
       GET_ALL: "/getAll",
       GET_NEW: "/getNewPosts",
       GET_TYPE: "/getPostsByType",

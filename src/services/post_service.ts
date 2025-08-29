@@ -257,6 +257,25 @@ export default class PostService extends APIClient {
   }
 
   /**
+   * MARK: 更新文章
+   * @param postData 更新文章的Data
+   */
+  async updatePostGood(postId: number, userId: string = ""): Promise<void> {
+    let body = {};
+
+    if (userId !== "") {
+      body = { goodedUserUID: userId };
+    }
+
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.UPDATE_POST_GOOD}/${postId}`,
+      body
+    );
+
+    console.log(`updatePostGood : ${reponseData}`);
+  }
+
+  /**
    * MARK: 創建文章留言
    * @param postCommentData 創建文章留言的Data
    */

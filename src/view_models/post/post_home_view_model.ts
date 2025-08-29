@@ -118,4 +118,33 @@ export default class PostHomeViewModel {
       router.push(RouterPath.HOME.POST.POPULAR.path);
     }
   };
+
+  changeLike = async (listData: Post[], data: Post) => {
+    if (
+      data.user.uid === userDataStore.userData.value.uid ||
+      !userDataStore.isLogin()
+    ) {
+      return;
+    }
+
+    const idx: number = listData.findIndex((e) => e.id === data.id);
+
+    if (idx !== -1) {
+      if (data.userIsGood) {
+        await new PostService().updatePostGood(data.id);
+        data.good = data.good - 1;
+      } else {
+        await new PostService().updatePostGood(
+          data.id,
+          userDataStore.userData.value.uid
+        );
+        data.good = data.good + 1;
+      }
+
+      data.userIsGood = !data.userIsGood;
+
+      listData[idx].userIsGood = data.userIsGood;
+      listData[idx].good = data.good;
+    }
+  };
 }

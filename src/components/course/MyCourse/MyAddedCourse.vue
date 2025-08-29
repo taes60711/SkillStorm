@@ -1,7 +1,13 @@
 <template>
   <BaseView :apiListFunc="getCourseList" @apiReturnData="handleApiReturnData">
     <template #apiListBody>
+      <div v-if="courseData.length === 0" class="noDataContainer">
+        <i class="fa-solid fa-newspaper"></i>
+        <p>目前還沒有任何分享</p>
+      </div>
+
       <div
+        v-else
         class="courseItemContainer"
         v-for="(item, index) in courseData"
         v-bind:key="index"
@@ -19,13 +25,6 @@
                 •{{ dateTimeFormat.format(item.createdTime) }}
               </p>
             </div>
-
-            <MainButton
-              :onPress="() => openItemSetting(item)"
-              :style="{ paddingRight: '16px' }"
-            >
-              <i class="fa-solid fa-ellipsis"></i>
-            </MainButton>
           </div>
           <p class="title">{{ item.title }}</p>
 

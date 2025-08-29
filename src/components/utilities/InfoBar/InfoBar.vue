@@ -143,7 +143,7 @@
           class="fa-solid fa-book-open-reader InfoBarSettingItem InfoBarSettingIcon"
         ></i>
       </MainButton>
-      <MainButton :onPress="() => {}">
+      <MainButton :onPress="viewModel.goToMessage">
         <IconText
           v-if="viewModel.isShowText.value"
           icon="fa-solid fa-gear"

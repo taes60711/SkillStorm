@@ -89,7 +89,14 @@
     </template>
 
     <template #apiListBody>
-      <div
+
+      <div v-if="viewModel.postCommentData.value.length === 0" 
+        class="noDataContainer">
+        <i class="fa-solid fa-comment-slash"></i>
+        <p>目前還沒有任何留言</p>
+      </div>
+
+      <div v-else
         class="postCommentContainer"
         v-for="(item, index) in viewModel.postCommentData.value"
         v-bind:key="index"
@@ -113,7 +120,7 @@
         <div class="editContainer" v-if="item.user.uid == userDataStore.userData.value.uid">
          <MainButton
             :onPress="() => viewModel.editPostCommentStart(item.id, item.message)"
-            :style="{ marginLeft: '10px' }"
+            :style="{ marginRight: '5px' }"
             text="編集"
             v-if="!viewModel.commentIsEdit.value" 
           ></MainButton>
@@ -237,5 +244,8 @@ onBeforeMount(() => {
 .postCommentContainer .editContainer{
   display: flex;
   flex-direction: row;
+  padding-top: 10px;
 }
+
+
 </style>
