@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import Editor from "primevue/editor";
 import { Quill } from "@vueup/vue-quill";
-import Modal from "../utilities/Modal.vue";
+import Modal from "@/components/post/PostFileEditorModal.vue";
 import { EditTools } from "@/global/edit_tools";
 
 const editTools = new EditTools();
@@ -175,29 +175,52 @@ const insertCustomLink = (link: string, linkText: string) => {
     </Editor>
 
     <!-- link Insert -->
-    <Modal :visible="showLinkModal" @update:visible="showLinkModal = $event">
-      <p>Link Text:</p>
-      <input type="text" v-model="LinkTextController" />
-      <p>Link:</p>
-      <input type="text" v-model="LinkController" />
+    <Modal
+      :visible="showLinkModal"
+      :confirmFunc="() => insertCustomLink(LinkController, LinkTextController)"
+      @update:visible="showLinkModal = $event"
+    >
+      <input
+        type="text"
+        class="textInput modalTextInput"
+        placeholder="請輸入鏈結文字"
+        v-model="LinkTextController"
+      />
 
-      <button @click="insertCustomLink(LinkController, LinkTextController)">
-        插入鏈結
-      </button>
+      <input
+        type="text"
+        class="textInput modalTextInput"
+        placeholder="請輸入鏈結"
+        v-model="LinkController"
+      />
     </Modal>
 
     <!-- youtubeVideo Insert -->
-    <Modal :visible="showVideoModal" @update:visible="showVideoModal = $event">
-      <h2>youtube URL</h2>
-      <input type="text" v-model="youtubeController" />
-      <button @click="insertCustomVideo(youtubeController)">插入影片</button>
+    <Modal
+      :visible="showVideoModal"
+      :confirmFunc="() => insertCustomVideo(youtubeController)"
+      @update:visible="showVideoModal = $event"
+    >
+      <input
+        type="text"
+        class="textInput modalTextInput"
+        placeholder="請輸入Youtube URL"
+        v-model="youtubeController"
+      />
     </Modal>
 
     <!-- Img Insert -->
-    <Modal :visible="showModal" @update:visible="showModal = $event">
-      <h2>Image URL</h2>
-      <input type="text" v-model="urlImgController" />
-      <button @click="insertCustomImage(urlImgController)">插入圖片</button>
+    <Modal
+      :visible="showModal"
+      :confirmFunc="() => insertCustomImage(urlImgController)"
+      @update:visible="showModal = $event"
+    >
+      <input
+        type="text"
+        class="textInput modalTextInput"
+        placeholder="請輸入圖片 URL"
+        v-model="urlImgController"
+      />
     </Modal>
   </div>
 </template>
@@ -224,5 +247,10 @@ const insertCustomLink = (link: string, linkText: string) => {
 ::v-deep(.p-editor .ql-editor.ql-blank::before) {
   color: #c4c0c0;
   font-style: normal;
+}
+
+.modalTextInput {
+  width: 100%;
+  margin: 20px 0px;
 }
 </style>

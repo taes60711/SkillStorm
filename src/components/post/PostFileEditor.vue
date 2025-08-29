@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import Modal from "../utilities/Modal.vue";
+import Modal from "@/components/post/PostFileEditorModal.vue";
 import { EditTools } from "@/global/edit_tools";
 import { ref } from "vue";
 import MainButton from "@/components/utilities/MainButton.vue";
