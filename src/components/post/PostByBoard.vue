@@ -75,18 +75,26 @@
               class="bottombarItem"
             ></IconText>
 
-            <IconText
-              v-if="item.userIsGood"
-              icon="fa-regular fa-heart"
-              :text="`${item.good}`"
-              class="bottombarItem"
-            ></IconText>
-            <IconText
-              v-else
-              icon="fa-solid fa-heart"
-              :text="`${item.good}`"
-              class="bottombarItem"
-            ></IconText>
+            <MainButton
+              :onPress="
+                () => {
+                  viewModel.changeLike(postData, item);
+                }
+              "
+            >
+              <IconText
+                v-if="item.userIsGood"
+                icon="fa-solid fa-heart"
+                :text="`${item.good}`"
+                class="bottombarItem"
+              ></IconText>
+              <IconText
+                v-else
+                icon="fa-regular fa-heart"
+                :text="`${item.good}`"
+                class="bottombarItem"
+              ></IconText>
+            </MainButton>
 
             <IconText
               icon="fa-regular fa-comment"

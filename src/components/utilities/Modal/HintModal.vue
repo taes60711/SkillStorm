@@ -1,15 +1,16 @@
 <template>
   <div class="hint_Container">
-    <p class=".textTitle {">提示</p>
+    <p class="textTitle">提示</p>
     <p class="textContianer">{{ props.modalProps.modalText }}</p>
 
     <div class="btnContainer">
       <MainButton
         :onPress="
           () => {
-            props.modalProps.cancel();
+            props.modalProps.cancelFunc();
           }
         "
+        :style="{ padding: '5px 20px' }"
         text="取消"
       >
       </MainButton>
@@ -19,6 +20,7 @@
             props.modalProps.confirmFunc();
           }
         "
+        :style="{ padding: '5px 20px' }"
         text="確認"
       >
       </MainButton>
@@ -37,7 +39,7 @@ const props = defineProps<{
 <style scoped>
 .hint_Container {
   background-color: rgb(56, 54, 54);
-  padding: 5px 20px;
+  padding: 13px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -48,10 +50,11 @@ const props = defineProps<{
 .textTitle {
   font-size: 25px;
   font-weight: 800;
+  align-self: center;
 }
 
 .textContianer {
-  padding: 30px 30px;
+  padding: 15px 30px;
   display: flex;
   justify-content: center;
   align-items: center;

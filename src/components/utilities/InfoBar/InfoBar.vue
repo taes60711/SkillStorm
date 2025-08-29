@@ -110,7 +110,7 @@
       <MainButton
         :onPress="
           () => {
-            viewModel.changePage(RouterPath.HOME.POST.MY.path);
+            viewModel.changePage(RouterPath.HOME.POST.MY.path, true);
           }
         "
       >
@@ -128,7 +128,7 @@
       <MainButton
         :onPress="
           () => {
-            viewModel.changePage(RouterPath.HOME.COURSE.MY.path);
+            viewModel.changePage(RouterPath.HOME.COURSE.MY.path, true);
           }
         "
       >

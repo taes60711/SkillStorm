@@ -74,17 +74,31 @@
   </div>
 
   <!-- youtubeVideo Insert -->
-  <Modal :visible="showVideoModal" @update:visible="showVideoModal = $event">
-    <h2>youtube URL</h2>
-    <input type="text" v-model="youtubeController" />
-    <button @click="handleYtVideo(youtubeController)">插入影片</button>
+  <Modal
+    :visible="showVideoModal"
+    :confirmFunc="() => handleYtVideo(youtubeController)"
+    @update:visible="showVideoModal = $event"
+  >
+    <input
+      type="text"
+      class="textInput modalTextInput"
+      placeholder="請輸入Youtube URL"
+      v-model="youtubeController"
+    />
   </Modal>
 
   <!-- Img Insert -->
-  <Modal :visible="showModal" @update:visible="showModal = $event">
-    <h2>Image URL</h2>
-    <input type="text" v-model="urlImgController" />
-    <button @click="handleUrlImg(urlImgController)">插入圖片</button>
+  <Modal
+    :visible="showModal"
+    :confirmFunc="() => handleUrlImg(urlImgController)"
+    @update:visible="showModal = $event"
+  >
+    <input
+      type="text"
+      class="textInput modalTextInput"
+      placeholder="請輸入圖片 URL"
+      v-model="urlImgController"
+    />
   </Modal>
 </template>
 
@@ -137,6 +151,7 @@ const deleteEditingFile = (index: number) => {
   overflow-x: auto;
   overflow-y: hidden;
   width: 100%;
+  padding-top: 8px;
   padding-bottom: 5px;
 }
 
@@ -177,5 +192,10 @@ const deleteEditingFile = (index: number) => {
   margin-right: 14px;
   color: white;
   font-size: 18px;
+}
+
+.modalTextInput {
+  width: 100%;
+  margin: 20px 0px;
 }
 </style>

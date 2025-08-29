@@ -1,3 +1,4 @@
+import HintModal from "@/components/utilities/Modal/HintModal.vue";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import phoneHintModal from "@/components/utilities/Modal/phoneHintModal.vue";
 import { userDataStore } from "@/global/user_data";
@@ -60,16 +61,39 @@ export default class InfoBarViewModel {
   ///登出
   logout = () => {
     if (userDataStore.isLogin()) {
-      userDataStore.clearUser();
-      router.push(RouterPath.HOME.POST.HOME);
+      this.modalController.show(
+        HintModal,
+        {
+          modalText: "確認要登出嗎？",
+          cancelFunc: () => {
+            this.modalController.close();
+          },
+          confirmFunc: () => {
+            this.modalController.close();
+            userDataStore.clearUser();
+            router.push(RouterPath.HOME.POST.HOME);
+          }
+        },
+        false,
+        true,
+        "rgba(0, 0, 0, 0.4)",
+        "logoOutModal"
+      );
     }
   };
 
   /// 切換頁面
-  changePage = (path: string) => {
+  changePage = (path: string, isNeedLoginCheck: boolean = false) => {
     if (path !== "noPath") {
-      router.push(path);
-      this.isChoicePagePath.value = path;
+      if (isNeedLoginCheck) {
+        if (userDataStore.isLogin()) {
+          router.push(path);
+          this.isChoicePagePath.value = path;
+        }
+      } else {
+        router.push(path);
+        this.isChoicePagePath.value = path;
+      }
     } else {
       this.goToMessage();
     }
