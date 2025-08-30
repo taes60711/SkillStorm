@@ -4,6 +4,7 @@ import EditProfileViewModel from "@/view_models/profile/edit_view_model";
 import SkillBarSelect from "./SkillBarSelect.vue";
 import { onBeforeMount, ref } from "@vue/runtime-core";
 import Avatar from "@/components/utilities/Avatar.vue";
+import MainButton from "@/components/utilities/MainButton.vue";
 
 const viewModel = new EditProfileViewModel();
 
@@ -37,22 +38,8 @@ const onUpdateSkills = (skills: Record<string, number>) => {
 </script>
 
 <template>
-  <div class="text-white">
-    <div v-if="!viewModel.loading" class="">
-      <!-- 頂部導航 -->
-      <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">編輯個人資料</h1>
-      </div>
-
-      <!-- 錯誤提示 -->
-      <div v-if="viewModel.error" class="text-red-500">
-        {{ viewModel.error }}
-      </div>
-
-      <!-- 編輯區域 -->
-      <!-- 頭像上傳區域 -->
-      <Avatar :imgurl="viewModel.formData.image"></Avatar>
-
+  <div class="profileContainer">
+    <div class="AvatarInputContainer">
       <!-- 隱藏的檔案輸入框 -->
       <input
         type="file"
@@ -62,72 +49,128 @@ const onUpdateSkills = (skills: Record<string, number>) => {
         class="hidden"
       />
 
-      <!-- 自定義上傳按鈕 -->
-      <button
-        @click="viewModel.triggerFileInput"
-        class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
+      <!-- 頭像上傳區域 -->
+      <MainButton
+        :onPress="viewModel.triggerFileInput"
+        :needOpacity="false"
+        class="marginB"
       >
-        選擇圖片
-      </button>
+        <div class="avatar-wrapper">
+          <Avatar :imgurl="viewModel.formData.image" :size="'180px'" />
 
-      <div class="">
-        <!-- 名稱 -->
-        <div>
-          <div class="text-gray-400 text-sm mb-2">名稱</div>
-          <input v-model="viewModel.formData.name" type="text" class="" />
+          <div class="camera-overlay">
+            <i :style="{ paddingBottom: '8px' }" class="fa-solid fa-camera"></i>
+            <p :style="{ fontSize: '14px' }">選擇圖片</p>
+          </div>
         </div>
+      </MainButton>
+    </div>
 
-        <!-- 職業 -->
-        <div>
-          <div class="text-gray-400 text-sm mb-2">職業</div>
-          <input v-model="viewModel.formData.job" type="text" class="" />
-        </div>
+    <div class="profileInputContainer">
+      <h1 class="text-2xl font-bold">編輯個人資料</h1>
 
-        <!-- 自我介紹 -->
-        <div>
-          <div class="text-gray-400 text-sm mb-2">自我介紹</div>
-          <textarea
-            v-model="viewModel.formData.introduction"
-            rows="4"
-            class="resize-none"
-          ></textarea>
-        </div>
+      <!-- 名稱 -->
+      <input
+        placeholder="名稱"
+        class="textInput marginB"
+        v-model="viewModel.formData.name"
+      />
+      <!-- 職業 -->
+      <input
+        placeholder="職業"
+        class="textInput marginB"
+        v-model="viewModel.formData.job"
+      />
 
-        <!-- 技能 -->
-        <p>能教的技能</p>
+      <!-- 自我介紹 -->
+      <textarea
+        v-model="viewModel.formData.introduction"
+        placeholder="自我介紹"
+        rows="4"
+        cols="50"
+      ></textarea>
 
-        <SkillBarSelect
-          @update="onUpdateSkills"
-          :selectedSkills="viewModel.formData?.skills"
-        />
-        <p>父組件接收到的技能等級:</p>
-        <pre>{{ editSkills }}</pre>
+      <!-- 技能 -->
+      <p>能教的技能</p>
+      <SkillBarSelect
+        @update="onUpdateSkills"
+        :selectedSkills="viewModel.formData?.skills"
+      />
+      <!-- <p>父組件接收到的技能等級:</p>
+      <pre>{{ editSkills }}</pre> -->
 
-        <p>想學的技能</p>
+      <p>想學的技能</p>
 
-        <SkillBarSelect
-          @update="onUpdateWantSkills"
-          :selectedSkills="viewModel.formData?.wantSkills"
-        />
-        <p>父組件接收到的技能等級:</p>
-        <pre>{{ editWantSkills }}</pre>
-      </div>
+      <SkillBarSelect
+        @update="onUpdateWantSkills"
+        :selectedSkills="viewModel.formData?.wantSkills"
+      />
+      <!-- <p>父組件接收到的技能等級:</p>
+      <pre>{{ editWantSkills }}</pre> -->
 
       <div class="flex gap-4">
-        <button
-          @click="viewModel.handleCancel"
-          class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
-        >
-          返回
-        </button>
-        <button
-          @click="viewModel.updateProfile"
-          :disabled="!viewModel.hasChanges"
-          class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition-colors disabled:opacity-50"
-        >
-          {{ viewModel.loading ? "更新中..." : "更新" }}
-        </button>
+        <!-- 自定義上傳按鈕 -->
+        <MainButton
+          :onPress="viewModel.handleCancel"
+          text="返回"
+          class="marginB"
+        ></MainButton>
+
+        <MainButton
+          :onPress="viewModel.updateProfile"
+          text="更新"
+          class="marginB"
+        ></MainButton>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.profileContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.AvatarInputContainer {
+  padding-right: 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileInputContainer {
+  width: 400px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+  font-size: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 50%;
+}
+
+.avatar-wrapper:hover .camera-overlay {
+  opacity: 1;
+}
+</style>

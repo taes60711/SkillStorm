@@ -34,11 +34,14 @@
     </div>
 
     <!-- 已選技能 + 等級 -->
-    <div class="result" v-if="selectedSkillsNames.length">
-      <p>已選擇的技能：</p>
-      <div v-for="skillName in selectedSkillsNames" :key="skillName">
+    <div v-if="selectedSkillsNames.length">
+      <div
+        v-for="skillName in selectedSkillsNames"
+        :key="skillName"
+        class="skillBar"
+      >
         {{ skillName }}
-        <select v-model="selectedSkillsLevels[skillName]">
+        <select v-model="selectedSkillsLevels[skillName]" class="leveContainer">
           <option v-for="level in levels" :key="level" :value="level">
             Lv {{ level }}
           </option>
@@ -137,11 +140,11 @@ onBeforeUnmount(() => {
 .multi-select {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .dropdown {
   border: 1px solid #ccc;
+  border-radius: 8px;
   padding: 5px;
   cursor: pointer;
   width: 200px;
@@ -180,7 +183,28 @@ onBeforeUnmount(() => {
   background-color: #888484;
 }
 
-.result select {
-  margin-left: 10px;
+.result {
+  display: flex;
+  flex-direction: row;
+}
+
+.skillBar {
+  background-color: rgb(72, 73, 73);
+  padding: 2px 4px;
+  display: inline-flex;
+  flex-direction: row;
+  border-radius: 10px;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.leveContainer {
+  margin-left: 5px;
+  background-color: rgb(46, 45, 45) !important;
+  border-radius: 50%;
+  padding: 8px 5px !important;
+  font-size: 8px !important;
+  font-weight: 800;
+  cursor: pointer;
 }
 </style>
