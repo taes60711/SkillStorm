@@ -21,7 +21,7 @@
               icon="fa-solid fa-briefcase"
               :text="` ${profileViewModel.profile?.job}`"
               :size="'16px'"
-              :style="{ padding: '0px 15px' }"
+              :style="{ padding: '3px 15px' }"
             ></IconText>
 
             <!-- 編輯按鈕 -->
