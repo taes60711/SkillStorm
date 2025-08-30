@@ -1,9 +1,66 @@
 <template>
   <BaseView
-    :apiListFunc="viewModel.getMyPostList"
+    :apiListFunc="viewModel.getProfileList"
     @apiReturnData="handleApiReturnData"
     :noLoadMoreData="true"
   >
+    <template #apiListHeader>
+      <div class="myPofileContainer">
+        <!-- 頭像 -->
+        <Avatar
+          :imgurl="profileViewModel.profile.image"
+          :size="'180px'"
+        ></Avatar>
+        <!-- 個人資料 -->
+
+        <div class="myDataContainer">
+          <div class="myProfileInfo">
+            {{ profileViewModel.profile?.name }}
+
+            <IconText
+              icon="fa-solid fa-briefcase"
+              :text="` ${profileViewModel.profile?.job}`"
+              :size="'16px'"
+              :style="{ padding: '0px 15px' }"
+            ></IconText>
+
+            <!-- 編輯按鈕 -->
+            <MainButton :onPress="() => profileViewModel.toProfileEdit()">
+              <i class="fa-solid fa-gear" :style="{ fontSize: '18px' }"></i>
+            </MainButton>
+          </div>
+
+          <p class="introductionText">
+            {{ profileViewModel.profile?.introduction }}
+          </p>
+
+          <p :style="{ marginBottom: '3px', fontSize: '14px' }">能教的技能</p>
+          <div
+            v-for="skill in profileViewModel.profile?.skills"
+            :key="skill.name"
+          >
+            <ProfileSkillBar
+              :name="skill.name"
+              :level="skill.level"
+            ></ProfileSkillBar>
+          </div>
+
+          <p :style="{ margin: '3px 0px', fontSize: '14px' }">想學的技能</p>
+
+          <div
+            v-for="skill in profileViewModel.profile?.wantSkills"
+            :key="skill.name"
+          >
+            <ProfileSkillBar
+              :name="skill.name"
+              :level="skill.level"
+            ></ProfileSkillBar>
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的文章 -->
+    </template>
     <template #apiListBody>
       <div v-if="postData.length === 0" class="noDataContainer">
         <i class="fa-solid fa-newspaper"></i>
@@ -93,6 +150,14 @@
           </div>
         </MainButton>
       </div>
+
+      <MainButton
+        :onPress="() => profileViewModel.toMyPostPage()"
+        class="moreBtn"
+      >
+        <p :style="{ marginRight: '7px' }">查看更多</p>
+        <i class="fa-solid fa-circle-arrow-right"></i>
+      </MainButton>
     </template>
   </BaseView>
 </template>
@@ -189,5 +254,31 @@ function handleApiReturnData(data: Post[]) {
   align-items: center;
 
   padding: 30px 0px 0px 0px;
+}
+
+.myProfileInfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.introductionText {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: rgb(212, 210, 208);
+}
+
+.myDataContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0px 20px;
+}
+
+.moreBtn {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 </style>

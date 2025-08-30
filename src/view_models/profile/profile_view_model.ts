@@ -2,7 +2,8 @@ import { ref, type Ref } from "vue";
 import UserService from "@/services/user_service";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
 import { userDataStore } from "@/global/user_data";
-import { AppImage } from "@/global/app_image";
+import router from "@/router/router_manager";
+import { RouterPath } from "@/router/router_path";
 
 export default class ProfileViewModel {
   // 用戶 api
@@ -18,12 +19,18 @@ export default class ProfileViewModel {
 
     // 初始化時從全局狀態讀取資料
     this.userData.value = userDataStore.userData.value;
-
-    debugger;
   }
 
   // 獲取用戶資料
   public get profile(): ProfileData | null {
     return this.userData.value;
   }
+
+  toProfileEdit = () => {
+    router.push(RouterPath.HOME.PROFILE.EDIT.path);
+  };
+
+  toMyPostPage = () => {
+    router.push(RouterPath.HOME.POST.MY.path);
+  };
 }

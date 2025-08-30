@@ -108,7 +108,7 @@ export default class EditProfileViewModel {
       userDataStore.updateUser(this.formData as ProfileData);
 
       this._bypassGuard = true;
-      router.push(RouterPath.HOME.POST.MY);
+      router.push(RouterPath.HOME.PROFILE.HOME);
     } catch (error) {
       this._error.value = "更新失敗";
       console.error("更新失敗:", error);
@@ -213,7 +213,7 @@ export default class EditProfileViewModel {
    * 處理取消編輯
    */
   public handleCancel(): void {
-    router.push(RouterPath.HOME.POST.MY);
+    router.push(RouterPath.HOME.PROFILE.HOME);
   }
 
   /**

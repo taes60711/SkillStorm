@@ -14,7 +14,7 @@ const router = createRouter({
     RouterPath.HOME.COURSE.HOME,
     RouterPath.HOME.SUGGESTUSERS.HOME,
     {
-      ...RouterPath.HOME.PROFILE.INDEX,
+      ...RouterPath.HOME.PROFILE.HOME,
       meta: { requiresAuth: true }
     },
     {

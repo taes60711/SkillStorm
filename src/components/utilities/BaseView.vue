@@ -56,6 +56,10 @@ const props = defineProps({
   size: {
     type: Number,
     default: 5
+  },
+  noLoadMoreData: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -118,6 +122,11 @@ const firstLoadData = async () => {
 /// 將要顯示的資料回傳, 並執行預加載
 const insertLoadedData = async (loadedData: T[]) => {
   emit("apiReturnData", loadedData);
+
+  if (props.noLoadMoreData) {
+    apiLoadingStatus.value = apiStatus.noDataCanLoad;
+    return;
+  }
   await preloadData();
 };
 

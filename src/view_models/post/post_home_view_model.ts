@@ -97,6 +97,18 @@ export default class PostHomeViewModel {
     };
   }
 
+  ///“個人資料的我的”文章
+  getProfileList: (page: number, size: number) => Promise<Post[]> = (
+    page,
+    size
+  ) => {
+    return new PostService().getPostByMy(
+      page,
+      2,
+      userDataStore.userData.value.uid
+    );
+  };
+
   ///“我的”文章
   getMyPostList: (page: number, size: number) => Promise<Post[]> = (
     page,

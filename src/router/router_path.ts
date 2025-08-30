@@ -1,7 +1,7 @@
 import Register from "../components/account/register/Register.vue";
 import Login from "../components/account/Login.vue";
 import pwdForgot from "../components/account/PwdForgotView.vue";
-import Profile from "../components/profile/ProfileHome.vue";
+import MyPost from "../components/profile/MyPost.vue";
 import EditProfile from "../components/profile/ProfileEdit.vue";
 import PostHome from "@/components/post/postHome/PostHome.vue";
 import InfoBar from "@/components/utilities/InfoBar/InfoBar.vue";
@@ -9,7 +9,7 @@ import CourseHome from "@/components/course/CourseHome.vue";
 import SuggestUsersHome from "@/components/suggestusers/SuggestUsersHome.vue";
 import PostByBoard from "@/components/post/PostByBoard.vue";
 import PostPopular from "@/components/post/postHome/PostPopular.vue";
-import MyPost from "@/components/profile/MyPost.vue";
+import MyProfile from "@/components/profile/MyProfile.vue";
 import MyCourse from "@/components/course/MyCourse/MyCourse.vue";
 
 export const RouterPath = {
@@ -51,6 +51,14 @@ export const RouterPath = {
     },
     /// MARK: 個人資料
     PROFILE: {
+      HOME: {
+        path: "/profile/home",
+        components: {
+          default: MyProfile,
+          aside: InfoBar
+        },
+        name: "profile"
+      },
       EDIT: {
         path: "/profile/edit",
         component: EditProfile,

@@ -45,11 +45,11 @@
       <div
         v-if="userDataStore.isLogin() && viewModel.isShowText.value"
         :class="
-          viewModel.isChoicePagePath.value === RouterPath.HOME.POST.MY.path
+          viewModel.isChoicePagePath.value === RouterPath.HOME.PROFILE.HOME.path
             ? 'InfoBar_MyItemBtnChoiced'
             : 'InfoBar_MyItemBtn'
         "
-        @click="viewModel.changePage(RouterPath.HOME.POST.MY.path, true)"
+        @click="viewModel.changePage(RouterPath.HOME.PROFILE.HOME.path, true)"
       >
         <IconText text="我的">
           <Avatar
@@ -116,7 +116,7 @@
         <IconText
           v-if="viewModel.isShowText.value"
           icon="fa-solid fa-newspaper"
-          text="我的"
+          text="我的文章"
           class="InfoBarSettingItem"
         ></IconText>
         <i

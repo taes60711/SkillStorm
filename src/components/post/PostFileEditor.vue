@@ -107,7 +107,6 @@ import Modal from "@/components/utilities/EditorModal.vue";
 import { EditTools } from "@/global/edit_tools";
 import { ref } from "vue";
 import MainButton from "@/components/utilities/MainButton.vue";
-import { onMounted } from "vue";
 import { ModalController } from "../utilities/Modal/ModalController";
 import ConfirmModal from "../utilities/Modal/confirmModal.vue";
 
