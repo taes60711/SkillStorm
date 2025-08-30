@@ -103,11 +103,13 @@
 </template>
 
 <script setup lang="ts">
-import Modal from "@/components/post/PostFileEditorModal.vue";
+import Modal from "@/components/utilities/EditorModal.vue";
 import { EditTools } from "@/global/edit_tools";
 import { ref } from "vue";
 import MainButton from "@/components/utilities/MainButton.vue";
 import { onMounted } from "vue";
+import { ModalController } from "../utilities/Modal/ModalController";
+import ConfirmModal from "../utilities/Modal/confirmModal.vue";
 
 const fileUrls = defineModel("fileUrls");
 const editTools = new EditTools();
@@ -118,9 +120,7 @@ const urlImgController = ref<string>("");
 const showVideoModal = ref(false);
 const youtubeController = ref<string>("");
 
-onMounted(() => {
-  console.log(fileUrls.value[0] == "");
-});
+const modalController: ModalController = new ModalController();
 
 const handlelocalImg = async (event: Event) => {
   const base64Img: string = await editTools.handleLocalImgChange(event);
@@ -130,12 +130,34 @@ const handlelocalImg = async (event: Event) => {
 
 const handleYtVideo = (videoUrl: string) => {
   const ytId: string = editTools.getYtvideoID(videoUrl);
+
+  if (ytId == "err") {
+    modalController.show(
+      ConfirmModal,
+      {
+        modalText: "請輸入正確Youtube URL",
+        needTitile: true,
+        confirmFunc: () => {
+          modalController.close();
+        }
+      },
+      false,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "errConfirmModal"
+    );
+    return;
+  }
   const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
   fileUrls.value.push(ytURL);
 };
 
 const handleUrlImg = (imgUrl: string) => {
   console.log(imgUrl);
+  if (!imgUrl) {
+    return;
+  }
+
   fileUrls.value.push(imgUrl);
 };
 

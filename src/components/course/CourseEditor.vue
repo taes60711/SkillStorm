@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CourseEditViewModel from "@/view_models/course/course_edit_view_model";
-import RichTextEditor from "../utilities/RichTextEditor.vue";
+import RichTextEditor from "@/components/course/RichTextEditor.vue";
 import { SkillType } from "@/models/skill_type";
 import { GlobalData } from "@/global/global_data";
 import CourseChapterEdit from "./CourseChapterEdit.vue";

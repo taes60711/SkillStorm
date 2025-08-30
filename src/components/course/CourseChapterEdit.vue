@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RichTextEditor from "../utilities/RichTextEditor.vue";
+import RichTextEditor from "@/components/course/RichTextEditor.vue";
 import MainButton from "@/components/utilities/MainButton.vue";
 const title = defineModel("title");
 const content = defineModel("content");
@@ -24,7 +24,11 @@ const changeChapter = defineModel("changeChapter");
         <i class="fa-solid fa-trash"></i>
       </MainButton>
 
-      <MainButton :onPress="haschangeChapter" class="main-button">
+      <MainButton
+        v-if="haschangeChapter"
+        :onPress="changeChapter"
+        class="main-button"
+      >
         <i class="fa-solid fa-arrow-turn-down"></i>
       </MainButton>
     </div>

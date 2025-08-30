@@ -3,6 +3,52 @@
     :apiListFunc="viewModel.getMyPostList"
     @apiReturnData="handleApiReturnData"
   >
+    <template #apiListHeader>
+      <div class="myPofileContainer">
+        <!-- 頭像 -->
+        <Avatar :imgurl="profileViewModel.profile.image"></Avatar>
+        <!-- 個人資料 -->
+        <h2 class="whitespace-normal break-words">
+          {{ profileViewModel.profile?.name }}
+        </h2>
+
+        <p>職業</p>
+        <p>{{ profileViewModel.profile?.job }}</p>
+
+        <p class="whitespace-normal break-words">
+          {{ profileViewModel.profile?.introduction }}
+        </p>
+        <!-- 編輯按鈕 -->
+
+        <MainButton class="marginB">
+          <router-link :to="RouterPath.HOME.PROFILE.EDIT"> 編輯 </router-link>
+        </MainButton>
+      </div>
+
+      <div class="mt-2">
+        <p>能教的技能</p>
+        <div class="flex gap-3">
+          <div
+            v-for="skill in profileViewModel.profile?.skills"
+            :key="skill.name"
+          >
+            {{ skill.level }} {{ skill.name }}
+          </div>
+        </div>
+
+        <p>想學的技能</p>
+        <div class="flex gap-3">
+          <div
+            v-for="skill in profileViewModel.profile?.wantSkills"
+            :key="skill.name"
+          >
+            {{ skill.level }} {{ skill.name }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的文章 -->
+    </template>
     <template #apiListBody>
       <div v-if="postData.length === 0" class="noDataContainer">
         <i class="fa-solid fa-newspaper"></i>
@@ -98,16 +144,20 @@
 
 <script setup lang="ts">
 import PostHomeViewModel from "@/view_models/post/post_home_view_model";
-import BaseView from "../utilities/BaseView.vue";
+import BaseView from "@/components/utilities/BaseView.vue";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
 import { ref } from "vue";
 import { DateFormatUtilities } from "@/global/date_time_format";
 import IconText from "@/components/utilities/IconText.vue";
 import MainButton from "@/components/utilities/MainButton.vue";
 import Avatar from "@/components/utilities/Avatar.vue";
-import PostFile from "./postHome/PostFile.vue";
+import PostFile from "@/components/post/postHome/PostFile.vue";
 import { userDataStore } from "@/global/user_data";
+import { RouterPath } from "@/router/router_path";
+import ProfileViewModel from "@/view_models/profile/profile_view_model";
 
+// 初始化 ViewModel
+const profileViewModel = new ProfileViewModel();
 const dateTimeFormat = new DateFormatUtilities();
 const viewModel = new PostHomeViewModel();
 const postData = ref<Post[]>([]);
@@ -175,5 +225,12 @@ function handleApiReturnData(data: Post[]) {
   flex-grow: 1;
   display: flex;
   margin-left: 15px;
+}
+
+.myPofileContainer {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
 }
 </style>

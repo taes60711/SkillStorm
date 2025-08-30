@@ -2,8 +2,10 @@
 import { ref, onMounted } from "vue";
 import Editor from "primevue/editor";
 import { Quill } from "@vueup/vue-quill";
-import Modal from "@/components/post/PostFileEditorModal.vue";
+import Modal from "@/components/utilities/EditorModal.vue";
 import { EditTools } from "@/global/edit_tools";
+import ConfirmModal from "../utilities/Modal/confirmModal.vue";
+import { ModalController } from "../utilities/Modal/ModalController";
 
 const editTools = new EditTools();
 
@@ -20,6 +22,7 @@ const showLinkModal = ref(false);
 const LinkTextController = ref<string>("");
 const LinkController = ref<string>("");
 const lastCursorIndex = ref<number>(0);
+const modalController: ModalController = new ModalController();
 
 const COLORS = [
   "#000000",
@@ -135,6 +138,10 @@ const insertCustomImage = (imgUrl: string) => {
   console.log(imgUrl);
   const editor: Quill = editorRef.value?.quill;
   const cursorPos: number = lastCursorIndex.value;
+
+  if (!imgUrl) {
+    return;
+  }
   const inputed: string = `<img src="${imgUrl}">`;
   editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
   value.value = editor.root.innerHTML;
@@ -145,6 +152,24 @@ const insertCustomVideo = (videoUrl: string) => {
   const editor: Quill = editorRef.value?.quill;
   const cursorPos: number = lastCursorIndex.value;
   const ytId: string = editTools.getYtvideoID(videoUrl);
+  if (ytId == "err") {
+    modalController.show(
+      ConfirmModal,
+      {
+        modalText: "請輸入正確Youtube URL",
+        needTitile: true,
+        confirmFunc: () => {
+          modalController.close();
+        }
+      },
+      false,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "errConfirmModal"
+    );
+    return;
+  }
+
   const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
 
   const inputed: string = `<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${ytURL}"></iframe><p><br></p>`;
@@ -156,6 +181,25 @@ const insertCustomVideo = (videoUrl: string) => {
 const insertCustomLink = (link: string, linkText: string) => {
   const editor: Quill = editorRef.value?.quill;
   const cursorPos: number = lastCursorIndex.value;
+
+  if (!link || !link.includes("http")) {
+    modalController.show(
+      ConfirmModal,
+      {
+        modalText: "請輸入正確 URL",
+        needTitile: true,
+        confirmFunc: () => {
+          modalController.close();
+        }
+      },
+      false,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "errConfirmModal"
+    );
+    return;
+  }
+
   const inputed: string = `<p><a href=${link} rel="noopener noreferrer" target="_blank">${linkText}</a><br></p>`;
   editor.clipboard.dangerouslyPasteHTML(cursorPos, inputed);
   value.value = editor.root.innerHTML;

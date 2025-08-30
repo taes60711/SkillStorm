@@ -13,7 +13,7 @@ export default class UserDataStore {
   private static instance: UserDataStore;
 
   // 私有構造函數，禁止外部直接創建實例
-  private constructor() { }
+  private constructor() {}
 
   /**
    * 獲取單例實例
@@ -54,7 +54,7 @@ export default class UserDataStore {
       job: "",
       skills: [],
       wantSkills: [],
-      status: 999,
+      status: 999
     };
   }
 
@@ -116,7 +116,6 @@ export default class UserDataStore {
       // 成功恢復
       console.log("從 localStorage 恢復用戶資料:", this.user.value);
     }
-
   }
 }
 

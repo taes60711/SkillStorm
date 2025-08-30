@@ -8,7 +8,6 @@ import { RouterPath } from "@/router/router_path";
 import router from "@/router/router_manager";
 
 export default class EditProfileViewModel {
-
   private userService: UserService;
   private _bypassGuard: boolean = false;
 
@@ -35,7 +34,7 @@ export default class EditProfileViewModel {
       introduction: "",
       job: "",
       skills: [],
-      wantSkills: [],
+      wantSkills: []
     });
   }
 
@@ -72,7 +71,7 @@ export default class EditProfileViewModel {
         introduction: userData.introduction ?? "",
         job: userData.job ?? "",
         skills: [...(userData.skills || [])],
-        wantSkills: [...(userData.wantSkills || [])],
+        wantSkills: [...(userData.wantSkills || [])]
       });
 
       console.log("處理後的表單數據:", this.formData);
@@ -109,7 +108,7 @@ export default class EditProfileViewModel {
       userDataStore.updateUser(this.formData as ProfileData);
 
       this._bypassGuard = true;
-      router.push(RouterPath.HOME.PROFILE.INDEX);
+      router.push(RouterPath.HOME.POST.MY);
     } catch (error) {
       this._error.value = "更新失敗";
       console.error("更新失敗:", error);
@@ -171,7 +170,7 @@ export default class EditProfileViewModel {
       introduction: this.originalData.value.introduction || "",
       job: this.originalData.value.job || "",
       skills: this.originalData.value.skills || [],
-      wantSkills: this.originalData.value.wantSkills || [],
+      wantSkills: this.originalData.value.wantSkills || []
     };
 
     const currentData = {
@@ -181,7 +180,7 @@ export default class EditProfileViewModel {
       introduction: this.formData.introduction,
       job: this.formData.job,
       skills: this.formData.skills,
-      wantSkills: this.formData.wantSkills,
+      wantSkills: this.formData.wantSkills
     };
 
     return !this.deepEqual(original, currentData);
@@ -214,7 +213,7 @@ export default class EditProfileViewModel {
    * 處理取消編輯
    */
   public handleCancel(): void {
-    router.push(RouterPath.HOME.PROFILE.INDEX);
+    router.push(RouterPath.HOME.POST.MY);
   }
 
   /**

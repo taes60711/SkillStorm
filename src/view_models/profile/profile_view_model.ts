@@ -18,6 +18,8 @@ export default class ProfileViewModel {
 
     // 初始化時從全局狀態讀取資料
     this.userData.value = userDataStore.userData.value;
+
+    debugger;
   }
 
   // 獲取用戶資料

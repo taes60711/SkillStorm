@@ -200,21 +200,6 @@ export default class CourseEditViewModel {
     return isOk;
   };
 
-  /**
-   * 清空所有編輯的資料（暫時）
-   */
-  private resetAllEditData = (): void => {
-    this.titleController.value = "";
-    this.outlineController.value = "";
-    this.beforeNeedController.value = "";
-    this.selectedLevel.value = "1";
-    this.selectedType.value = { id: ProgramSkillType.frontend, name: "前端" };
-    this.isPublic.value = true;
-    this.htmlString.value = "";
-    this.selectedSkill.value = [];
-    this.chapters.value = [];
-  };
-
   addChapter = (): void => {
     const newChapter: ChapterEditModel = { title: "", content: "" };
     this.chapters.value.push(newChapter);

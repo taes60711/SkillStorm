@@ -1,5 +1,6 @@
 <template>
   <div class="confirmModal_Container">
+    <p v-if="props.modalProps.needTitile" class="textTitle">提示</p>
     <p class="textContianer">{{ props.modalProps.modalText }}</p>
 
     <MainButton
@@ -32,6 +33,12 @@ const props = defineProps<{
   justify-content: space-between;
   color: white;
   border-radius: 10px;
+}
+
+.textTitle {
+  font-size: 25px;
+  font-weight: 800;
+  align-self: center;
 }
 
 .textContianer {

@@ -9,7 +9,7 @@ import CourseHome from "@/components/course/CourseHome.vue";
 import SuggestUsersHome from "@/components/suggestusers/SuggestUsersHome.vue";
 import PostByBoard from "@/components/post/PostByBoard.vue";
 import PostPopular from "@/components/post/postHome/PostPopular.vue";
-import MyPost from "@/components/post/MyPost.vue";
+import MyPost from "@/components/profile/MyPost.vue";
 import MyCourse from "@/components/course/MyCourse/MyCourse.vue";
 
 export const RouterPath = {
@@ -51,14 +51,6 @@ export const RouterPath = {
     },
     /// MARK: 個人資料
     PROFILE: {
-      INDEX: {
-        path: "/profile",
-        components: {
-          default: Profile,
-          aside: InfoBar
-        },
-        name: "profile"
-      },
       EDIT: {
         path: "/profile/edit",
         component: EditProfile,
