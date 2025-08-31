@@ -23,6 +23,8 @@ const props = defineProps({
   display: inline-flex;
   flex-direction: row;
   border-radius: 10px;
+  margin-right: 8px;
+  margin-bottom: 8px;
   align-items: center;
 }
 

@@ -8,7 +8,6 @@ import { EditTools } from "@/global/edit_tools";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import confimModal from "@/components/utilities/Modal/confirmModal.vue";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
-import HintModal from "@/components/utilities/Modal/HintModal.vue";
 
 /// 文章編輯ViewModel
 export default class PostEditViewModel {

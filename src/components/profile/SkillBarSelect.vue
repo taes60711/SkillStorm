@@ -1,12 +1,23 @@
 <template>
-  <div class="multi-select" ref="multiSelectRef">
+  <div class="multi-select">
     <!-- 自訂下拉 -->
-    <div class="dropdown" @click="toggleDropdown">
-      <span>{{
-        selectedSkillsNames.length
-          ? selectedSkillsNames.join(", ")
-          : "請選擇技能"
-      }}</span>
+    <div class="dropdown" ref="multiSelectRef" @click="toggleDropdown">
+      <!-- 已選技能 + 等級 -->
+      <div v-if="selectedSkills.length">
+        <div v-for="skill in selectedSkills" :key="skill.name" class="skillBar">
+          {{ skill.name }}
+          <MainButton :onPress="deleteSkill">
+            <i class="fa-solid fa-trash deleteBtn"></i>
+          </MainButton>
+
+          <select v-model="skill.level" class="leveContainer">
+            <option v-for="level in levels" :key="level" :value="level">
+              Lv {{ level }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div v-else>{{ "請選擇技能" }}</div>
       <div class="options" v-if="dropdownOpen">
         <!-- 搜尋框 -->
         <input
@@ -23,29 +34,8 @@
           class="option"
           @click.stop="toggleSkill(skill.name)"
         >
-          <input
-            type="checkbox"
-            :checked="selectedSkillsNames.includes(skill.name)"
-            readonly
-          />
           <label>{{ skill.name }}</label>
         </div>
-      </div>
-    </div>
-
-    <!-- 已選技能 + 等級 -->
-    <div v-if="selectedSkillsNames.length">
-      <div
-        v-for="skillName in selectedSkillsNames"
-        :key="skillName"
-        class="skillBar"
-      >
-        {{ skillName }}
-        <select v-model="selectedSkillsLevels[skillName]" class="leveContainer">
-          <option v-for="level in levels" :key="level" :value="level">
-            Lv {{ level }}
-          </option>
-        </select>
       </div>
     </div>
   </div>
@@ -54,11 +44,11 @@
 <script setup lang="ts">
 import { GlobalData } from "@/global/global_data";
 import type { Skill } from "@/models/reponse/auth/profile_data_reponse_data";
+import MainButton from "@/components/utilities/MainButton.vue";
 import {
   computed,
   onBeforeUnmount,
   onMounted,
-  reactive,
   ref,
   watch
 } from "@vue/runtime-core";
@@ -68,11 +58,10 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "update", value: Record<string, number>): void;
+  (e: "update", value: Skill[]): void;
 }>();
 
-const selectedSkillsNames = ref<string[]>([]);
-const selectedSkillsLevels = reactive<Record<string, number>>({});
+const selectedSkills = ref<Skill[]>([]);
 const levels = [1, 2, 3, 4, 5];
 const dropdownOpen = ref(false);
 const multiSelectRef = ref<HTMLElement | null>(null);
@@ -91,21 +80,30 @@ const toggleDropdown = () => {
 };
 
 const toggleSkill = (skillName: string) => {
-  const index = selectedSkillsNames.value.indexOf(skillName);
+  const index = selectedSkills.value.findIndex((s) => s.name === skillName);
   if (index === -1) {
-    selectedSkillsNames.value.push(skillName);
-    selectedSkillsLevels[skillName] = 1;
+    // 新增一個技能，等級預設 1
+    selectedSkills.value.push({
+      name: skillName,
+      level: 1,
+      month: 0
+    });
   } else {
-    selectedSkillsNames.value.splice(index, 1);
-    delete selectedSkillsLevels[skillName];
+    // 移除技能
+    selectedSkills.value.splice(index, 1);
   }
 };
 
+const deleteSkill = (skillName: string) => {
+  const index = selectedSkills.value.findIndex((s) => s.name === skillName);
+  selectedSkills.value.splice(index, 1);
+};
+
 watch(
-  selectedSkillsLevels,
-  (newVal: any) => {
-    console.log({ ...newVal });
-    emit("update", { ...newVal });
+  selectedSkills,
+  (newVal) => {
+    console.log([...newVal]);
+    emit("update", [...newVal]);
   },
   { deep: true }
 );
@@ -121,13 +119,12 @@ const handleClickOutside = (event: MouseEvent) => {
 };
 
 onMounted(() => {
-  for (let i = 0; i < props.selectedSkills.length; i++) {
-    const skill = props.selectedSkills[i];
-    if (!selectedSkillsNames.value.includes(skill.name)) {
-      selectedSkillsNames.value.push(skill.name);
-      selectedSkillsLevels[skill.name] = skill.level ?? 1;
-    }
-  }
+  // 初始化父元件傳進來的 selectedSkills
+  selectedSkills.value = props.selectedSkills.map((skill: { level: any }) => ({
+    ...skill,
+    level: skill.level ?? 1 // 沒等級就預設 1
+  }));
+
   document.addEventListener("click", handleClickOutside);
 });
 
@@ -147,7 +144,6 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   padding: 5px;
   cursor: pointer;
-  width: 200px;
   position: relative;
   user-select: none;
 }
@@ -191,19 +187,28 @@ onBeforeUnmount(() => {
 .skillBar {
   background-color: rgb(72, 73, 73);
   padding: 2px 4px;
+
   display: inline-flex;
   flex-direction: row;
   border-radius: 10px;
   align-items: center;
   margin-right: 8px;
+  margin-bottom: 5px;
 }
 
 .leveContainer {
-  margin-left: 5px;
+  /* margin-left: 5px; */
   background-color: rgb(46, 45, 45) !important;
   border-radius: 50%;
   padding: 8px 5px !important;
   font-size: 8px !important;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.deleteBtn {
+  border-radius: 50%;
+  padding: 5px !important;
   font-weight: 800;
   cursor: pointer;
 }

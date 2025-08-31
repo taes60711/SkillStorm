@@ -35,26 +35,25 @@
           </p>
 
           <p :style="{ marginBottom: '3px', fontSize: '14px' }">能教的技能</p>
-          <div
-            v-for="skill in profileViewModel.profile?.skills"
-            :key="skill.name"
-          >
-            <ProfileSkillBar
-              :name="skill.name"
-              :level="skill.level"
-            ></ProfileSkillBar>
+
+          <div class="skillRow">
+            <div
+              v-for="skill in profileViewModel.profile?.skills"
+              :key="skill.name"
+            >
+              <ProfileSkillBar :name="skill.name" :level="skill.level" />
+            </div>
           </div>
 
           <p :style="{ margin: '3px 0px', fontSize: '14px' }">想學的技能</p>
 
-          <div
-            v-for="skill in profileViewModel.profile?.wantSkills"
-            :key="skill.name"
-          >
-            <ProfileSkillBar
-              :name="skill.name"
-              :level="skill.level"
-            ></ProfileSkillBar>
+          <div class="skillRow">
+            <div
+              v-for="skill in profileViewModel.profile?.wantSkills"
+              :key="skill.name"
+            >
+              <ProfileSkillBar :name="skill.name" :level="skill.level" />
+            </div>
           </div>
         </div>
       </div>
@@ -152,6 +151,7 @@
       </div>
 
       <MainButton
+        v-if="postData.length !== 0"
         :onPress="() => profileViewModel.toMyPostPage()"
         class="moreBtn"
       >
@@ -272,6 +272,7 @@ function handleApiReturnData(data: Post[]) {
   flex-direction: column;
   flex: 1;
   padding: 0px 20px;
+  max-width: 398px;
 }
 
 .moreBtn {
@@ -280,5 +281,11 @@ function handleApiReturnData(data: Post[]) {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+.skillRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 </style>

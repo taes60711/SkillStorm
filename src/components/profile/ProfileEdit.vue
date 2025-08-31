@@ -1,40 +1,17 @@
 <script setup lang="ts">
-import { onBeforeRouteLeave } from "vue-router";
 import EditProfileViewModel from "@/view_models/profile/edit_view_model";
 import SkillBarSelect from "./SkillBarSelect.vue";
-import { onBeforeMount, ref } from "@vue/runtime-core";
+import { onBeforeMount } from "@vue/runtime-core";
 import Avatar from "@/components/utilities/Avatar.vue";
 import MainButton from "@/components/utilities/MainButton.vue";
+import { EditTools } from "@/global/edit_tools";
 
 const viewModel = new EditProfileViewModel();
+const editTools = new EditTools();
 
-// 路由守衛只負責調用 ViewModel 的方法
-onBeforeRouteLeave((to, from, next) => {
-  viewModel.setupRouteGuard((canLeave) => {
-    next(canLeave);
-  });
+onBeforeMount(() => {
+  viewModel.initializeForm();
 });
-
-onBeforeMount(async () => {
-  try {
-    await viewModel.initializeForm();
-    console.log(viewModel.formData);
-  } catch (error) {
-    console.error("初始化表單失敗:", error);
-  }
-});
-
-const editWantSkills = ref<Record<string, number>>({});
-
-const onUpdateWantSkills = (skills: Record<string, number>) => {
-  editWantSkills.value = skills;
-};
-
-const editSkills = ref<Record<string, number>>({});
-
-const onUpdateSkills = (skills: Record<string, number>) => {
-  editSkills.value = skills;
-};
 </script>
 
 <template>
@@ -50,13 +27,9 @@ const onUpdateSkills = (skills: Record<string, number>) => {
       />
 
       <!-- 頭像上傳區域 -->
-      <MainButton
-        :onPress="viewModel.triggerFileInput"
-        :needOpacity="false"
-        class="marginB"
-      >
+      <MainButton :onPress="editTools.triggerFileInput">
         <div class="avatar-wrapper">
-          <Avatar :imgurl="viewModel.formData.image" :size="'180px'" />
+          <Avatar :imgurl="viewModel.formData.value.image" :size="'180px'" />
 
           <div class="camera-overlay">
             <i :style="{ paddingBottom: '8px' }" class="fa-solid fa-camera"></i>
@@ -67,59 +40,60 @@ const onUpdateSkills = (skills: Record<string, number>) => {
     </div>
 
     <div class="profileInputContainer">
-      <h1 class="text-2xl font-bold">編輯個人資料</h1>
+      <p class="pageTitle">編輯個人資料</p>
 
       <!-- 名稱 -->
       <input
         placeholder="名稱"
         class="textInput marginB"
-        v-model="viewModel.formData.name"
+        v-model="viewModel.formData.value.name"
       />
       <!-- 職業 -->
       <input
         placeholder="職業"
         class="textInput marginB"
-        v-model="viewModel.formData.job"
+        v-model="viewModel.formData.value.job"
       />
 
       <!-- 自我介紹 -->
       <textarea
-        v-model="viewModel.formData.introduction"
+        v-model="viewModel.formData.value.introduction"
         placeholder="自我介紹"
         rows="4"
         cols="50"
+        class="marginB"
       ></textarea>
 
       <!-- 技能 -->
       <p>能教的技能</p>
       <SkillBarSelect
-        @update="onUpdateSkills"
-        :selectedSkills="viewModel.formData?.skills"
+        @update="viewModel.onUpdateSkills"
+        :selectedSkills="viewModel.formData.value.skills"
+        class="marginB"
       />
-      <!-- <p>父組件接收到的技能等級:</p>
-      <pre>{{ editSkills }}</pre> -->
 
       <p>想學的技能</p>
 
       <SkillBarSelect
-        @update="onUpdateWantSkills"
-        :selectedSkills="viewModel.formData?.wantSkills"
+        @update="viewModel.onUpdateWantSkills"
+        :selectedSkills="viewModel.formData.value.wantSkills"
       />
-      <!-- <p>父組件接收到的技能等級:</p>
-      <pre>{{ editWantSkills }}</pre> -->
 
-      <div class="flex gap-4">
+      <div class="editButton">
         <!-- 自定義上傳按鈕 -->
         <MainButton
           :onPress="viewModel.handleCancel"
           text="返回"
-          class="marginB"
+          class="marginR"
         ></MainButton>
 
         <MainButton
-          :onPress="viewModel.updateProfile"
+          :onPress="
+            () => {
+              viewModel.updateProfile();
+            }
+          "
           text="更新"
-          class="marginB"
         ></MainButton>
       </div>
     </div>
@@ -172,5 +146,25 @@ const onUpdateSkills = (skills: Record<string, number>) => {
 
 .avatar-wrapper:hover .camera-overlay {
   opacity: 1;
+}
+
+.editButton {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+.marginR {
+  margin-right: 10px;
+}
+
+.marginB {
+  margin-bottom: 10px;
+}
+
+.pageTitle {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 50px;
 }
 </style>
