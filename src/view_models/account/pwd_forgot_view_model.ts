@@ -3,11 +3,14 @@ import UserService from "../../services/user_service";
 import router from "@/router/router_manager";
 import { EditTools } from "@/global/edit_tools";
 import { GlobalData } from "@/global/global_data";
-
+import EmailService from "@/services/email_service";
+import { ModalController } from "@/components/utilities/Modal/ModalController";
+import ConfirmModal from "@/components/utilities/Modal/confirmModal.vue";
 /// 忘記密碼ViewModel
 export default class PwdForgotViewModel {
   private userService = new UserService();
   private editTools = new EditTools();
+  private emailService = new EmailService();
 
   codeController = ref<string>(""); /// 驗證碼
   codeIsEmpty = ref<boolean>(false); /// 驗證碼 錯誤
@@ -20,6 +23,8 @@ export default class PwdForgotViewModel {
 
   newPwdController = ref<string>(""); /// 新密碼
   newPwdIsEmpty = ref<boolean>(false); /// 新密碼 錯誤
+
+  modalController = new ModalController();
 
   /**
    * MARK: 送出按鈕
@@ -46,6 +51,46 @@ export default class PwdForgotViewModel {
       );
       GlobalData.closeLoadingModal();
     }
+  };
+
+  // 發送驗證碼
+  sendEmailVerify = async (): Promise<void> => {
+    const emailRegex: RegExp =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (
+      !this.editTools.checkInputValid(this.emailController.value, emailRegex)
+    ) {
+      this.emailIsEmpty.value = true;
+      return;
+    } else {
+      this.emailIsEmpty.value = false;
+    }
+
+    GlobalData.openLoadingModal();
+
+    // 發送驗證碼
+    const response: string = await this.emailService.sendCaptchaMail(
+      this.emailController.value,
+      "resetPwd"
+    );
+
+    if (response === "success") {
+      this.modalController.show(
+        ConfirmModal,
+        {
+          modalText: "寄送成功,請至Email查收",
+          needTitile: true,
+          confirmFunc: () => {
+            this.modalController.close();
+          }
+        },
+        false,
+        true,
+        "rgba(0, 0, 0, 0.4)",
+        "sendEmailVerifyConfirmModal"
+      );
+    }
+    GlobalData.closeLoadingModal();
   };
 
   /**

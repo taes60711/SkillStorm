@@ -12,12 +12,23 @@ const viewModel = new PwdForgotViewModel();
 
     <div class="loginInputContainer">
       <div class="pwdForgotTitle">忘記密碼</div>
-      <input
-        type="text"
-        placeholder="Email"
-        v-model="viewModel.emailController.value"
-        class="textInput marginB"
-      />
+
+      <div class="emailInputContainer marginB">
+        <input
+          type="text"
+          placeholder="Email"
+          v-model="viewModel.emailController.value"
+          class="textInput"
+        />
+        <MainButton
+          :onPress="
+            () => {
+              viewModel.sendEmailVerify();
+            }
+          "
+          text="寄送驗證碼"
+        ></MainButton>
+      </div>
 
       <p class="pwd_forgot_err" v-if="viewModel.emailIsEmpty.value">
         信箱不可為空或格式不正確
@@ -93,6 +104,11 @@ const viewModel = new PwdForgotViewModel();
   font-weight: 800;
   font-size: 30px;
   padding-bottom: 30px;
+}
+
+.emailInputContainer {
+  display: flex;
+  flex-direction: row;
 }
 
 .loginInputContainer {

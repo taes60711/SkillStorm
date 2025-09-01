@@ -29,7 +29,9 @@
       </div>
     </div>
 
-    <slot name="rightBody"></slot>
+    <div class="rightBody">
+      <slot name="rightBody"></slot>
+    </div>
   </div>
 </template>
 
@@ -222,5 +224,11 @@ const preloadData = async () => {
 }
 .circle:nth-child(3) {
   animation-delay: 0.3s;
+}
+
+.rightBody {
+  position: sticky;
+  top: 0;
+  height: fit-content;
 }
 </style>
