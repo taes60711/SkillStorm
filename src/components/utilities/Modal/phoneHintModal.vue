@@ -15,14 +15,14 @@
       v-if="os === 'iOS'"
       class="downloadBtn"
       :onPress="() => toDonloadPage()"
-      text=" 下載 iOS 版"
+      text="下載 iOS 版"
     >
     </MainButton>
     <MainButton
       v-else-if="os === 'Android'"
       class="downloadBtn"
       :onPress="() => toDonloadPage()"
-      text="Android 版 請耐心等待"
+      text="下載 Android 版"
     >
     </MainButton>
 
@@ -31,7 +31,7 @@
         <qrcode-vue :value="iosStoreUrl" :size="100" />
 
         <MainButton
-          class="downloadBtn marginB"
+          class="downloadBtn BtnMargin"
           :onPress="() => toDonloadPage()"
           text="iOS"
         >
@@ -40,7 +40,7 @@
       <div class="qrCodeContainer">
         <qrcode-vue :value="androidStoreUrl" :size="100" />
         <MainButton
-          class="downloadBtn marginB"
+          class="downloadBtn BtnMargin"
           :onPress="() => toDonloadPage()"
           text="Android"
         >
@@ -67,6 +67,7 @@ function toDonloadPage() {
     window.open(iosStoreUrl, "_blank");
     console.log("ios");
   } else if (os === "Android") {
+    window.open(androidStoreUrl, "_blank");
     console.log("android");
   }
 }
@@ -121,8 +122,9 @@ function getDeviceOS(): string {
   padding: 10px;
   font-weight: 700;
 }
-.marginB {
-  margin-bottom: 13px;
+.BtnMargin {
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .qrCode {
