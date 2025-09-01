@@ -64,7 +64,7 @@
           ></IconText>
         </div>
 
-        <div class="postCommentBar">
+        <div class="postCommentBar" ref="commentBar">
           <Avatar
             :imgurl="userDataStore.userData.value.image"
             size="40px"
@@ -119,7 +119,11 @@
 
         <div class="editContainer" v-if="item.user.uid == userDataStore.userData.value.uid">
          <MainButton
-            :onPress="() => viewModel.editPostCommentStart(item.id, item.message)"
+            :onPress="() => {
+              scrollToComment();
+              viewModel.editPostCommentStart(item.id, item.message);
+               
+            }"
             :style="{ marginRight: '5px' }"
             text="編集"
             v-if="!viewModel.commentIsEdit.value" 
@@ -146,9 +150,9 @@ import IconText from "@/components/utilities/IconText.vue";
 import { userDataStore } from "@/global/user_data";
 import BaseView from "@/components/utilities/BaseView.vue";
 import postDetailViewModel from "@/view_models/post/post_detail_view_models";
-import { onBeforeMount } from "@vue/runtime-core";
+import { onBeforeMount, ref } from "@vue/runtime-core";
 
-
+const commentBar = ref<HTMLElement | null>(null);
 const dateTimeFormat = new DateFormatUtilities();
 const viewModel = new postDetailViewModel();
 const props = defineProps<{
@@ -159,6 +163,13 @@ onBeforeMount(() => {
   /// 導入文章Id
   viewModel.init(props.modalProps.postData.id);
 });
+
+const scrollToComment = () => {
+   console.log("commentBar:", commentBar.value);
+    commentBar.value?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+
+};
 
 
 </script>

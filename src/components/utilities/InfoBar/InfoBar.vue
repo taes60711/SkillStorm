@@ -63,12 +63,11 @@
         class=""
         v-else-if="userDataStore.isLogin() && !viewModel.isShowText.value"
         :class="
-          viewModel.isChoicePagePath.value ===
-          RouterPath.HOME.PROFILE.INDEX.path
+          viewModel.isChoicePagePath.value === RouterPath.HOME.PROFILE.HOME.path
             ? 'InfoBar_MyItemBtnChoiced'
             : 'InfoBar_MyItemBtn'
         "
-        @click="viewModel.changePage(RouterPath.HOME.PROFILE.INDEX.path)"
+        @click="viewModel.changePage(RouterPath.HOME.PROFILE.HOME.path)"
       >
         <Avatar
           :imgurl="userDataStore.userData.value.image"
