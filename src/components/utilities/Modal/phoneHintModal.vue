@@ -59,7 +59,8 @@ const os: string = getDeviceOS();
 const iosStoreUrl: string =
   "https://apps.apple.com/tw/app/skillstorm/id6739574450";
 
-const androidStoreUrl: string = "";
+const androidStoreUrl: string =
+  "https://drive.google.com/file/d/1VY_P5x0ZYD0wFHYbhR0LJsHcjdaQ8nVN/view?usp=sharing";
 
 function toDonloadPage() {
   console.log(os);
