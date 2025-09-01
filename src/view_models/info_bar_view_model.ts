@@ -84,18 +84,37 @@ export default class InfoBarViewModel {
 
   /// 切換頁面
   changePage = (path: string, isNeedLoginCheck: boolean = false) => {
-    if (path !== "noPath") {
-      if (isNeedLoginCheck) {
-        if (userDataStore.isLogin()) {
-          router.push(path);
-          this.isChoicePagePath.value = path;
-        }
-      } else {
-        router.push(path);
-        this.isChoicePagePath.value = path;
-      }
-    } else {
+    if (path == "noPath") {
       this.goToMessage();
+      return;
+    }
+
+    if (!isNeedLoginCheck) {
+      router.push(path);
+      this.isChoicePagePath.value = path;
+      return;
+    }
+    if (userDataStore.isLogin()) {
+      router.push(path);
+      this.isChoicePagePath.value = path;
+    } else {
+      this.modalController.show(
+        HintModal,
+        {
+          modalText: "請登入帳號",
+          cancelFunc: () => {
+            this.modalController.close();
+          },
+          confirmFunc: () => {
+            this.modalController.close();
+            router.push(RouterPath.AUTH.LOGIN.path);
+          }
+        },
+        false,
+        true,
+        "rgba(0, 0, 0, 0.4)",
+        "loginHintModal"
+      );
     }
   };
 

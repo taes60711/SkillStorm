@@ -61,6 +61,7 @@ router.beforeEach((to, from, next) => {
         next();
       } else {
         console.log("Need Login");
+        next(RouterPath.HOME.POST.HOME.path);
       }
       break;
   }

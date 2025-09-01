@@ -45,6 +45,7 @@ const props = defineProps<{
   justify-content: space-between;
   color: white;
   border-radius: 10px;
+  min-width: 220px;
 }
 
 .textTitle {
