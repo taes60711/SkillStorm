@@ -70,17 +70,22 @@
             size="40px"
             borderRadius="50px"
           />
-          <input type="text" placeholder="輸入文字..." v-model="viewModel.commentInput.value" class="postComment" />
+          <input
+            type="text"
+            placeholder="輸入文字..."
+            v-model="viewModel.commentInput.value"
+            class="postComment"
+          />
           <MainButton
-            :onPress="() => {
-              if(viewModel.commentIsEdit.value) {
-                viewModel.editPostCommentSend();
-              } else {
-                viewModel.createPostComment()
+            :onPress="
+              () => {
+                if (viewModel.commentIsEdit.value) {
+                  viewModel.editPostCommentSend();
+                } else {
+                  viewModel.createPostComment();
+                }
               }
-             
-            }"
-          
+            "
           >
             <i class="fa-solid fa-paper-plane postCommentSendBtn"></i>
           </MainButton>
@@ -89,53 +94,54 @@
     </template>
 
     <template #apiListBody>
-
-      <div v-if="viewModel.postCommentData.value.length === 0" 
-        class="noDataContainer">
+      <div
+        v-if="viewModel.postCommentData.value.length === 0"
+        class="noDataContainer"
+      >
         <i class="fa-solid fa-comment-slash"></i>
         <p>目前還沒有任何留言</p>
       </div>
 
-      <div v-else
+      <div
+        v-else
         class="postCommentContainer"
         v-for="(item, index) in viewModel.postCommentData.value"
         v-bind:key="index"
       >
         <div class="topUserBar">
           <Avatar :imgurl="item.user.image" size="40px" borderRadius="50px" />
-          <p :style="{ paddingLeft: '10px' }">
-          
-            <p :style="{ color: 'rgb(132, 131, 131)' }">
+          <div :style="{ paddingLeft: '10px' }">
+            <div :style="{ color: 'rgb(132, 131, 131)' }">
               {{ item.user.name }}
               •{{ dateTimeFormat.format(item.postTime) }}
-            </p>  
-
-     
-            <div class="commentMessge">
-              {{ item.message }}
             </div>
-          </p>
+
+            {{ item.message }}
+          </div>
         </div>
 
-        <div class="editContainer" v-if="item.user.uid == userDataStore.userData.value.uid">
-         <MainButton
-            :onPress="() => {
-              scrollToComment();
-              viewModel.editPostCommentStart(item.id, item.message);
-               
-            }"
+        <div
+          class="editContainer"
+          v-if="item.user.uid == userDataStore.userData.value.uid"
+        >
+          <MainButton
+            :onPress="
+              () => {
+                scrollToComment();
+                viewModel.editPostCommentStart(item.id, item.message);
+              }
+            "
             :style="{ marginRight: '5px' }"
             text="編集"
-            v-if="!viewModel.commentIsEdit.value" 
+            v-if="!viewModel.commentIsEdit.value"
           ></MainButton>
-          
+
           <MainButton
             :onPress="() => viewModel.deletePostComment(item.id)"
             text="刪除"
-            v-if="!viewModel.commentIsEdit.value" 
+            v-if="!viewModel.commentIsEdit.value"
           ></MainButton>
         </div>
-
       </div>
     </template>
   </BaseView>
@@ -165,13 +171,9 @@ onBeforeMount(() => {
 });
 
 const scrollToComment = () => {
-   console.log("commentBar:", commentBar.value);
-    commentBar.value?.scrollIntoView({ behavior: "smooth", block: "start" });
-
-
+  console.log("commentBar:", commentBar.value);
+  commentBar.value?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
-
-
 </script>
 
 <style scoped>
@@ -252,11 +254,9 @@ const scrollToComment = () => {
   padding-bottom: 15px;
 }
 
-.postCommentContainer .editContainer{
+.postCommentContainer .editContainer {
   display: flex;
   flex-direction: row;
   padding-top: 10px;
 }
-
-
 </style>

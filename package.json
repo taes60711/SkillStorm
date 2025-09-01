@@ -16,6 +16,7 @@
     "crypto-js": "^4.2.0",
     "firebase": "^12.1.0",
     "primevue": "^4.2.5",
+    "qrcode.vue": "^3.6.0",
     "quill": "^2.0.3",
     "video.js": "^8.22.0",
     "videojs-youtube": "^3.0.1",

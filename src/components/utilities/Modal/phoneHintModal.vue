@@ -4,7 +4,7 @@
       :src="AppImage.noTextLogo"
       :style="{
         width: '200px',
-        height: '200px',
+        height: '200px'
       }"
     />
     <h1>請前往 App 下載體驗完整功能</h1>
@@ -26,21 +26,44 @@
     >
     </MainButton>
 
-    <p v-else class="s">現在為網頁模式，請使用手機開啟該頁面</p>
+    <div v-else class="qrCode">
+      <div class="qrCodeContainer">
+        <qrcode-vue :value="iosStoreUrl" :size="100" />
+
+        <MainButton
+          class="downloadBtn marginB"
+          :onPress="() => toDonloadPage()"
+          text="iOS"
+        >
+        </MainButton>
+      </div>
+      <div class="qrCodeContainer">
+        <qrcode-vue :value="androidStoreUrl" :size="100" />
+        <MainButton
+          class="downloadBtn marginB"
+          :onPress="() => toDonloadPage()"
+          text="Android"
+        >
+        </MainButton>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { AppImage } from "@/global/app_image";
 import MainButton from "../MainButton.vue";
+import QrcodeVue from "qrcode.vue";
 
 const os: string = getDeviceOS();
+const iosStoreUrl: string =
+  "https://apps.apple.com/tw/app/skillstorm/id6739574450";
+
+const androidStoreUrl: string = "";
 
 function toDonloadPage() {
   console.log(os);
   if (os === "iOS") {
-    const iosStoreUrl: string =
-      "https://apps.apple.com/tw/app/skillstorm/id6739574450";
     window.open(iosStoreUrl, "_blank");
     console.log("ios");
   } else if (os === "Android") {
@@ -97,5 +120,22 @@ function getDeviceOS(): string {
   justify-content: center;
   padding: 10px;
   font-weight: 700;
+}
+.marginB {
+  margin-bottom: 13px;
+}
+
+.qrCode {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.qrCodeContainer {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
 }
 </style>
