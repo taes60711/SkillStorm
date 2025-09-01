@@ -45,13 +45,13 @@ export default class LoginViewModel {
       password: this.pwdController.value
     };
 
-    const userData: ProfileData = await this.userService.getUserDataByEmail(
-      loginData,
-      "normalSign"
-    );
+    const userData: ProfileData | string =
+      await this.userService.getUserDataByEmail(loginData, "normalSign");
 
-    if (!userData) {
+    if (!userData || typeof userData === "string") {
       GlobalData.closeLoadingModal();
+
+      this.error.value = "帳號或密碼錯誤";
       return;
     }
 
@@ -88,13 +88,12 @@ export default class LoginViewModel {
     };
 
     GlobalData.openLoadingModal();
-    const userData: ProfileData = await this.userService.getUserDataByEmail(
-      loginData,
-      "googleSign"
-    );
+    const userData: ProfileData | string =
+      await this.userService.getUserDataByEmail(loginData, "googleSign");
 
-    if (!userData) {
+    if (!userData || typeof userData === "string") {
       GlobalData.closeLoadingModal();
+      this.error.value = "帳號或密碼錯誤";
       return;
     }
 

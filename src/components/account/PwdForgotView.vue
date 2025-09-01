@@ -20,7 +20,7 @@ const viewModel = new PwdForgotViewModel();
       />
 
       <p class="pwd_forgot_err" v-if="viewModel.emailIsEmpty.value">
-        信箱不得為空
+        信箱不可為空或格式不正確
       </p>
 
       <input
@@ -52,7 +52,7 @@ const viewModel = new PwdForgotViewModel();
         class="textInput marginB"
       />
 
-      <p class="pwd_forgot_err" v-if="viewModel.newPwdIsEmpty.value">
+      <p class="pwd_forgot_err marginB" v-if="viewModel.newPwdIsEmpty.value">
         新密碼不得為空
       </p>
 

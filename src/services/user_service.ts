@@ -38,7 +38,7 @@ export default class UserService extends APIClient {
   async getUserDataByEmail(
     loginData: LoginRequestData,
     loginType: string = "normalSign"
-  ): Promise<ProfileData> {
+  ): Promise<ProfileData | string> {
     let sha256Password: string = "";
 
     if (loginType == "googleSign") {
@@ -60,7 +60,7 @@ export default class UserService extends APIClient {
     );
 
     if (typeof reponseData === "string") {
-      throw new Error(`Failed`);
+      return "failed";
     }
 
     return reponseData;

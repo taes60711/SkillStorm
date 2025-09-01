@@ -8,7 +8,6 @@ import { EditTools } from "@/global/edit_tools";
 import { GlobalData } from "@/global/global_data";
 import { firebaseController } from "@/global/firebase_controller";
 import type { UserCredential } from "firebase/auth";
-import type { LoginRequestData } from "@/models/request/auth/login_request_data";
 
 export default class RegisterViewModel {
   stepIndex = ref<number>(0);
