@@ -14,14 +14,14 @@
     <MainButton
       v-if="os === 'iOS'"
       class="downloadBtn"
-      :onPress="() => toDonloadPage()"
+      :onPress="() => toIosDonloadPage()"
       text="下載 iOS 版"
     >
     </MainButton>
     <MainButton
       v-else-if="os === 'Android'"
       class="downloadBtn"
-      :onPress="() => toDonloadPage()"
+      :onPress="() => toAndroidDonloadPage()"
       text="下載 Android 版"
     >
     </MainButton>
@@ -32,7 +32,7 @@
 
         <MainButton
           class="downloadBtn BtnMargin"
-          :onPress="() => toDonloadPage()"
+          :onPress="() => toIosDonloadPage()"
           text="iOS"
         >
         </MainButton>
@@ -41,7 +41,7 @@
         <qrcode-vue :value="androidStoreUrl" :size="100" />
         <MainButton
           class="downloadBtn BtnMargin"
-          :onPress="() => toDonloadPage()"
+          :onPress="() => toAndroidDonloadPage()"
           text="Android"
         >
         </MainButton>
@@ -62,15 +62,14 @@ const iosStoreUrl: string =
 const androidStoreUrl: string =
   "https://drive.google.com/uc?export=download&id=1VY_P5x0ZYD0wFHYbhR0LJsHcjdaQ8nVN";
 
-function toDonloadPage() {
+function toAndroidDonloadPage() {
   console.log(os);
-  if (os === "iOS") {
-    window.open(iosStoreUrl, "_blank");
-    console.log("ios");
-  } else if (os === "Android") {
-    window.open(androidStoreUrl, "_blank");
-    console.log("android");
-  }
+  window.open(androidStoreUrl, "_blank");
+  console.log("android");
+}
+function toIosDonloadPage() {
+  window.open(iosStoreUrl, "_blank");
+  console.log("ios");
 }
 
 function getDeviceOS(): string {
