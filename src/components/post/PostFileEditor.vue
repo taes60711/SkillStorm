@@ -122,12 +122,20 @@ const youtubeController = ref<string>("");
 const modalController: ModalController = new ModalController();
 
 const handlelocalImg = async (event: Event) => {
+  if (fileLengthCheck()) {
+    return;
+  }
+
   const base64Img: string = await editTools.handleLocalImgChange(event);
   const imgUrl: string = await editTools.uploadImgToDatabase(base64Img);
   fileUrls.value.push(imgUrl);
 };
 
 const handleYtVideo = (videoUrl: string) => {
+  if (fileLengthCheck()) {
+    return;
+  }
+
   const ytId: string = editTools.getYtvideoID(videoUrl);
 
   if (ytId == "err") {
@@ -152,6 +160,9 @@ const handleYtVideo = (videoUrl: string) => {
 };
 
 const handleUrlImg = (imgUrl: string) => {
+  if (fileLengthCheck()) {
+    return;
+  }
   console.log(imgUrl);
   if (!imgUrl) {
     return;
@@ -162,6 +173,28 @@ const handleUrlImg = (imgUrl: string) => {
 
 const deleteEditingFile = (index: number) => {
   fileUrls.value.splice(index, 1);
+};
+
+const fileLengthCheck = (): boolean => {
+  if (fileUrls.value.length >= 7) {
+    modalController.show(
+      ConfirmModal,
+      {
+        modalText: "檔案不得超過７個檔案",
+        needTitile: true,
+        confirmFunc: () => {
+          modalController.close();
+        }
+      },
+      false,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "fileLengthErrConfirmModal"
+    );
+    return true;
+  } else {
+    return false;
+  }
 };
 </script>
 
