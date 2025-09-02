@@ -1,3 +1,4 @@
+import ConfirmModal from "@/components/utilities/Modal/confirmModal.vue";
 import HintModal from "@/components/utilities/Modal/HintModal.vue";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import phoneHintModal from "@/components/utilities/Modal/phoneHintModal.vue";
@@ -72,6 +73,19 @@ export default class InfoBarViewModel {
             this.modalController.close();
             userDataStore.clearUser();
             router.push(RouterPath.HOME.POST.HOME);
+            this.modalController.show(
+              ConfirmModal,
+              {
+                modalText: "登出成功",
+                confirmFunc: () => {
+                  this.modalController.close();
+                }
+              },
+              false,
+              true,
+              "rgba(0, 0, 0, 0.4)",
+              "logoOutSuccessModal"
+            );
           }
         },
         false,

@@ -1,8 +1,11 @@
+import { ModalController } from "@/components/utilities/Modal/ModalController";
 import { userDataStore } from "@/global/user_data";
 import type { PostComment } from "@/models/reponse/post/post_comment_reponse_data";
 import type { CreatePostCommentRequestData } from "@/models/request/post/create_post_comment_request_data";
 import PostService from "@/services/post_service";
 import { type Ref, ref } from "vue";
+import HintModal from "@/components/utilities/Modal/HintModal.vue";
+import type { Post } from "@/models/reponse/post/post_reponse_data";
 
 export default class postDetailViewModel {
   postId: Ref<number> = ref<number>(-1);
@@ -10,6 +13,7 @@ export default class postDetailViewModel {
   commentInput: Ref<string> = ref<string>("");
   commentIsEdit: Ref<Boolean> = ref<Boolean>(false);
   postCommentUID: Ref<number> = ref<number>(-1);
+  modalController: ModalController = new ModalController();
 
   init(enterPostId: number) {
     this.postId.value = enterPostId;
@@ -61,18 +65,35 @@ export default class postDetailViewModel {
 
   /// 刪除文章詳細頁面的留言
   deletePostComment = async (postCommentId: number) => {
-    const isSuccess: Boolean = await new PostService().deletePostComment(
-      postCommentId
-    );
+    this.modalController.show(
+      HintModal,
+      {
+        modalText: "確定要刪除該留言?",
+        needTitile: true,
+        cancelFunc: () => {
+          this.modalController.close();
+        },
+        confirmFunc: async () => {
+          const isSuccess: Boolean = await new PostService().deletePostComment(
+            postCommentId
+          );
 
-    if (isSuccess) {
-      const idx = this.postCommentData.value.findIndex(
-        (item) => item.id === postCommentId
-      );
-      if (idx !== -1) {
-        this.postCommentData.value.splice(idx, 1);
-      }
-    }
+          if (isSuccess) {
+            const idx = this.postCommentData.value.findIndex(
+              (item) => item.id === postCommentId
+            );
+            if (idx !== -1) {
+              this.postCommentData.value.splice(idx, 1);
+            }
+          }
+          this.modalController.close();
+        }
+      },
+      false,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "fileLengthErrConfirmModal"
+    );
   };
 
   /// 開始編集文章詳細頁面的留言
@@ -108,6 +129,36 @@ export default class postDetailViewModel {
         this.commentInput.value = "";
         this.commentIsEdit.value = false;
       }
+    }
+  };
+
+  detailPageChangeLike = async (listData: Post[], data: Post) => {
+    console.log("asd");
+    if (
+      data.user.uid === userDataStore.userData.value.uid ||
+      !userDataStore.isLogin()
+    ) {
+      return;
+    }
+
+    const idx: number = listData.findIndex((e) => e.id === data.id);
+
+    if (idx !== -1) {
+      if (data.userIsGood) {
+        await new PostService().updatePostGood(data.id);
+        data.good = data.good - 1;
+      } else {
+        await new PostService().updatePostGood(
+          data.id,
+          userDataStore.userData.value.uid
+        );
+        data.good = data.good + 1;
+      }
+
+      data.userIsGood = !data.userIsGood;
+
+      listData[idx].userIsGood = data.userIsGood;
+      listData[idx].good = data.good;
     }
   };
 }

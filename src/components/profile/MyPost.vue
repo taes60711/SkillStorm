@@ -21,7 +21,7 @@
           :onPress="
             () => {
               item.user = userDataStore.user.value;
-              viewModel.toDetailPage(item);
+              viewModel.toDetailPage(postData, item);
             }
           "
         >

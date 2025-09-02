@@ -46,12 +46,12 @@ export default class PostHomeViewModel {
   };
 
   ///開啟文章詳細頁
-  toDetailPage = (data: Post) => {
+  toDetailPage = (listData: Post[], data: Post) => {
     console.log(data);
 
     this.modalController.show(
       PostDetail,
-      { postData: data },
+      { postData: data, listData: listData },
       true,
       true,
       "rgba(0, 0, 0, 0.4)",

@@ -38,18 +38,29 @@
             class="bottombarItem"
           ></IconText>
 
-          <IconText
-            v-if="props.modalProps.postData.userIsGood"
-            icon="fa-regular fa-heart"
-            :text="`${props.modalProps.postData.good}`"
-            class="bottombarItem"
-          ></IconText>
-          <IconText
-            v-else
-            icon="fa-solid fa-heart"
-            :text="`${props.modalProps.postData.good}`"
-            class="bottombarItem"
-          ></IconText>
+          <MainButton
+            :onPress="
+              () => {
+                viewModel.detailPageChangeLike(
+                  props.modalProps.listData,
+                  props.modalProps.postData
+                );
+              }
+            "
+          >
+            <IconText
+              v-if="props.modalProps.postData.userIsGood"
+              icon="fa-solid fa-heart"
+              :text="`${props.modalProps.postData.good}`"
+              class="bottombarItem"
+            ></IconText>
+            <IconText
+              v-else
+              icon="fa-regular fa-heart"
+              :text="`${props.modalProps.postData.good}`"
+              class="bottombarItem"
+            ></IconText>
+          </MainButton>
 
           <IconText
             icon="fa-regular fa-comment"

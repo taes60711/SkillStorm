@@ -33,7 +33,7 @@
       >
         <MainButton
           :needOpacity="false"
-          :onPress="() => viewModel.toDetailPage(item)"
+          :onPress="() => viewModel.toDetailPage(postData, item)"
         >
           <div class="topBar">
             <div class="topUserBar">
