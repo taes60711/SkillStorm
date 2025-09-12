@@ -166,6 +166,7 @@ onBeforeUnmount(() => {
   padding: 3px;
   border-radius: 4px;
   border: 1px solid #ccc;
+  color: rgb(35, 35, 35);
 }
 
 .option {

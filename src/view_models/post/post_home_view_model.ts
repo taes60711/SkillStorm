@@ -7,6 +7,7 @@ import type { Post } from "@/models/reponse/post/post_reponse_data";
 import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
 import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
+import HintModal from "@/components/utilities/Modal/HintModal.vue";
 
 export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();
@@ -157,6 +158,32 @@ export default class PostHomeViewModel {
 
       listData[idx].userIsGood = data.userIsGood;
       listData[idx].good = data.good;
+    }
+  };
+
+  deletePost = async (listData: Post[], data: Post) => {
+    const idx: number = listData.findIndex((e) => e.id === data.id);
+
+    if (idx !== -1) {
+      this.modalController.show(
+        HintModal,
+        {
+          modalText: "確定要刪除該篇文章?",
+          needTitile: true,
+          cancelFunc: () => {
+            this.modalController.close();
+          },
+          confirmFunc: async () => {
+            await new PostService().deletePost(data.id);
+            listData.splice(idx, 1);
+            this.modalController.close();
+          }
+        },
+        false,
+        true,
+        "rgba(0, 0, 0, 0.4)",
+        "deletePostModal"
+      );
     }
   };
 }

@@ -7,6 +7,9 @@
       class="textInput marginB"
       v-model="viewModel.nameController.value"
     />
+    <p class="register_err" v-if="viewModel.nameError.value != ''">
+      {{ viewModel.nameError.value }}
+    </p>
 
     <input
       type="password"
@@ -40,8 +43,19 @@
       class="textInput marginB"
       v-model="viewModel.captchaController.value"
     />
+    <p class="register_err" v-if="viewModel.captchaError.value != ''">
+      {{ viewModel.captchaError.value }}
+    </p>
 
-    <MainButton :onPress="() => {}" text="註冊" class="marginB"></MainButton>
+    <MainButton
+      :onPress="
+        () => {
+          viewModel.signUp();
+        }
+      "
+      text="註冊"
+      class="marginB"
+    ></MainButton>
 
     <MainButton
       :onPress="
@@ -49,7 +63,7 @@
           viewModel.pageChange(0);
         }
       "
-      text="退回"
+      text="返回"
     ></MainButton>
   </div>
 </template>
@@ -102,5 +116,9 @@ const viewModel = defineModel("RegisterViewModel");
   padding-right: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.register_err {
+  color: #f90202;
 }
 </style>

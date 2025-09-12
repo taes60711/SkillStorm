@@ -13,8 +13,16 @@ export class EditTools {
     let isOK: boolean = true;
     const controllerStr: string = controller.replaceAll(" ", "");
 
-    if (controllerStr === "" || !regex?.test(controllerStr)) {
+    console.log(controllerStr);
+
+    if (controllerStr === "") {
       isOK = false;
+    }
+
+    if (regex) {
+      if (!regex?.test(controllerStr)) {
+        isOK = false;
+      }
     }
 
     return isOK;

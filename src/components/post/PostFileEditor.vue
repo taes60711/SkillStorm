@@ -157,6 +157,7 @@ const handleYtVideo = (videoUrl: string) => {
   }
   const ytURL: string = `https://www.youtube.com/embed/${ytId}`;
   fileUrls.value.push(ytURL);
+  youtubeController.value = "";
 };
 
 const handleUrlImg = (imgUrl: string) => {
@@ -169,6 +170,7 @@ const handleUrlImg = (imgUrl: string) => {
   }
 
   fileUrls.value.push(imgUrl);
+  urlImgController.value = "";
 };
 
 const deleteEditingFile = (index: number) => {

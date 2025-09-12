@@ -27,6 +27,17 @@
             </div>
 
             <MainButton
+              :onPress="
+                () => {
+                  deleteCourse(courseData, item);
+                }
+              "
+              :style="{ paddingRight: '16px' }"
+            >
+              <i class="fa-solid fa-trash fileDeleteBtn"></i>
+            </MainButton>
+
+            <MainButton
               :onPress="() => openItemSetting(item)"
               :style="{ paddingRight: '16px' }"
             >
@@ -88,6 +99,7 @@ import CourseDetail from "@/components/course/CourseDetail.vue";
 import CourseEditor from "@/components/course/CourseEditor.vue";
 import IconText from "@/components/utilities/IconText.vue";
 import MyCourseBoard from "@/components/course/MyCourse/MyCourseBoard.vue";
+import HintModal from "@/components/utilities/Modal/HintModal.vue";
 
 const modalController: ModalController = new ModalController();
 const dateTimeFormat = new DateFormatUtilities();
@@ -105,6 +117,32 @@ function toDetailPage(data: Course) {
     "rgba(0, 0, 0, 0.4)",
     "CourseDetail"
   );
+}
+
+function deleteCourse(listData: Course[], data: Course) {
+  const idx: number = listData.findIndex((e) => e.id === data.id);
+
+  if (idx !== -1) {
+    modalController.show(
+      HintModal,
+      {
+        modalText: "確定要刪除該篇課程?",
+        needTitile: true,
+        cancelFunc: () => {
+          modalController.close();
+        },
+        confirmFunc: async () => {
+          await new CourseService().deleteCourse(data.id);
+          listData.splice(idx, 1);
+          modalController.close();
+        }
+      },
+      false,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "deleteCourseModal"
+    );
+  }
 }
 
 function openItemSetting(data: Course) {

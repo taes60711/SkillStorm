@@ -67,6 +67,20 @@ export default class CourseService extends APIClient {
   }
 
   /**
+   * MARK: 刪除課程
+   * @param postData 更新文章的Data
+   */
+  async deleteCourse(courseId: number): Promise<void> {
+    let body = {};
+
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.COURSE.DELETE_COURSE}/${courseId}`,
+      body
+    );
+
+    console.log(`deleteCourse : ${reponseData}`);
+  }
+  /**
    * 所有課程
    * @param page 從第幾頁開始
    * @param size 一次拿多少的資料

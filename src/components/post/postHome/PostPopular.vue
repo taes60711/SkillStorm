@@ -66,6 +66,18 @@
             <MainButton :onPress="() => onChangePage('back')"> </MainButton>
 
             <MainButton
+              :onPress="
+                () => {
+                  viewModel.deletePost(postData, item);
+                }
+              "
+              :style="{ paddingRight: '16px' }"
+              v-if="item.user.uid == userDataStore.userData.value.uid"
+            >
+              <i class="fa-solid fa-trash fileDeleteBtn"></i>
+            </MainButton>
+
+            <MainButton
               :onPress="() => openItemSetting(item)"
               :style="{ paddingRight: '16px' }"
               v-if="item.user.uid == userDataStore.userData.value.uid"

@@ -135,7 +135,7 @@ export default class RegisterViewModel {
           isOK = false;
         }
         if (!this.editTools.checkInputValid(this.captchaController.value)) {
-          this.captchaController.value = "驗證碼不可為空";
+          this.captchaError.value = "驗證碼不可為空";
           isOK = false;
         }
 
@@ -147,7 +147,6 @@ export default class RegisterViewModel {
         ) {
           isOK = false;
         }
-
         break;
     }
 

@@ -258,7 +258,7 @@ export default class PostService extends APIClient {
 
   /**
    * MARK: 更新文章
-   * @param postData 更新文章的Data
+   * @param postId 更新文章的DataId
    */
   async updatePostGood(postId: number, userId: string = ""): Promise<void> {
     let body = {};
@@ -273,6 +273,21 @@ export default class PostService extends APIClient {
     );
 
     console.log(`updatePostGood : ${reponseData}`);
+  }
+
+  /**
+   * MARK: 刪除文章
+   * @param postData 更新文章的Data
+   */
+  async deletePost(postId: number): Promise<void> {
+    let body = {};
+
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.DELETE_POST}/${postId}`,
+      body
+    );
+
+    console.log(`deletePost : ${reponseData}`);
   }
 
   /**
