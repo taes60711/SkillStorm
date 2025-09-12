@@ -12,7 +12,7 @@ const changeChapter = defineModel("changeChapter");
 
 <template>
   <div class="courseChapterEditContainer">
-    <div class="tt">
+    <div class="titleContainer">
       <input
         type="text"
         v-model="title"
@@ -45,19 +45,21 @@ const changeChapter = defineModel("changeChapter");
   padding: 5px px;
 }
 
-.tt {
+.titleContainer {
   display: flex;
   flex-direction: row;
+  padding-bottom: 7px;
+  padding-left: 5px;
 }
 
-.courseChapterEditContainer .tt .textInput {
+.courseChapterEditContainer .titleContainer .textInput {
   flex: 1;
   min-width: 0;
   border: none;
   padding-left: 10px;
 }
 
-.courseChapterEditContainer .tt .main-button {
+.courseChapterEditContainer .titleContainer .main-button {
   width: 40px;
   height: 40px;
   display: flex;

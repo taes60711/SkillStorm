@@ -103,9 +103,14 @@ onBeforeMount(() => {
 
     <div class="chapterBar">
       <MainButton
-        :onPress="() => viewModel.addChapter()"
+        :onPress="
+          () => {
+            viewModel.addChapter();
+          }
+        "
         text="章節＋"
-      ></MainButton>
+      >
+      </MainButton>
 
       <div class="chapterBarRight">
         <p>公開</p>
