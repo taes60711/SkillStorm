@@ -51,6 +51,10 @@ export default class EditProfileViewModel {
    * 更新用戶資料
    */
   public async updateProfile() {
+    this.formData.value.image = await this.editTools.uploadImgToDatabase(
+      this.formData.value.image ?? ""
+    );
+
     console.log(this.formData.value);
     await this.userService.updateProfileData(this.formData.value);
 

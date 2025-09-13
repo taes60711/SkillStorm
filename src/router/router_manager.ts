@@ -41,7 +41,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(`to.path > ${to.path} toParam > ${to.params.id}`);
   const isLogin = userDataStore.isLogin(); // 判斷是否有登入資料
 
   switch (isLogin) {
