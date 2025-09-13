@@ -172,4 +172,29 @@ export default class CourseService extends APIClient {
       return reponseData;
     }
   }
+
+  /**
+   * 外部文章
+   * @param postId 文章Id
+   * @returns
+   */
+  async getCoursByCourseId(
+    courseId: Number,
+    userUID: String
+  ): Promise<Course | String> {
+    const param = {
+      id: courseId
+    };
+
+    const reponseData: Course | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.COURSE.GET_COURSE_BY_ID}/${userUID}`,
+      param
+    );
+
+    if (typeof reponseData === "string") {
+      return "";
+    } else {
+      return reponseData;
+    }
+  }
 }

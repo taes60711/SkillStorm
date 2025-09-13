@@ -5,6 +5,8 @@ import SkillService from "@/services/skill_service";
 import { APIHttpController, DevType } from "./api_http_controller";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import Loading from "@/components/utilities/Loading.vue";
+import CourseService from "@/services/course_service";
+import { userDataStore } from "./user_data";
 
 export class GlobalData {
   private static instance: GlobalData;
@@ -32,8 +34,25 @@ export class GlobalData {
   private static async getPostBoardData() {
     this.postBoard = await new PostService().getAllPostBoard();
   }
+
   private static async getSkillData() {
     this.skillData = await new SkillService().getSkillList();
+  }
+
+  /// 未完成
+  static async getExtendsPost(postId: string) {
+    const id: number = parseInt(postId);
+
+    new PostService().getPostByPostId(id);
+  }
+
+  /// 未完成
+  static async getExtendsCourse(courseId: string) {
+    const id: number = parseInt(courseId);
+    new CourseService().getCoursByCourseId(
+      id,
+      userDataStore.userData.value.uid
+    );
   }
 
   static openLoadingModal() {

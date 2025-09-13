@@ -8,6 +8,7 @@ import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
 import type { CreatePostRequestData } from "@/models/request/post/create_post_request_data";
 import HintModal from "@/components/utilities/Modal/HintModal.vue";
+import ShareModal from "@/components/utilities/Modal/ShareModal.vue";
 
 export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();
@@ -132,6 +133,7 @@ export default class PostHomeViewModel {
     }
   };
 
+  // 按讚收讚
   changeLike = async (listData: Post[], data: Post) => {
     if (
       data.user.uid === userDataStore.userData.value.uid ||
@@ -161,6 +163,7 @@ export default class PostHomeViewModel {
     }
   };
 
+  ///刪除文章
   deletePost = async (listData: Post[], data: Post) => {
     const idx: number = listData.findIndex((e) => e.id === data.id);
 
@@ -185,5 +188,19 @@ export default class PostHomeViewModel {
         "deletePostModal"
       );
     }
+  };
+
+  ///分享文章
+  sharePost = async (data: Post) => {
+    this.modalController.show(
+      ShareModal,
+      {
+        shareUrl: `/post/${data.id}`
+      },
+      true,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "sharePostModal"
+    );
   };
 }

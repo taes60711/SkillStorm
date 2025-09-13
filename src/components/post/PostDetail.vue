@@ -73,6 +73,16 @@
             text="分享"
             class="bottombarItem"
           ></IconText>
+
+          <MainButton
+            :onPress="() => viewModel.sharePost(props.modalProps.postData)"
+          >
+            <IconText
+              icon="fa-solid fa-arrow-up-right-from-square"
+              text="分享"
+              class="bottombarItem"
+            ></IconText>
+          </MainButton>
         </div>
 
         <div class="postCommentBar" ref="commentBar">

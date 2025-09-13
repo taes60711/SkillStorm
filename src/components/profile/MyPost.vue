@@ -96,11 +96,16 @@
               class="bottombarItem"
             ></IconText>
 
-            <IconText
-              icon="fa-solid fa-arrow-up-right-from-square"
-              text="分享"
-              class="bottombarItem"
-            ></IconText>
+            <MainButton
+              :onPress="() => viewModel.sharePost(item)"
+              :style="{ paddingRight: '16px' }"
+            >
+              <IconText
+                icon="fa-solid fa-arrow-up-right-from-square"
+                text="分享"
+                class="bottombarItem"
+              ></IconText>
+            </MainButton>
           </div>
         </MainButton>
       </div>

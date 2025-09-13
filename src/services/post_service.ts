@@ -175,6 +175,28 @@ export default class PostService extends APIClient {
   }
 
   /**
+   * 外部文章
+   * @param postId 文章Id
+   * @returns
+   */
+  async getPostByPostId(postId: Number): Promise<Post | String> {
+    const param = {
+      id: postId
+    };
+
+    const reponseData: Post | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.POST.GET_POST_BY_ID}`,
+      param
+    );
+
+    if (typeof reponseData === "string") {
+      return "";
+    } else {
+      return reponseData;
+    }
+  }
+
+  /**
    * MARK: 取得所有看板項目
    */
   async getAllPostBoard(): Promise<PostBoard[]> {

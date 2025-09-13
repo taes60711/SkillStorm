@@ -67,6 +67,7 @@ function toAndroidDonloadPage() {
   window.open(androidStoreUrl, "_blank");
   console.log("android");
 }
+
 function toIosDonloadPage() {
   window.open(iosStoreUrl, "_blank");
   console.log("ios");
@@ -92,11 +93,11 @@ function getDeviceOS(): string {
 <style scoped>
 .phoneHintModal_Container {
   background-color: rgb(60, 58, 58);
-  padding: 20px 0;
+  padding: 20px;
   margin: 20px;
   border-radius: 10px;
   max-width: 400px;
-  padding: 20px;
+
   border: 0.5px rgb(100, 100, 100) solid;
   display: flex;
   justify-content: center;

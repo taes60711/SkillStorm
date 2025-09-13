@@ -116,5 +116,23 @@ export const RouterPath = {
       component: pwdForgot,
       name: "forgotPassword"
     }
+  },
+  EXTENDS: {
+    COURSE: {
+      path: "/course/:id",
+      components: {
+        default: CourseHome,
+        aside: InfoBar
+      },
+      name: "extendsCourse"
+    },
+    POST: {
+      path: "/post/:id",
+      components: {
+        default: PostHome,
+        aside: InfoBar
+      },
+      name: "extendsPost"
+    }
   }
 };

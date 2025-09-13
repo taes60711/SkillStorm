@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, useRoute } from "vue-router";
 import { RouterPath } from "./router_path";
 import { userDataStore } from "@/global/user_data"; // 引入全局用戶資料管理
+import { GlobalData } from "@/global/global_data";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -12,6 +13,8 @@ const router = createRouter({
     RouterPath.HOME.POST.POPULAR,
     RouterPath.HOME.POST.BOARD,
     RouterPath.HOME.COURSE.HOME,
+    RouterPath.EXTENDS.COURSE,
+    RouterPath.EXTENDS.POST,
     RouterPath.HOME.SUGGESTUSERS.HOME,
     {
       ...RouterPath.HOME.PROFILE.HOME,
@@ -38,6 +41,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  console.log(`to.path > ${to.path} toParam > ${to.params.id}`);
   const isLogin = userDataStore.isLogin(); // 判斷是否有登入資料
 
   switch (isLogin) {
@@ -56,7 +60,7 @@ router.beforeEach((to, from, next) => {
       break;
 
     case false:
-      /// 未登入
+      /// 不需要登入
       if (!to.meta.requiresAuth) {
         next();
       } else {
@@ -64,6 +68,19 @@ router.beforeEach((to, from, next) => {
         next(RouterPath.HOME.POST.HOME.path);
       }
       break;
+  }
+
+  if (to.path.includes("/post") && to.params !== undefined) {
+    console.log(`to.path > ${to.path} toParam > ${to.params.id}`);
+
+    GlobalData.getExtendsPost(to.params.id[0]);
+    return;
+  }
+
+  if (to.path.includes("/course") && to.params !== undefined) {
+    console.log(`to.path > ${to.path} toParam > ${to.params.id}`);
+    GlobalData.getExtendsCourse(to.params.id[0]);
+    return;
   }
 });
 

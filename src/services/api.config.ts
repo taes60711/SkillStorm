@@ -27,7 +27,8 @@ export const API_CONFIG = {
       GET_ALL: "/getAll",
       GET_NEW: "/getNewPosts",
       GET_TYPE: "/getPostsByType",
-      GET_MY_POST: "/getPostsByUser"
+      GET_MY_POST: "/getPostsByUser",
+      GET_POST_BY_ID: "/getPostsByPostId"
     },
     COURSE: {
       CREATE_COURSE: "/createCourse",
@@ -35,7 +36,8 @@ export const API_CONFIG = {
       DELETE_COURSE: "/deleteCourse",
       GET_MY_COURSE: "/getCoursesByUserId",
       GET_ADDED_COURSE: "/getAddedCourses",
-      GET_ALL: "/getAllCourses"
+      GET_ALL: "/getAllCourses",
+      GET_COURSE_BY_ID: "/getCourseByCourseId"
     }
   }
 };

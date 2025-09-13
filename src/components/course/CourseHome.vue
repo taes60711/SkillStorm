@@ -39,6 +39,17 @@
             <MainButton
               :onPress="
                 () => {
+                  shareCourse(item);
+                }
+              "
+              :style="{ paddingRight: '16px' }"
+            >
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </MainButton>
+
+            <MainButton
+              :onPress="
+                () => {
                   deleteCourse(courseData, item);
                 }
               "
@@ -107,6 +118,7 @@ import CourseDetail from "@/components/course/CourseDetail.vue";
 import CourseEditor from "@/components/course/CourseEditor.vue";
 import IconText from "@/components/utilities/IconText.vue";
 import HintModal from "@/components/utilities/Modal/HintModal.vue";
+import ShareModal from "@/components/utilities/Modal/ShareModal.vue";
 
 const modalController: ModalController = new ModalController();
 const dateTimeFormat = new DateFormatUtilities();
@@ -121,6 +133,20 @@ function toDetailPage(data: Course) {
     true,
     "rgba(0, 0, 0, 0.4)",
     "CourseDetail"
+  );
+}
+
+///分享文章
+function shareCourse(data: Course) {
+  modalController.show(
+    ShareModal,
+    {
+      shareUrl: `/course/${data.id}`
+    },
+    true,
+    true,
+    "rgba(0, 0, 0, 0.4)",
+    "shareCourseModal"
   );
 }
 

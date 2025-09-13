@@ -6,6 +6,7 @@ import PostService from "@/services/post_service";
 import { type Ref, ref } from "vue";
 import HintModal from "@/components/utilities/Modal/HintModal.vue";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
+import ShareModal from "@/components/utilities/Modal/ShareModal.vue";
 
 export default class postDetailViewModel {
   postId: Ref<number> = ref<number>(-1);
@@ -160,5 +161,19 @@ export default class postDetailViewModel {
       listData[idx].userIsGood = data.userIsGood;
       listData[idx].good = data.good;
     }
+  };
+
+  ///分享文章
+  sharePost = async (data: Post) => {
+    this.modalController.show(
+      ShareModal,
+      {
+        shareUrl: `/post/${data.id}`
+      },
+      true,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "sharePostModal"
+    );
   };
 }
