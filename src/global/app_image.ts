@@ -1,11 +1,16 @@
-/**
- * 程式中所有圖片
- */
 export class AppImage {
-  public static googleLogo: string = "src/assets/images/google-icon.svg";
-  public static logo: string = "src/assets/images/logo.png";
-  public static noTextLogo: string = "src/assets/images/logoNoText.png";
-
-  public static defaultUserImg: string =
-    "/src/assets/images/profile/default_avatar.png";
+  public static googleLogo = new URL(
+    "@/assets/images/google-icon.svg",
+    import.meta.url
+  ).href;
+  public static logo = new URL("@/assets/images/logo.png", import.meta.url)
+    .href;
+  public static noTextLogo = new URL(
+    "@/assets/images/logoNoText.png",
+    import.meta.url
+  ).href;
+  public static defaultUserImg = new URL(
+    "@/assets/images/profile/default_avatar.png",
+    import.meta.url
+  ).href;
 }

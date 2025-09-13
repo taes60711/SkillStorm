@@ -6,6 +6,7 @@ import { GlobalData } from "@/global/global_data";
 import EmailService from "@/services/email_service";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import ConfirmModal from "@/components/utilities/Modal/confirmModal.vue";
+import { RouterPath } from "@/router/router_path";
 /// 忘記密碼ViewModel
 export default class PwdForgotViewModel {
   private userService = new UserService();
@@ -44,6 +45,21 @@ export default class PwdForgotViewModel {
       );
 
       GlobalData.closeLoadingModal();
+
+      this.modalController.show(
+        ConfirmModal,
+        {
+          modalText: "修改成功",
+          confirmFunc: () => {
+            this.modalController.close();
+            router.push(RouterPath.AUTH.LOGIN.path);
+          }
+        },
+        false,
+        true,
+        "rgba(0, 0, 0, 0.4)",
+        "logoOutSuccessModal"
+      );
       console.log(`修改成功 彈回至登入頁面`);
     } else {
       console.log(
