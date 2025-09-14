@@ -68,12 +68,6 @@
             class="bottombarItem"
           ></IconText>
 
-          <IconText
-            icon="fa-solid fa-arrow-up-right-from-square"
-            text="分享"
-            class="bottombarItem"
-          ></IconText>
-
           <MainButton
             :onPress="() => viewModel.sharePost(props.modalProps.postData)"
           >
@@ -153,7 +147,7 @@
               }
             "
             :style="{ marginRight: '5px' }"
-            text="編集"
+            text="編輯"
             v-if="!viewModel.commentIsEdit.value"
           ></MainButton>
 

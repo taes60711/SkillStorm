@@ -26,7 +26,7 @@ const props = defineProps<{
 }>();
 
 onBeforeMount(() => {
-  shareUrl = `${APIHttpController.prefixUrl}:/${APIHttpController.domainUrl}${props.modalProps.shareUrl}`;
+  shareUrl = `${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}${props.modalProps.shareUrl}`;
 });
 
 async function copyUrl() {
