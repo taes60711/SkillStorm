@@ -54,12 +54,23 @@ export default class EditProfileViewModel {
     this.formData.value.image = await this.editTools.uploadImgToDatabase(
       this.formData.value.image ?? ""
     );
-
-    console.log(this.formData.value);
     await this.userService.updateProfileData(this.formData.value);
 
-    // 更新全局狀態和 localStorage
-    userDataStore.updateUser(this.formData.value as ProfileData);
+    const userData: ProfileData = {
+      uid: this.formData.value.uid,
+      email: userDataStore.userData.value.email,
+      password: userDataStore.userData.value.password,
+      image: this.formData.value.image,
+      introduction: this.formData.value.introduction,
+      job: this.formData.value.job,
+      lastlogin: userDataStore.userData.value.lastlogin,
+      name: this.formData.value.name,
+      skills: this.formData.value.skills,
+      wantSkills: this.formData.value.wantSkills,
+      status: userDataStore.userData.value.status
+    };
+
+    userDataStore.setUser(userData);
 
     router.push(RouterPath.HOME.PROFILE.HOME);
   }

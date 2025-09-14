@@ -25,7 +25,23 @@ export default class PostHomeViewModel {
         "postedit"
       );
     } else {
-      console.log("請登入");
+      this.modalController.show(
+        HintModal,
+        {
+          modalText: "請登入帳號",
+          cancelFunc: () => {
+            this.modalController.close();
+          },
+          confirmFunc: () => {
+            this.modalController.close();
+            router.push(RouterPath.AUTH.LOGIN.path);
+          }
+        },
+        false,
+        true,
+        "rgba(0, 0, 0, 0.4)",
+        "loginHintModal"
+      );
     }
   };
 

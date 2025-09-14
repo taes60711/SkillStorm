@@ -70,22 +70,6 @@ export default class UserDataStore {
   }
 
   /**
-   * 更新用戶資料
-   * 局部更新用戶資料，僅更新提供的屬性，並同步到 localStorage。
-   * @param {Partial<ProfileData>} data 要更新的用戶資料屬性
-   */
-  updateUser(data: Partial<ProfileData>) {
-    if (this.user.value) {
-      Object.assign(this.user.value, data); // 局部更新用戶資料
-      localStorage.setItem(
-        "skillStormUserData",
-        JSON.stringify(this.user.value)
-      );
-      console.log("更新用戶資料:", this.user.value);
-    }
-  }
-
-  /**
    * 清除用戶資料
    * 清空內存中的用戶資料，並移除 localStorage 中的對應資料。
    */

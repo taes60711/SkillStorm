@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="imageLoadError"
+    v-if="!props.imgurl"
     class="normalImgContainer"
     :style="{
       width: size,
@@ -17,7 +17,6 @@
     :src="avatarUrl()"
     class="avatarImg"
     :style="{ width: size, height: size, borderRadius: borderRadius }"
-    @error="handleImageError"
     alt="Avatar"
   />
 </template>
@@ -25,11 +24,8 @@
 <script setup lang="ts">
 import { AppImage } from "@/global/app_image";
 import { EditTools } from "@/global/edit_tools";
-import type { Ref } from "vue";
-import { ref } from "vue";
 
 const editTools: EditTools = new EditTools();
-const imageLoadError: Ref<boolean> = ref(false);
 
 const props = defineProps({
   imgurl: {
@@ -46,12 +42,8 @@ const props = defineProps({
   }
 });
 
-const handleImageError = (): void => {
-  imageLoadError.value = true;
-};
-
 const avatarUrl = (): string => {
-  if (imageLoadError.value || !props.imgurl) {
+  if (!props.imgurl) {
     return AppImage.defaultUserImg;
   }
 
