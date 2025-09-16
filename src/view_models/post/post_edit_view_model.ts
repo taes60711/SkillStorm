@@ -58,12 +58,20 @@ export default class PostEditViewModel {
         );
 
         if (idx !== -1) {
-          await new PostService().updatePost(this.postId, postData);
+          const isSuccess: Boolean = await new PostService().updatePost(
+            this.postId,
+            postData
+          );
 
+          /// 投稿失敗
+          if (!isSuccess) {
+            GlobalData.closeLoadingModal();
+            return;
+          }
+
+          /// 投稿成功
           this.listPostData[idx].mainMessage = postData.content;
           this.listPostData[idx].fileMessage = postData.fileMessage;
-
-          GlobalData.closeLoadingModal();
 
           this.modalController.show(
             confimModal,
@@ -79,6 +87,7 @@ export default class PostEditViewModel {
             "rgba(0, 0, 0, 0.4)",
             "confirmModal"
           );
+          GlobalData.closeLoadingModal();
         }
       } else {
         // 創建文章

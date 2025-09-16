@@ -8,6 +8,8 @@ import type { Post } from "@/models/reponse/post/post_reponse_data";
 import { GlobalData } from "@/global/global_data";
 import type { PostComment } from "@/models/reponse/post/post_comment_reponse_data";
 import type { CreatePostCommentRequestData } from "@/models/request/post/create_post_comment_request_data";
+import TokenService from "./token_service";
+import type { APIResponseData } from "@/models/api_response_data";
 
 ///  文章相關API
 export default class PostService extends APIClient {
@@ -253,29 +255,44 @@ export default class PostService extends APIClient {
 
   /**
    * MARK: 更新文章
+   * @param postId  文章的id
    * @param postData 更新文章的Data
    */
   async updatePost(
     postId: number,
     postData: CreatePostRequestData
-  ): Promise<void> {
+  ): Promise<Boolean> {
     let fileMessageStr: string = "[]";
 
     fileMessageStr = this.listToListStr(postData.fileMessage);
 
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+
     const body = {
-      createdBy: userDataStore.userData.value.uid, // 創文章者
-      title: "", // 標題（畫面上已移除）
       mainMessage: postData.content, // 內文
       fileMessage: fileMessageStr, // 圖片/影片
       type: postData.type // 看板
     };
-    const reponseData: string = await this.apiPush(
-      `${API_CONFIG.ENDPOINTS.POST.UPDATE_POST}/${postId}`,
-      body
-    );
 
-    console.log(`updatePost : ${reponseData}`);
+    /// Call updatePost API
+    const responseData: APIResponseData<string> | string = await this.apiPush<
+      APIResponseData<string>
+    >(`${API_CONFIG.ENDPOINTS.POST.UPDATE_POST}/${postId}`, body, {
+      "X-OneTime-Token": token
+    });
+
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<string> =
+      this.handleReponseData(responseData);
+
+    if (handledReponseData.statusCode != "200") {
+      return false;
+    }
+    console.log("updatePost:", handledReponseData.data);
+    return true;
   }
 
   /**
