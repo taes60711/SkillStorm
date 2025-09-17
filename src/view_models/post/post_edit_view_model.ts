@@ -91,8 +91,13 @@ export default class PostEditViewModel {
         }
       } else {
         // 創建文章
-        await new PostService().createPost(postData);
+        const postId: Number = await new PostService().createPost(postData);
         GlobalData.closeLoadingModal();
+
+        if (postId == -1) {
+          return;
+        }
+
         this.modalController.show(
           confimModal,
           {

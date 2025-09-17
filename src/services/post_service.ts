@@ -233,30 +233,41 @@ export default class PostService extends APIClient {
    * MARK: 創建文章
    * @param postData 創建文章的Data
    */
-  async createPost(postData: CreatePostRequestData): Promise<void> {
+  async createPost(postData: CreatePostRequestData): Promise<Number> {
     let fileMessageStr: string = "[]";
 
     fileMessageStr = this.listToListStr(postData.fileMessage);
 
     const body = {
       createdBy: userDataStore.userData.value.uid, // 創文章者
-      title: "", // 標題（畫面上已移除）
       mainMessage: postData.content, // 內文
       fileMessage: fileMessageStr, // 圖片/影片
       type: postData.type // 看板
     };
-    const reponseData: string = await this.apiPush(
-      `${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`,
-      body
-    );
 
-    console.log(`createPost : ${reponseData}`);
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+    /// Call getToken API
+    const reponseData: APIResponseData<{ postIndex: Number }> | string =
+      await this.apiPush(`${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`, body, {
+        "X-OneTime-Token": token
+      });
+
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<{ postIndex: Number }> =
+      this.handleReponseData(reponseData);
+
+    if (handledReponseData.statusCode != "200") return -1;
+
+    return handledReponseData.data.postIndex;
   }
 
   /**
    * MARK: 更新文章
    * @param postId  文章的id
-   * @param postData 更新文章的Data
+   * @param postData 文章的Data
    */
   async updatePost(
     postId: number,
@@ -296,37 +307,71 @@ export default class PostService extends APIClient {
   }
 
   /**
-   * MARK: 更新文章
+   * MARK: 刪除文章
+   * @param postId 文章的Id
+   */
+  async deletePost(postId: number): Promise<Boolean> {
+    let body = {};
+
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.DELETE_POST}/${postId}`,
+      body,
+      {
+        "X-OneTime-Token": token
+      }
+    );
+
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<string> =
+      this.handleReponseData(reponseData);
+
+    if (handledReponseData.statusCode != "200") {
+      return false;
+    }
+
+    console.log("deletePost:", handledReponseData.data);
+    return true;
+  }
+
+  /**
+   * MARK: 更新文章的讚
    * @param postId 更新文章的DataId
    */
-  async updatePostGood(postId: number, userId: string = ""): Promise<void> {
+  async updatePostGood(postId: number, userId: string = ""): Promise<Boolean> {
     let body = {};
 
     if (userId !== "") {
       body = { goodedUserUID: userId };
     }
 
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+
     const reponseData: string = await this.apiPush(
       `${API_CONFIG.ENDPOINTS.POST.UPDATE_POST_GOOD}/${postId}`,
-      body
+      body,
+      {
+        "X-OneTime-Token": token
+      }
     );
 
-    console.log(`updatePostGood : ${reponseData}`);
-  }
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<string> =
+      this.handleReponseData(reponseData);
 
-  /**
-   * MARK: 刪除文章
-   * @param postData 更新文章的Data
-   */
-  async deletePost(postId: number): Promise<void> {
-    let body = {};
+    if (handledReponseData.statusCode != "200") {
+      return false;
+    }
 
-    const reponseData: string = await this.apiPush(
-      `${API_CONFIG.ENDPOINTS.POST.DELETE_POST}/${postId}`,
-      body
-    );
-
-    console.log(`deletePost : ${reponseData}`);
+    console.log("updatePostGood:", handledReponseData.data);
+    return true;
   }
 
   /**
@@ -335,7 +380,12 @@ export default class PostService extends APIClient {
    */
   async createPostComment(
     postCommentData: CreatePostCommentRequestData
-  ): Promise<number> {
+  ): Promise<Number> {
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+
     const body = {
       userUid: userDataStore.userData.value.uid, // 創留言者
       postId: postCommentData.postUID, // 文章ID
@@ -343,33 +393,35 @@ export default class PostService extends APIClient {
     };
     const reponseData: string = await this.apiPush(
       `${API_CONFIG.ENDPOINTS.POST.CREATE_POST_COMMENT}`,
-      body
-    );
-    console.log(`createPostComment : ${reponseData}`);
-
-    return Number(reponseData);
-  }
-
-  /**
-   * MARK: 刪除文章留言
-   * @param postId 文章的uid
-   */
-  async deletePostComment(postId: number): Promise<Boolean> {
-    const reponseData: string = await this.apiPush(
-      `${API_CONFIG.ENDPOINTS.POST.DELETE_POST_COMMENT}/${postId}`
+      body,
+      {
+        "X-OneTime-Token": token
+      }
     );
 
-    console.log(`deletePostComment : ${reponseData}`);
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<{ postCommentIndex: Number }> =
+      this.handleReponseData(reponseData);
 
-    return reponseData != "null" ? true : false;
+    if (handledReponseData.statusCode != "200") return -1;
+
+    console.log(
+      "handledReponseData.data.postCommentIndex " +
+        handledReponseData.data.postCommentIndex
+    );
+    return handledReponseData.data.postCommentIndex;
   }
-
   /**
    * MARK: 更新文章留言
    * @param postId 文章的uid
    * @param message 留言訊息
    */
   async uploadPostComment(postId: number, message: string): Promise<Boolean> {
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+
     const body = {
       id: postId, // 文章的uid
       message: message // 留言訊息
@@ -377,16 +429,56 @@ export default class PostService extends APIClient {
 
     const reponseData: string = await this.apiPush(
       `${API_CONFIG.ENDPOINTS.POST.UPDATE_POST_COMMENT}/${postId}`,
-      body
+      body,
+      {
+        "X-OneTime-Token": token
+      }
     );
 
-    console.log(`uploadPostComment : ${reponseData}`);
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<string> =
+      this.handleReponseData(reponseData);
 
-    return reponseData != "null" ? true : false;
+    if (handledReponseData.statusCode != "200") {
+      return false;
+    }
+
+    console.log("uploadPostComment:", handledReponseData.data);
+    return true;
   }
 
   /**
-   * 取得文章留言
+   * MARK: 刪除文章留言
+   * @param postId 文章的uid
+   */
+  async deletePostComment(postId: number): Promise<Boolean> {
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.POST.DELETE_POST_COMMENT}/${postId}`,
+      {},
+      {
+        "X-OneTime-Token": token
+      }
+    );
+
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<string> =
+      this.handleReponseData(reponseData);
+
+    if (handledReponseData.statusCode != "200") {
+      return false;
+    }
+
+    console.log("deletePostComment:", handledReponseData.data);
+    return true;
+  }
+
+  /**
+   * MARK:  取得文章留言
    * @param page 從第幾頁開始
    * @param size 一次拿多少的資料
    * @param postId  文章的uid

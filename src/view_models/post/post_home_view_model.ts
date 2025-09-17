@@ -193,9 +193,13 @@ export default class PostHomeViewModel {
             this.modalController.close();
           },
           confirmFunc: async () => {
-            await new PostService().deletePost(data.id);
-            listData.splice(idx, 1);
-            this.modalController.close();
+            const isSuccess: Boolean = await new PostService().deletePost(
+              data.id
+            );
+            if (isSuccess) {
+              listData.splice(idx, 1);
+              this.modalController.close();
+            }
           }
         },
         false,
