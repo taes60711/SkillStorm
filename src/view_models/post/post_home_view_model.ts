@@ -14,11 +14,13 @@ export default class PostHomeViewModel {
   modalController: ModalController = new ModalController();
 
   ///開啟文章發佈頁面
-  createEditPage = () => {
+  createEditPage = (listData: Post[]) => {
     if (userDataStore.isLogin()) {
       this.modalController.show(
         PostEditor,
-        {},
+        {
+          listPostData: listData
+        },
         true,
         false,
         "rgba(0, 0, 0, 0.4)",

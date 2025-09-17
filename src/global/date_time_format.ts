@@ -94,4 +94,23 @@ export class DateFormatUtilities {
 
     return `${mm}/${dd}(${weekday})`;
   }
+
+  getUTCFormattedDateTime(): string {
+    const now = new Date();
+
+    const pad = (n: number, width = 2) => n.toString().padStart(width, "0");
+
+    const year = now.getUTCFullYear();
+    const month = pad(now.getUTCMonth() + 1);
+    const day = pad(now.getUTCDate());
+
+    const hours = pad(now.getUTCHours());
+    const minutes = pad(now.getUTCMinutes());
+    const seconds = pad(now.getUTCSeconds());
+
+    // 取得毫秒並轉成 6 位數 (微秒表示法)
+    const microseconds = pad(now.getUTCMilliseconds(), 3) + "000";
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${microseconds}`;
+  }
 }

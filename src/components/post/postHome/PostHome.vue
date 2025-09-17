@@ -26,7 +26,7 @@
           borderRadius="50px"
         />
         <MainButton
-          :onPress="() => viewModel.createEditPage()"
+          :onPress="() => viewModel.createEditPage(postData)"
           :textLeft="true"
           text="發佈新文章"
           class="postCreateBtn"

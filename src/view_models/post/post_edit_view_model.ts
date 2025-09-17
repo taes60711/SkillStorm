@@ -8,6 +8,8 @@ import { EditTools } from "@/global/edit_tools";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import confimModal from "@/components/utilities/Modal/confirmModal.vue";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
+import { userDataStore } from "@/global/user_data";
+import { DateFormatUtilities } from "@/global/date_time_format";
 
 /// 文章編輯ViewModel
 export default class PostEditViewModel {
@@ -26,6 +28,13 @@ export default class PostEditViewModel {
 
   postId: number = -1;
   listPostData: Post[] = [];
+
+  needCreatePostAddPage: Boolean = false;
+
+  createEditInit = (listData: Post[]): void => {
+    this.listPostData = listData;
+    this.needCreatePostAddPage = true;
+  };
 
   editInit = (postData: CreatePostRequestData, listData: Post[]): void => {
     this.selectedBoard.value = postData.type as PostBoard;
@@ -112,6 +121,28 @@ export default class PostEditViewModel {
           "rgba(0, 0, 0, 0.4)",
           "confirmModal"
         );
+
+        const postBoardType: PostBoard =
+          GlobalData.postBoard.find((e) => e.type === postData.type) ??
+          GlobalData.postBoard[0];
+
+        if (this.needCreatePostAddPage) {
+          const createdPost: Post = {
+            id: 0,
+            createdBy: userDataStore.userData.value.uid,
+            mainMessage: postData.content,
+            fileMessage: postData.fileMessage,
+            viewed: 0,
+            good: 0,
+            type: postBoardType,
+            count: 0,
+            userIsGood: false,
+            postTime: new DateFormatUtilities().getUTCFormattedDateTime(),
+            user: userDataStore.userData.value
+          };
+
+          this.listPostData.splice(0, 0, createdPost);
+        }
       }
     }
   };

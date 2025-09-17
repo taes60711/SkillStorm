@@ -44,12 +44,16 @@ const props = defineProps<{
 }>();
 
 onBeforeMount(() => {
-  if (Object.keys(props.modalProps).length !== 0) {
+  console.log(Object.keys(props.modalProps).length);
+
+  if (Object.keys(props.modalProps).length >= 2) {
     /// 導入文章
     viewModel.editInit(
       props.modalProps.postData,
       props.modalProps.listPostData
     );
+  } else if (Object.keys(props.modalProps).length >= 1) {
+    viewModel.createEditInit(props.modalProps.listPostData);
   }
 });
 </script>
