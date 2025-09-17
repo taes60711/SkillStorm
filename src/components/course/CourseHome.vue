@@ -191,7 +191,9 @@ function openItemSetting(data: Course) {
 const goToEdit = () => {
   modalEditController.show(
     CourseEditor,
-    {},
+    {
+      listCourseData: courseData.value
+    },
     true,
     false,
     "rgba(0, 0, 0, 0.4)",

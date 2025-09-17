@@ -44,8 +44,6 @@ const props = defineProps<{
 }>();
 
 onBeforeMount(() => {
-  console.log(Object.keys(props.modalProps).length);
-
   if (Object.keys(props.modalProps).length >= 2) {
     /// 導入文章
     viewModel.editInit(

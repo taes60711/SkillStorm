@@ -4,6 +4,8 @@ import APIClient from "./api_client";
 import { userDataStore } from "@/global/user_data";
 import type { CreateCourseRequestData } from "@/models/request/course/create_course_request_data";
 import type { Course } from "@/models/reponse/course/course_reponse_data";
+import TokenService from "./token_service";
+import type { APIResponseData } from "@/models/api_response_data";
 
 ///  課程相關API
 export default class CourseService extends APIClient {
@@ -16,7 +18,7 @@ export default class CourseService extends APIClient {
   /**
    * MARK: 創建課程
    */
-  async createCourse(courseData: CreateCourseRequestData): Promise<void> {
+  async createCourse(courseData: CreateCourseRequestData): Promise<Number> {
     const body = {
       createdBy: userDataStore.userData.value?.uid, // 創文章者
       title: courseData.title, // 標題
@@ -30,12 +32,25 @@ export default class CourseService extends APIClient {
       isPublic: courseData.isPublic // 是否公開
     };
 
-    const reponseData: string = await this.apiPush(
-      `${API_CONFIG.ENDPOINTS.COURSE.CREATE_COURSE}`,
-      body
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
     );
 
-    console.log(`createCourse : ${reponseData}`);
+    const reponseData: APIResponseData<{ courseIndex: Number }> | string =
+      await this.apiPush(`${API_CONFIG.ENDPOINTS.COURSE.CREATE_COURSE}`, body, {
+        "X-OneTime-Token": token
+      });
+
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<{ courseIndex: Number }> =
+      this.handleReponseData(reponseData);
+
+    console.log(`updateCourse : ${handledReponseData.statusCode}`);
+
+    if (handledReponseData.statusCode != "200") return -1;
+
+    return handledReponseData.data.courseIndex;
   }
 
   /**
@@ -44,7 +59,7 @@ export default class CourseService extends APIClient {
   async updateCourse(
     courseData: CreateCourseRequestData,
     courseId: number
-  ): Promise<void> {
+  ): Promise<Boolean> {
     const body = {
       createdBy: userDataStore.userData.value?.uid, // 創文章者
       title: courseData.title, // 標題
@@ -58,27 +73,59 @@ export default class CourseService extends APIClient {
       isPublic: courseData.isPublic // 是否公開
     };
 
-    const reponseData: string = await this.apiPush(
-      `${API_CONFIG.ENDPOINTS.COURSE.UPDATE_COURSE}/${courseId}`,
-      body
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
     );
 
-    console.log(`updateCourse : ${reponseData}`);
+    const reponseData: string = await this.apiPush(
+      `${API_CONFIG.ENDPOINTS.COURSE.UPDATE_COURSE}/${courseId}`,
+      body,
+      {
+        "X-OneTime-Token": token
+      }
+    );
+
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<string> =
+      this.handleReponseData(reponseData);
+
+    console.log(`updateCourse : ${handledReponseData.statusCode}`);
+
+    if (handledReponseData.statusCode != "200") return false;
+
+    return true;
   }
 
   /**
    * MARK: 刪除課程
    * @param postData 更新文章的Data
    */
-  async deleteCourse(courseId: number): Promise<void> {
+  async deleteCourse(courseId: number): Promise<Boolean> {
+    /// Call Token API
+    const token: string = await new TokenService().getToken(
+      userDataStore.userData.value.uid
+    );
+
     let body = {};
 
     const reponseData: string = await this.apiPush(
       `${API_CONFIG.ENDPOINTS.COURSE.DELETE_COURSE}/${courseId}`,
-      body
+      body,
+      {
+        "X-OneTime-Token": token
+      }
     );
 
-    console.log(`deleteCourse : ${reponseData}`);
+    /// Handle API Return Data
+    const handledReponseData: APIResponseData<string> =
+      this.handleReponseData(reponseData);
+
+    console.log(`deleteCourse : ${handledReponseData.statusCode}`);
+
+    if (handledReponseData.statusCode != "200") return false;
+
+    return true;
   }
   /**
    * 所有課程

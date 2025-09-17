@@ -249,7 +249,7 @@ export default class PostService extends APIClient {
     const token: string = await new TokenService().getToken(
       userDataStore.userData.value.uid
     );
-    /// Call getToken API
+    /// Call API
     const reponseData: APIResponseData<{ postIndex: Number }> | string =
       await this.apiPush(`${API_CONFIG.ENDPOINTS.POST.CREATE_POST}`, body, {
         "X-OneTime-Token": token

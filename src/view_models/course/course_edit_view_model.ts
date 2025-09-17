@@ -12,6 +12,8 @@ import type { Course } from "@/models/reponse/course/course_reponse_data";
 import { GlobalData } from "@/global/global_data";
 import { ModalController } from "@/components/utilities/Modal/ModalController";
 import confimModal from "@/components/utilities/Modal/confirmModal.vue";
+import { userDataStore } from "@/global/user_data";
+import { DateFormatUtilities } from "@/global/date_time_format";
 
 /// 課程編輯ViewModel
 export default class CourseEditViewModel {
@@ -36,6 +38,10 @@ export default class CourseEditViewModel {
   /// 發文成功的Modal顯示
 
   modalController = new ModalController();
+
+  createEditInit = (listData: Course[]): void => {
+    this.listCourseData = listData;
+  };
 
   editInit = (courseData: Course, listData: Course[]): void => {
     this.titleController.value = courseData.title;
@@ -107,7 +113,17 @@ export default class CourseEditViewModel {
         );
 
         if (idx !== -1) {
-          await new CourseService().updateCourse(data, this.coursetId);
+          const isSuccess: Boolean = await new CourseService().updateCourse(
+            data,
+            this.coursetId
+          );
+
+          if (isSuccess != true) {
+            /// Close Loading
+            GlobalData.closeLoadingModal();
+            return;
+          }
+
           this.listCourseData[idx].title = data.title;
           this.listCourseData[idx].needLevel = data.needLevel;
           this.listCourseData[idx].content = data.outline;
@@ -138,9 +154,37 @@ export default class CourseEditViewModel {
         }
       } else {
         ///　作成
-        await new CourseService().createCourse(data);
+        const courseIndex: Number = await new CourseService().createCourse(
+          data
+        );
+
+        console.log(courseIndex);
         /// Close Loading
         GlobalData.closeLoadingModal();
+        if (courseIndex == -1) {
+          return;
+        }
+
+        const createdCourse: Course = {
+          id: courseIndex as number,
+          createdBy: userDataStore.userData.value.uid,
+          title: data.title,
+          needLevel: data.needLevel,
+          content: data.outline,
+          beforeNeed: data.beforeNeed,
+          prStory: data.prStory,
+          courseChapters: data.courseChapters,
+          courseLearningkillList: data.learningkillList,
+          createdTime: new DateFormatUtilities().getUTCFormattedDateTime(),
+          type: data.type,
+          isPublic: false,
+          signUpStatus: "",
+          user: userDataStore.userData.value,
+          isLike: false
+        };
+
+        this.listCourseData.splice(0, 0, createdCourse);
+
         /// 作成成功Hint
         this.modalController.show(
           confimModal,

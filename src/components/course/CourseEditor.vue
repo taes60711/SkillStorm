@@ -18,12 +18,14 @@ const props = defineProps<{
 }>();
 
 onBeforeMount(() => {
-  if (Object.keys(props.modalProps).length !== 0) {
+  if (Object.keys(props.modalProps).length >= 2) {
     /// 導入文章
     viewModel.editInit(
       props.modalProps.courseData,
       props.modalProps.listCourseData
     );
+  } else if (Object.keys(props.modalProps).length >= 1) {
+    viewModel.createEditInit(props.modalProps.listCourseData);
   }
 });
 </script>

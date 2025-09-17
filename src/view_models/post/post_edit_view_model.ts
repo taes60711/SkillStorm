@@ -128,7 +128,7 @@ export default class PostEditViewModel {
 
         if (this.needCreatePostAddPage) {
           const createdPost: Post = {
-            id: 0,
+            id: postId as number,
             createdBy: userDataStore.userData.value.uid,
             mainMessage: postData.content,
             fileMessage: postData.fileMessage,
