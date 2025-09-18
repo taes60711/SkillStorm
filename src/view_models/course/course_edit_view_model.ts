@@ -178,7 +178,7 @@ export default class CourseEditViewModel {
           createdTime: new DateFormatUtilities().getUTCFormattedDateTime(),
           type: data.type,
           isPublic: false,
-          signUpStatus: "",
+          signUpStatus: "none",
           user: userDataStore.userData.value,
           isLike: false
         };

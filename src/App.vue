@@ -18,10 +18,10 @@ const modalController = new ModalController();
 const route = useRoute();
 
 onMounted(async () => {
-  // 從 localStorage 初始化用戶資料
-  userDataStore.initializeFromLocalStorage();
   /// 取得全域資料
   await GlobalData.init();
+  // 從 localStorage 初始化用戶資料
+  await userDataStore.init();
 
   /// 視窗大小並 判斷是否要顯示 “下載App彈窗”（監聽）
   window.addEventListener("resize", updateScreenWidth);

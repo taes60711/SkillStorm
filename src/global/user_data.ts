@@ -1,7 +1,6 @@
-// /src/global/user_data.ts
-// 全局用戶資料管理 (UserDataStore)
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_data";
+import UserService from "@/services/user_service";
 
 /**
  * UserDataStore
@@ -9,17 +8,10 @@ import type { ProfileData } from "@/models/reponse/auth/profile_data_reponse_dat
  * 使用單例模式，確保全局只有一個實例。
  */
 export default class UserDataStore {
-  // 單例實例
   private static instance: UserDataStore;
 
-  // 私有構造函數，禁止外部直接創建實例
   private constructor() {}
 
-  /**
-   * 獲取單例實例
-   * 確保全局只有一個 UserDataStore 實例。
-   * @returns {UserDataStore} 單例實例
-   */
   public static getInstance(): UserDataStore {
     if (!UserDataStore.instance) {
       UserDataStore.instance = new UserDataStore();
@@ -28,15 +20,7 @@ export default class UserDataStore {
   }
 
   // 用戶狀態：存儲當前用戶資料
-  private user = ref<ProfileData>(this.guestData());
-
-  /**
-   * 獲取用戶資料
-   * @returns {computed<ProfileData>} 響應式用戶資料
-   */
-  get userData() {
-    return computed(() => this.user.value);
-  }
+  userData = ref<ProfileData>(this.guestData());
 
   /**
    * 訪客用戶資料
@@ -59,13 +43,13 @@ export default class UserDataStore {
   }
 
   /**
-   * 設定用戶資料q
+   * 設定用戶資料
    * 將資料保存到內存和 localStorage 中，覆蓋現有資料。
    * @param {ProfileData} data 完整的用戶資料
    */
   setUser(data: ProfileData) {
-    this.user.value = data;
-    localStorage.setItem("skillStormUserData", JSON.stringify(data));
+    this.userData.value = data;
+    localStorage.setItem("skillStormUserUID", data.uid);
     console.log("設置用戶資料:", data);
   }
 
@@ -74,8 +58,8 @@ export default class UserDataStore {
    * 清空內存中的用戶資料，並移除 localStorage 中的對應資料。
    */
   clearUser() {
-    this.user.value = this.guestData();
-    localStorage.removeItem("skillStormUserData");
+    this.userData.value = this.guestData();
+    localStorage.removeItem("skillStormUserUID");
     console.log("清除用戶資料");
   }
 
@@ -84,7 +68,7 @@ export default class UserDataStore {
    * @returns true: 有登入, false: 未登入
    */
   isLogin(): boolean {
-    return this.user.value.uid != this.guestData().uid;
+    return this.userData.value.uid != this.guestData().uid;
   }
 
   /**
@@ -92,13 +76,20 @@ export default class UserDataStore {
    * 在應用啟動時調用，從 localStorage 中載入用戶資料並恢復到內存。
    * @returns {boolean} 是否成功恢復用戶資料
    */
-  async initializeFromLocalStorage(): Promise<void> {
-    const storedUser = localStorage.getItem("skillStormUserData");
+  async init(): Promise<void> {
+    const storedUser: string = localStorage.getItem("skillStormUserUID") ?? "";
 
-    if (storedUser) {
-      this.user.value = JSON.parse(storedUser) as ProfileData;
+    if (storedUser != "") {
+      const userUid = storedUser;
+
+      const userData: ProfileData = await new UserService().getUserDataByUID(
+        userUid
+      );
+
+      debugger;
+      this.userData.value = userData;
       // 成功恢復
-      console.log("從 localStorage 恢復用戶資料:", this.user.value);
+      console.log("從 localStorage 恢復用戶資料:", this.userData.value);
     }
   }
 }
