@@ -44,7 +44,7 @@ export default class postDetailViewModel {
       message: this.commentInput.value
     };
 
-    const postCommentId: number = await new PostService().createPostComment(
+    const postCommentId: Number = await new PostService().createPostComment(
       commnetData
     );
 
@@ -53,7 +53,7 @@ export default class postDetailViewModel {
     );
 
     this.postCommentData.value.unshift({
-      id: postCommentId,
+      id: postCommentId as number,
       postId: this.postId.value,
       userUid: userDataStore.userData.value.uid,
       message: this.commentInput.value,
