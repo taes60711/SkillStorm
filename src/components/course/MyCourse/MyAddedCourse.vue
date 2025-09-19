@@ -76,7 +76,7 @@ import { DateFormatUtilities } from "@/global/date_time_format";
 import MainButton from "@/components/utilities/MainButton.vue";
 import { SkillType } from "@/models/skill_type";
 import SkillTag from "@/components/utilities/SkillTag.vue";
-import { ModalController } from "../../utilities/Modal/ModalController";
+import { ModalController } from "@/components/utilities/Modal/ModalController";
 import CourseDetail from "@/components/course/CourseDetail.vue";
 import IconText from "@/components/utilities/IconText.vue";
 import MyCourseBoard from "@/components/course/MyCourse/MyCourseBoard.vue";

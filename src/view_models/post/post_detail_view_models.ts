@@ -7,6 +7,8 @@ import { type Ref, ref } from "vue";
 import HintModal from "@/components/utilities/Modal/HintModal.vue";
 import type { Post } from "@/models/reponse/post/post_reponse_data";
 import ShareModal from "@/components/utilities/Modal/ShareModal.vue";
+import { RouterPath } from "@/router/router_path";
+import router from "@/router/router_manager";
 
 export default class postDetailViewModel {
   postId: Ref<number> = ref<number>(-1);
@@ -34,6 +36,28 @@ export default class postDetailViewModel {
 
   /// 創建文章詳細頁面的留言
   createPostComment = async () => {
+    /// 需要登入帳號
+    if (!userDataStore.isLogin()) {
+      this.modalController.show(
+        HintModal,
+        {
+          modalText: "請登入帳號",
+          cancelFunc: () => {
+            this.modalController.close();
+          },
+          confirmFunc: () => {
+            this.modalController.close();
+            router.push(RouterPath.AUTH.LOGIN.path);
+          }
+        },
+        false,
+        true,
+        "rgba(0, 0, 0, 0.4)",
+        "loginHintModal"
+      );
+      return;
+    }
+
     /// 輸入文字為空不能創建留言
     if (this.commentInput.value.replace(" ", "") == "") {
       return;

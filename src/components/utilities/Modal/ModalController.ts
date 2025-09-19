@@ -27,7 +27,8 @@ export class ModalController {
     document.documentElement.appendChild(modalElement);
 
     // 在 body添加的div 內 創建 BaseModal
-    import("../Modal/BaseModal.vue").then((module) => {
+
+    import("@/components/utilities/Modal/BaseModal.vue").then((module) => {
       const ModalComponent = module.default;
       // Modal內的Content
       const contnet = modalContent;
