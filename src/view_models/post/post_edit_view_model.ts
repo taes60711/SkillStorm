@@ -33,7 +33,13 @@ export default class PostEditViewModel {
 
   createEditInit = (listData: Post[]): void => {
     this.listPostData = listData;
-    this.needCreatePostAddPage = true;
+    console.log(GlobalData.nowPath.value);
+    const segments = GlobalData.nowPath.value.split("/");
+    const last = segments[segments.length - 1];
+
+    if (last != "popular") {
+      this.needCreatePostAddPage = true;
+    }
   };
 
   editInit = (postData: CreatePostRequestData, listData: Post[]): void => {

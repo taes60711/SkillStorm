@@ -3,8 +3,8 @@ import { onMounted } from "vue";
 import { userDataStore } from "./global/user_data";
 import { GlobalData } from "./global/global_data";
 import { ref } from "vue";
-import { ModalController } from "./components/utilities/Modal/ModalController";
-import phoneHintModal from "./components/utilities/Modal/phoneHintModal.vue";
+import { ModalController } from "@/components/utilities/Modal/ModalController";
+import phoneHintModal from "@/components/utilities/Modal/phoneHintModal.vue";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 

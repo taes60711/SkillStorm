@@ -5,7 +5,7 @@ import { Quill } from "@vueup/vue-quill";
 import Modal from "@/components/utilities/EditorModal.vue";
 import { EditTools } from "@/global/edit_tools";
 import ConfirmModal from "../utilities/Modal/confirmModal.vue";
-import { ModalController } from "../utilities/Modal/ModalController";
+import { ModalController } from "@/components/utilities/Modal/ModalController";
 
 const editTools = new EditTools();
 

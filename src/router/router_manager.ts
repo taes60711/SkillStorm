@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, useRoute } from "vue-router";
 import { RouterPath } from "./router_path";
 import { userDataStore } from "@/global/user_data"; // 引入全局用戶資料管理
 import { GlobalData } from "@/global/global_data";
+import { ref } from "@vue/runtime-core";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -71,7 +72,6 @@ router.beforeEach((to, from, next) => {
 
   if (to.path.includes("/post") && to.params !== undefined) {
     console.log(`to.path > ${to.path} toParam > ${to.params.id}`);
-
     GlobalData.getExtendsPost(to.params.id[0]);
     return;
   }
@@ -81,6 +81,11 @@ router.beforeEach((to, from, next) => {
     GlobalData.getExtendsCourse(to.params.id[0]);
     return;
   }
+});
+
+router.afterEach((to, from, next) => {
+  GlobalData.nowPath.value = to.path;
+  console.log(GlobalData.nowPath.value);
 });
 
 export default router;

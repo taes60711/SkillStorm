@@ -7,6 +7,8 @@ import { ModalController } from "@/components/utilities/Modal/ModalController";
 import Loading from "@/components/utilities/Loading.vue";
 import CourseService from "@/services/course_service";
 import { userDataStore } from "./user_data";
+import { ref } from "vue";
+import type { Ref } from "@vue/runtime-core";
 
 export class GlobalData {
   private static instance: GlobalData;
@@ -19,11 +21,13 @@ export class GlobalData {
 
   static modalController = new ModalController();
 
+  static nowPath: Ref<string> = ref<string>("");
+
   public static async init(): Promise<GlobalData> {
     if (!GlobalData.instance) {
       GlobalData.instance = new GlobalData();
     }
-    APIHttpController.getInstance().init(DevType.release);
+    APIHttpController.getInstance().init(DevType.debug);
 
     await this.getPostBoardData();
     await this.getSkillData();

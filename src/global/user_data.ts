@@ -86,7 +86,6 @@ export default class UserDataStore {
         userUid
       );
 
-      debugger;
       this.userData.value = userData;
       // 成功恢復
       console.log("從 localStorage 恢復用戶資料:", this.userData.value);

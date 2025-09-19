@@ -3,7 +3,12 @@
     <div class="postBoard">
       <p class="postBoardTitle">看板</p>
       <div v-for="(item, index) in GlobalData.postBoard" v-bind:key="item.id">
-        <p class="postBoardItem" @click="() => goToBoard(item.type)">
+        <p
+          :class="
+            nowPath == item.type ? 'postBoardItemSelect' : 'postBoardItem'
+          "
+          @click="() => goToBoard(item.type)"
+        >
           <IconText :icon="item.iconData" :text="item.chineseName"></IconText>
         </p>
       </div>
@@ -12,18 +17,31 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router/router_manager";
 import { RouterPath } from "@/router/router_path";
 import { GlobalData } from "@/global/global_data";
 import IconText from "@/components/utilities/IconText.vue";
+import { onBeforeMount, type Ref } from "@vue/runtime-core";
+import router from "@/router/router_manager";
+import { ref } from "vue";
+
+const nowPath: Ref<number> = ref<number>(-1);
+
+onBeforeMount(() => {
+  const segments = GlobalData.nowPath.value.split("/");
+  const last = segments[segments.length - 1];
+
+  if (last != "") {
+    nowPath.value = Number(last);
+  }
+});
 
 ///跳至看板頁面
 const goToBoard = (type: number) => {
   router.push({
     name: RouterPath.HOME.POST.BOARD.name,
     params: {
-      boardtype: type,
-    },
+      boardtype: type
+    }
   });
 };
 </script>
@@ -54,6 +72,14 @@ const goToBoard = (type: number) => {
   margin: 2px 0 2px 0;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.postBoardItemSelect {
+  padding: 5px 10px 5px 10px;
+  margin: 2px 0 2px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: rgb(35, 35, 36);
 }
 
 .postBoardItem:hover {
