@@ -9,6 +9,10 @@ import CourseService from "@/services/course_service";
 import { userDataStore } from "./user_data";
 import { ref } from "vue";
 import type { Ref } from "@vue/runtime-core";
+import type { Post } from "@/models/reponse/post/post_reponse_data";
+import PostDetail from "@/components/post/PostDetail.vue";
+import CourseDetail from "@/components/course/CourseDetail.vue";
+import type { Course } from "@/models/reponse/course/course_reponse_data";
 
 export class GlobalData {
   private static instance: GlobalData;
@@ -43,19 +47,46 @@ export class GlobalData {
     this.skillData = await new SkillService().getSkillList();
   }
 
-  /// 未完成
   static async getExtendsPost(postId: string) {
+    GlobalData.openLoadingModal();
     const id: number = parseInt(postId);
 
-    new PostService().getPostByPostId(id);
+    const postData: Post | String = await new PostService().getPostByPostId(id);
+    GlobalData.closeLoadingModal();
+    if (typeof postData === "string") {
+      return;
+    }
+
+    this.modalController.show(
+      PostDetail,
+      { postData: postData },
+      true,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "postDetail"
+    );
   }
 
-  /// 未完成
   static async getExtendsCourse(courseId: string) {
+    GlobalData.openLoadingModal();
     const id: number = parseInt(courseId);
-    new CourseService().getCoursByCourseId(
-      id,
-      userDataStore.userData.value.uid
+    const corseData: Course | String =
+      await new CourseService().getCoursByCourseId(
+        id,
+        userDataStore.userData.value.uid
+      );
+    GlobalData.closeLoadingModal();
+    if (typeof corseData === "string") {
+      return;
+    }
+
+    this.modalController.show(
+      CourseDetail,
+      { courseData: corseData },
+      true,
+      true,
+      "rgba(0, 0, 0, 0.4)",
+      "CourseDetail"
     );
   }
 

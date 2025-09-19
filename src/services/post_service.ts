@@ -191,6 +191,8 @@ export default class PostService extends APIClient {
       param
     );
 
+    console.log(reponseData);
+
     if (typeof reponseData === "string") {
       return "";
     } else {

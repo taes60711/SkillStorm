@@ -5,23 +5,24 @@ import APIClient from "./api_client";
 
 ///  技能相關API
 export default class SkillService extends APIClient {
-    constructor() {
-        super(`${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/skill`);
+  constructor() {
+    super(
+      `${APIHttpController.prefixUrl}://${APIHttpController.domainUrl}/skill`
+    );
+  }
+
+  /**
+   * MARK: 取得所有Skill項目
+   */
+  async getSkillList(): Promise<SkillData[]> {
+    const reponseData: SkillData[] | string = await this.apiGet(
+      `${API_CONFIG.ENDPOINTS.SKILL.GET_ALL_SKILL}`
+    );
+
+    if (typeof reponseData === "string") {
+      throw new Error(`Failed`);
     }
 
-    /**
-     * MARK: 取得所有Skill項目
-     */
-    async getSkillList(): Promise<SkillData[]> {
-
-        const reponseData: SkillData[] | string = await this.apiGet(`${API_CONFIG.ENDPOINTS.SKILL.GET_ALL_SKILL}`);
-
-        console.log(`getSkillList : ${reponseData}`);
-
-        if (typeof reponseData === 'string') {
-            throw new Error(`Failed`);
-        }
-
-        return reponseData;
-    }
+    return reponseData;
+  }
 }

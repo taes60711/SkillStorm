@@ -134,11 +134,14 @@ export default class postDetailViewModel {
   };
 
   detailPageChangeLike = async (listData: Post[], data: Post) => {
-    console.log("asd");
     if (
       data.user.uid === userDataStore.userData.value.uid ||
       !userDataStore.isLogin()
     ) {
+      return;
+    }
+
+    if (listData == null) {
       return;
     }
 

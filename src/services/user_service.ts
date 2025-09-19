@@ -21,8 +21,6 @@ export default class UserService extends APIClient {
    * @param userUID 登入的使用者的UID
    */
   async getUserDataByUID(userUID: string): Promise<ProfileData> {
-    console.log(`${userUID}`);
-
     const reponseData: ProfileData | string = await this.apiGet(`/${userUID}`);
 
     if (typeof reponseData === "string") {
