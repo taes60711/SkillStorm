@@ -119,7 +119,7 @@ export const RouterPath = {
   },
   EXTENDS: {
     COURSE: {
-      path: "/course/:id",
+      path: "/extends/course/:id",
       components: {
         default: CourseHome,
         aside: InfoBar
@@ -127,7 +127,7 @@ export const RouterPath = {
       name: "extendsCourse"
     },
     POST: {
-      path: "/post/:id",
+      path: "/extends/post/:id",
       components: {
         default: PostHome,
         aside: InfoBar
