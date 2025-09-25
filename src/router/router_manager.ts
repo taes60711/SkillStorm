@@ -72,13 +72,13 @@ router.beforeEach((to, from, next) => {
 
   if (to.path.includes("/post") && to.params !== undefined) {
     console.log(`to.path > ${to.path} toParam > ${to.params.id}`);
-    GlobalData.getExtendsPost(to.params.id[0]);
+    GlobalData.getExtendsPost(to.params.id as string);
     return;
   }
 
   if (to.path.includes("/course") && to.params !== undefined) {
     console.log(`to.path > ${to.path} toParam > ${to.params.id}`);
-    GlobalData.getExtendsCourse(to.params.id[0]);
+    GlobalData.getExtendsCourse(to.params.id as string);
     return;
   }
 });

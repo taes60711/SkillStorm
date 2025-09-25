@@ -31,7 +31,7 @@ export class GlobalData {
     if (!GlobalData.instance) {
       GlobalData.instance = new GlobalData();
     }
-    APIHttpController.getInstance().init(DevType.debug);
+    APIHttpController.getInstance().init(DevType.release);
 
     await this.getPostBoardData();
     await this.getSkillData();
@@ -51,7 +51,9 @@ export class GlobalData {
     GlobalData.openLoadingModal();
     const id: number = parseInt(postId);
 
+
     const postData: Post | String = await new PostService().getPostByPostId(id);
+
     GlobalData.closeLoadingModal();
     if (typeof postData === "string") {
       return;
