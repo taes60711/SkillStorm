@@ -1,17 +1,21 @@
 // vite.config.ts
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  const isProd = mode === 'production'
+
   return {
     plugins: [vue()],
-    // 👇 加上 GitHub Pages 仓库名
-    base: "/SkillStorm/",
+    // base: '/SkillStorm/',
     resolve: {
       alias: {
-        "@": "/src"
+        '@': '/src'
       }
+    },
+    // 用 esbuild 內建的 drop 移除 console/debugger
+    esbuild: {
+      drop: isProd ? ['console', 'debugger'] : []
     }
-  };
-});
+  }
+})

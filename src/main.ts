@@ -8,4 +8,9 @@ import "@fortawesome/fontawesome-free/css/all.css";
 const app = create(App);
 app.use(router);
 app.use(PrimeVue);
+
+
+app.config.warnHandler = () => {}
+app.config.errorHandler = () => {}
+
 app.mount("#app");
